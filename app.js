@@ -1,6 +1,6 @@
 // ==========================================================================
 // AI-103 Studio Application Logic
-// Zen Modern Minimalist Interface (Inspired by Linear & Raycast)
+// Zen Modern Minimalist Interface with Zero-Jank Image Performance & Preloader
 // ==========================================================================
 
 (function () {
@@ -21,6 +21,66 @@
   
   let examTimerId = null;
   let examSeconds = 0;
+
+  // --- Image Cache Preloader ---
+  const preloadedImageUrls = new Set();
+
+  function preloadImageUrl(url) {
+    if (!url || preloadedImageUrls.has(url)) return;
+    preloadedImageUrls.add(url);
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = url;
+  }
+
+  function preloadAdjacentImages() {
+    // Immediately preload upcoming questions and previous question
+    const targetIndices = [
+      currentIndex + 1,
+      currentIndex + 2,
+      currentIndex + 3,
+      currentIndex - 1
+    ];
+    targetIndices.forEach(idx => {
+      if (idx >= 0 && idx < questions.length) {
+        const q = questions[idx];
+        if (q && q.images && q.images.length > 0) {
+          q.images.forEach(img => preloadImageUrl(img.path));
+        }
+      }
+    });
+  }
+
+  function startIdlePreloadAllImages() {
+    // Progressively cache all 123 images during browser idle periods
+    const allImages = [];
+    questions.forEach(q => {
+      if (q.images && q.images.length > 0) {
+        q.images.forEach(img => allImages.push(img.path));
+      }
+    });
+
+    let imgIndex = 0;
+    function preloadBatch() {
+      const batchSize = 4;
+      for (let i = 0; i < batchSize && imgIndex < allImages.length; i++) {
+        preloadImageUrl(allImages[imgIndex++]);
+      }
+      if (imgIndex < allImages.length) {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(preloadBatch, { timeout: 1000 });
+        } else {
+          setTimeout(preloadBatch, 250);
+        }
+      }
+    }
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(preloadBatch, { timeout: 1500 });
+    } else {
+      setTimeout(preloadBatch, 1000);
+    }
+  }
 
   // --- DOM Elements ---
   const elBtnStudyMode = document.getElementById('btnStudyMode');
@@ -116,6 +176,7 @@
     updateStats();
     renderCurrentQuestion();
     renderGridItems();
+    startIdlePreloadAllImages();
   }
 
   // --- Persistence ---
@@ -205,6 +266,7 @@
     renderCurrentQuestion();
     updateNavButtons();
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    preloadAdjacentImages();
   }
 
   function goToNext() {
@@ -262,7 +324,7 @@
     // 2. Question Prompt
     elQuestionText.textContent = q.question;
 
-    // 3. Images
+    // 3. Images (Zero-Layout-Shift with reserved aspect ratio & skeleton shimmer)
     renderImages(q);
 
     // 4. Options
@@ -286,17 +348,53 @@
         const wrap = document.createElement('div');
         wrap.className = 'q-img-wrap';
         wrap.title = 'Bấm để phóng to';
-        
+
+        // Reserved aspect-ratio container prevents any layout shift (CLS = 0)
+        const frame = document.createElement('div');
+        frame.className = 'q-img-frame';
+        if (imgObj.width && imgObj.height) {
+          frame.style.aspectRatio = `${imgObj.width} / ${imgObj.height}`;
+        } else {
+          frame.style.aspectRatio = '16 / 9';
+        }
+        frame.style.maxHeight = '480px';
+
+        // Shimmer skeleton placeholder
+        const shimmer = document.createElement('div');
+        shimmer.className = 'skeleton-shimmer absolute inset-0 rounded-lg pointer-events-none';
+
+        // Image with eager + async decoding
         const img = document.createElement('img');
         img.src = imgObj.path;
         img.alt = `Sơ đồ câu hỏi Q${q.id}`;
-        img.loading = 'lazy';
+        if (imgObj.width) img.width = imgObj.width;
+        if (imgObj.height) img.height = imgObj.height;
+        img.loading = 'eager';
+        img.decoding = 'async';
+        img.className = 'w-full h-full object-contain rounded-lg opacity-0 transition-opacity duration-300';
+
+        // If cached already by preloader, show immediately
+        if (img.complete && img.naturalHeight !== 0) {
+          img.classList.remove('opacity-0');
+          shimmer.style.display = 'none';
+        } else {
+          img.onload = () => {
+            img.classList.remove('opacity-0');
+            shimmer.style.display = 'none';
+          };
+          img.onerror = () => {
+            shimmer.style.display = 'none';
+          };
+        }
+
+        frame.appendChild(shimmer);
+        frame.appendChild(img);
 
         const hint = document.createElement('div');
         hint.className = 'flex items-center justify-center space-x-1.5 text-xs text-slate-400 mt-2 font-mono';
         hint.innerHTML = `<span class="material-symbols-outlined text-[14px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Bấm phóng to</span>`;
 
-        wrap.appendChild(img);
+        wrap.appendChild(frame);
         wrap.appendChild(hint);
 
         wrap.addEventListener('click', () => openLightbox(imgObj.path));

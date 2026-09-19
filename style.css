@@ -36,6 +36,32 @@ body {
   scrollbar-width: none;
 }
 
+/* Shimmer Skeleton for Zero-CLS Image Loading */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.08) 0%,
+    rgba(148, 163, 184, 0.18) 50%,
+    rgba(148, 163, 184, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+html.dark .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* Modern Zen Mode Buttons (Ôn tập · Thi thử) */
 .zen-mode-btn {
   cursor: pointer;
@@ -213,15 +239,17 @@ html.dark .interactive-guide {
   color: #cbd5e1;
 }
 
-/* Images & Diagrams */
+/* Images & Diagrams with Zero Layout Shift */
 .q-img-wrap {
+  position: relative;
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.75rem;
-  padding: 0.875rem;
+  padding: 0.75rem;
   text-align: center;
   cursor: zoom-in;
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease;
+  width: 100%;
 }
 html.dark .q-img-wrap {
   background-color: #111726;
@@ -230,11 +258,18 @@ html.dark .q-img-wrap {
 .q-img-wrap:hover {
   border-color: #38bdf8;
 }
-.q-img-wrap img {
-  max-width: 100%;
-  height: auto;
+.q-img-frame {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   border-radius: 0.5rem;
-  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+html.dark .q-img-frame {
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 /* Drawer Grid Items (10px squircle) */
