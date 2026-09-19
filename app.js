@@ -1,12 +1,12 @@
 // ==========================================================================
-// AI-103 Quiz Application Logic
+// AI-103 Quiz Application Logic (Enhanced UI/UX via Stitch)
 // ==========================================================================
 
 (function () {
   'use strict';
 
   // --- App State ---
-  const STORAGE_KEY = 'ai103_quiz_state_v2';
+  const STORAGE_KEY = 'ai103_quiz_state_v3';
   
   let questions = [];
   let currentIndex = 0;
@@ -16,7 +16,7 @@
   
   let userAnswers = {}; // { [qId]: { selectedKeys: [], isCorrect: boolean, revealed: boolean } }
   let bookmarks = new Set();
-  let theme = 'light';
+  let isDarkMode = true;
   
   let examTimerId = null;
   let examSeconds = 0;
@@ -26,7 +26,6 @@
   const elBtnExamMode = document.getElementById('btnExamMode');
   const elExamTimer = document.getElementById('examTimer');
   const elTimerText = document.getElementById('timerText');
-  const elBtnOpenGrid = document.getElementById('btnOpenGrid');
   const elBtnThemeToggle = document.getElementById('btnThemeToggle');
   const elThemeIconSun = document.getElementById('themeIconSun');
   const elThemeIconMoon = document.getElementById('themeIconMoon');
@@ -43,6 +42,7 @@
   const elQNumber = document.getElementById('qNumber');
   const elQTypeBadge = document.getElementById('qTypeBadge');
   const elBtnBookmark = document.getElementById('btnBookmark');
+  const elBookmarkText = document.getElementById('bookmarkText');
   const elQuestionText = document.getElementById('questionText');
   const elQuestionImages = document.getElementById('questionImages');
   const elOptionsContainer = document.getElementById('optionsContainer');
@@ -59,17 +59,21 @@
   const elBtnNext = document.getElementById('btnNext');
   const elNavStatus = document.getElementById('navStatus');
 
-  const elGridModal = document.getElementById('gridModal');
-  const elBtnCloseGrid = document.getElementById('btnCloseGrid');
-  const elBtnCloseGridBtn = document.getElementById('btnCloseGridBtn');
+  // Drawer
+  const elToggleDrawerBtn = document.getElementById('toggleDrawerBtn');
+  const elQuestionDrawer = document.getElementById('questionDrawer');
+  const elCloseDrawerBtn = document.getElementById('closeDrawerBtn');
+  const elDrawerOverlay = document.getElementById('drawerOverlay');
   const elGridContainer = document.getElementById('gridContainer');
   const elGridSearchInput = document.getElementById('gridSearchInput');
   const elBtnResetAllProgress = document.getElementById('btnResetAllProgress');
 
+  // Lightbox
   const elLightboxModal = document.getElementById('lightboxModal');
   const elLightboxImg = document.getElementById('lightboxImg');
   const elBtnCloseLightbox = document.getElementById('btnCloseLightbox');
 
+  // Exam Result Modal
   const elExamResultModal = document.getElementById('examResultModal');
   const elBtnCloseExamResult = document.getElementById('btnCloseExamResult');
   const elResultScorePercent = document.getElementById('resultScorePercent');
@@ -97,8 +101,8 @@
         questions = data.questions;
         onDataReady();
       } catch (err) {
-        console.error('Failed to load JSON data:', err);
-        elQuestionText.textContent = 'Lỗi không thể nạp file dữ liệu questions.json.';
+        console.error('Failed to load questions:', err);
+        elQuestionText.textContent = 'Không thể nạp file dữ liệu ai-103-questions.json.';
       }
     }
 
@@ -109,6 +113,7 @@
     updateFilteredIndices();
     updateStats();
     renderCurrentQuestion();
+    renderGridItems();
   }
 
   // --- Persistence ---
@@ -140,26 +145,27 @@
   }
 
   function loadSavedTheme() {
-    const saved = localStorage.getItem('ai103_quiz_theme');
-    if (saved) {
-      theme = saved;
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      theme = 'dark';
+    const saved = localStorage.getItem('ai103_quiz_dark');
+    if (saved !== null) {
+      isDarkMode = saved === 'true';
+    } else {
+      isDarkMode = true; // Default modern dark slate theme
     }
-    applyTheme(theme);
+    applyTheme(isDarkMode);
   }
 
-  function applyTheme(t) {
-    theme = t;
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('ai103_quiz_theme', theme);
-    if (theme === 'dark') {
-      elThemeIconSun.style.display = 'none';
-      elThemeIconMoon.style.display = 'block';
+  function applyTheme(dark) {
+    isDarkMode = dark;
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      elThemeIconSun.classList.remove('hidden');
+      elThemeIconMoon.classList.add('hidden');
     } else {
-      elThemeIconSun.style.display = 'block';
-      elThemeIconMoon.style.display = 'none';
+      document.documentElement.classList.remove('dark');
+      elThemeIconSun.classList.add('hidden');
+      elThemeIconMoon.classList.remove('hidden');
     }
+    localStorage.setItem('ai103_quiz_dark', isDarkMode);
   }
 
   // --- Filtering & Navigation ---
@@ -174,7 +180,7 @@
       } else if (currentFilter === 'unanswered') {
         if (!ans || !ans.selectedKeys || ans.selectedKeys.length === 0) indices.push(idx);
       } else if (currentFilter === 'correct') {
-        if (ans && ans.isCorrect) indices.push(idx);
+        if (ans && ans.isCorrect === true) indices.push(idx);
       } else if (currentFilter === 'wrong') {
         if (ans && ans.isCorrect === false) indices.push(idx);
       } else if (currentFilter === 'bookmarked') {
@@ -184,7 +190,6 @@
 
     filteredIndices = indices;
     if (filteredIndices.length === 0) {
-      // Don't leave blank if current question matches nothing
       filteredIndices = [currentIndex];
     } else if (!filteredIndices.includes(currentIndex)) {
       currentIndex = filteredIndices[0];
@@ -197,6 +202,7 @@
     saveState();
     renderCurrentQuestion();
     updateNavButtons();
+    renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
   function goToNext() {
@@ -243,8 +249,10 @@
     // Bookmark
     if (bookmarks.has(q.id)) {
       elBtnBookmark.classList.add('bookmarked');
+      elBookmarkText.textContent = 'Đã lưu [B]';
     } else {
       elBtnBookmark.classList.remove('bookmarked');
+      elBookmarkText.textContent = 'Đánh dấu [B]';
     }
 
     // 2. Question Prompt
@@ -262,7 +270,7 @@
     // 6. Action buttons
     updateActionButtons(q);
 
-    // 7. Update bottom nav buttons
+    // 7. Nav Buttons
     updateNavButtons();
   }
 
@@ -281,7 +289,7 @@
         img.loading = 'lazy';
 
         const hint = document.createElement('span');
-        hint.className = 'img-hint';
+        hint.className = 'block text-xs text-on-surface-variant/80 mt-2 font-mono';
         hint.textContent = `🔍 Hình ${i + 1} (Trang ${imgObj.page}) - Click để phóng to`;
 
         wrap.appendChild(img);
@@ -302,21 +310,25 @@
     if (q.options && q.options.length > 0) {
       const isMulti = q.type === 'multiple_choice_multi';
       
-      q.options.forEach((opt) => {
+      q.options.forEach((opt, optIndex) => {
         const item = document.createElement('div');
-        item.className = 'option-item';
+        item.className = 'option-item group';
         item.dataset.key = opt.key;
 
         const isSelected = ansState.selectedKeys.includes(opt.key);
         if (isSelected) item.classList.add('selected');
 
-        // If in Study mode and answered / revealed
+        // Status badges for Study mode
+        let statusBadgeHtml = '';
+
         if (mode === 'study' && ansState.selectedKeys.length > 0) {
           const isKeyCorrect = q.answer_keys.includes(opt.key);
           if (isKeyCorrect) {
             item.classList.add('correct');
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded bg-secondary/20 text-secondary text-[11px] font-mono font-semibold ml-2">Chính xác</span>`;
           } else if (isSelected && !isKeyCorrect) {
             item.classList.add('wrong');
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary text-[11px] font-mono font-semibold ml-2">Bạn đã chọn</span>`;
           }
         }
 
@@ -328,17 +340,25 @@
         body.className = 'option-body';
         body.textContent = opt.text;
 
+        const trailing = document.createElement('div');
+        trailing.className = 'shrink-0 flex items-center ml-2';
+        trailing.innerHTML = `
+          ${statusBadgeHtml}
+          <span class="text-[10px] font-mono text-on-surface-variant border border-outline-variant/40 px-1.5 py-0.5 rounded bg-surface-container ml-2 hidden sm:inline opacity-60 group-hover:opacity-100">${optIndex + 1}</span>
+        `;
+
         item.appendChild(keyBadge);
         item.appendChild(body);
+        item.appendChild(trailing);
 
         item.addEventListener('click', () => handleOptionClick(q, opt.key));
         elOptionsContainer.appendChild(item);
       });
 
-      // If multi-choice, add a confirmation button if not yet submitted
+      // Multi-choice confirmation button
       if (isMulti && mode === 'study' && ansState.selectedKeys.length > 0 && !ansState.revealed) {
         const confirmWrap = document.createElement('div');
-        confirmWrap.style.marginTop = '10px';
+        confirmWrap.className = 'pt-2';
         const btnConfirm = document.createElement('button');
         btnConfirm.className = 'btn-primary';
         btnConfirm.textContent = 'Kiểm tra kết quả lựa chọn';
@@ -350,10 +370,10 @@
       }
 
     } else {
-      // Non-MC question: Display informative helper card
+      // Non-MC question guide
       const helper = document.createElement('div');
       helper.className = 'interactive-guide';
-      helper.innerHTML = `<strong>Dạng câu hỏi tương tác:</strong> Câu hỏi này sử dụng bảng đối chiếu / nhận định / kéo thả trực quan theo sơ đồ ở trên. Bạn hãy đọc đề, suy nghĩ đáp án rồi bấm <strong>"Xem đáp án & giải thích"</strong> bên dưới để đối chiếu.`;
+      helper.innerHTML = `<strong>Dạng câu hỏi tương tác:</strong> Câu hỏi này sử dụng sơ đồ / đoạn mã / bảng đối chiếu kéo thả ở trên. Bạn hãy đọc đề, suy nghĩ phương án rồi bấm <strong>"Xem đáp án & giải thích"</strong> bên dưới để đối chiếu.`;
       elOptionsContainer.appendChild(helper);
     }
   }
@@ -364,7 +384,6 @@
 
     if (mode === 'study') {
       if (isMulti) {
-        // Toggle key in selectedKeys
         let keys = [...current.selectedKeys];
         if (keys.includes(key)) {
           keys = keys.filter(k => k !== key);
@@ -375,7 +394,6 @@
         saveState();
         renderOptions(q);
       } else {
-        // Single choice in Study mode: immediately validate and reveal
         const isCorrect = q.answer_keys.includes(key);
         userAnswers[q.id] = {
           selectedKeys: [key],
@@ -385,9 +403,10 @@
         saveState();
         updateStats();
         renderCurrentQuestion();
+        renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
       }
     } else {
-      // Exam mode: record selection without showing result
+      // Exam mode
       if (isMulti) {
         let keys = [...current.selectedKeys];
         if (keys.includes(key)) {
@@ -402,6 +421,7 @@
       saveState();
       updateStats();
       renderOptions(q);
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     }
   }
 
@@ -409,7 +429,6 @@
     const current = userAnswers[q.id];
     if (!current || current.selectedKeys.length === 0) return;
 
-    // Check if selected keys match all answer_keys
     const selectedSorted = [...current.selectedKeys].sort().join(',');
     const correctSorted = [...q.answer_keys].sort().join(',');
     const isCorrect = selectedSorted === correctSorted;
@@ -423,6 +442,7 @@
     saveState();
     updateStats();
     renderCurrentQuestion();
+    renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
   function renderExplanation(q) {
@@ -448,15 +468,14 @@
       elBtnExamSubmit.style.display = 'none';
 
       if (ansState && ansState.selectedKeys.length > 0) {
-        elBtnResetAnswer.style.display = 'inline-block';
+        elBtnResetAnswer.style.display = 'inline-flex';
       } else {
         elBtnResetAnswer.style.display = 'none';
       }
     } else {
-      // Exam mode: hide explanation button, show submit exam button
       elBtnToggleExplanation.style.display = 'none';
       elBtnResetAnswer.style.display = 'none';
-      elBtnExamSubmit.style.display = 'inline-block';
+      elBtnExamSubmit.style.display = 'inline-flex';
     }
   }
 
@@ -492,19 +511,20 @@
 
     const percent = Math.round((answered / (questions.length || 1)) * 100);
     elProgressBarFill.style.width = `${percent}%`;
-    elProgressLabel.textContent = `${answered} / ${questions.length} đã làm (${percent}%)`;
+    elProgressLabel.innerHTML = `<strong class="text-on-surface font-medium">${answered}</strong> / ${questions.length} hoàn thành (${percent}%)`;
   }
 
-  // --- Grid Modal (Drawer) ---
-  function openGridModal() {
-    renderGridItems();
-    elGridModal.style.display = 'flex';
-    elGridSearchInput.value = '';
+  // --- Slide-over Drawer ---
+  function openDrawer() {
+    elQuestionDrawer.classList.remove('translate-x-full');
+    elDrawerOverlay.classList.remove('opacity-0', 'pointer-events-none');
+    renderGridItems(elGridSearchInput.value);
     elGridSearchInput.focus();
   }
 
-  function closeGridModal() {
-    elGridModal.style.display = 'none';
+  function closeDrawer() {
+    elQuestionDrawer.classList.add('translate-x-full');
+    elDrawerOverlay.classList.add('opacity-0', 'pointer-events-none');
   }
 
   function renderGridItems(keyword = '') {
@@ -535,7 +555,7 @@
 
       item.addEventListener('click', () => {
         goToIndex(idx);
-        closeGridModal();
+        closeDrawer();
       });
 
       elGridContainer.appendChild(item);
@@ -557,14 +577,16 @@
   function setMode(newMode) {
     mode = newMode;
     if (mode === 'study') {
-      elBtnStudyMode.classList.add('active');
-      elBtnExamMode.classList.remove('active');
-      elExamTimer.style.display = 'none';
+      elBtnStudyMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all bg-primary-container text-on-primary-container shadow-sm';
+      elBtnExamMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all text-on-surface-variant hover:text-on-surface';
+      elExamTimer.classList.add('hidden');
+      elExamTimer.classList.remove('flex');
       stopExamTimer();
     } else {
-      elBtnExamMode.classList.add('active');
-      elBtnStudyMode.classList.remove('active');
-      elExamTimer.style.display = 'flex';
+      elBtnExamMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all bg-primary-container text-on-primary-container shadow-sm';
+      elBtnStudyMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all text-on-surface-variant hover:text-on-surface';
+      elExamTimer.classList.remove('hidden');
+      elExamTimer.classList.add('flex');
       startExamTimer();
     }
     renderCurrentQuestion();
@@ -593,7 +615,6 @@
   function submitExam() {
     stopExamTimer();
 
-    // Grade all questions
     let correct = 0;
     let wrong = 0;
     let skipped = 0;
@@ -603,7 +624,6 @@
       if (!ans || !ans.selectedKeys || ans.selectedKeys.length === 0) {
         skipped++;
       } else {
-        // Compare with answer_keys
         if (q.options && q.options.length > 0) {
           const selected = [...ans.selectedKeys].sort().join(',');
           const correctAns = [...q.answer_keys].sort().join(',');
@@ -615,7 +635,6 @@
             wrong++;
           }
         } else {
-          // For non-MC questions, count as answered
           ans.isCorrect = true;
           correct++;
         }
@@ -626,7 +645,6 @@
     saveState();
     updateStats();
 
-    // Show Results
     const total = questions.length;
     const pct = Math.round((correct / total) * 100);
     elResultScorePercent.textContent = `${pct}%`;
@@ -648,16 +666,13 @@
 
     // Theme Toggle
     elBtnThemeToggle.addEventListener('click', () => {
-      applyTheme(theme === 'dark' ? 'light' : 'dark');
+      applyTheme(!isDarkMode);
     });
 
-    // Grid Modal
-    elBtnOpenGrid.addEventListener('click', openGridModal);
-    elBtnCloseGrid.addEventListener('click', closeGridModal);
-    elBtnCloseGridBtn.addEventListener('click', closeGridModal);
-    elGridModal.addEventListener('click', (e) => {
-      if (e.target === elGridModal) closeGridModal();
-    });
+    // Drawer Toggle
+    elToggleDrawerBtn.addEventListener('click', openDrawer);
+    elCloseDrawerBtn.addEventListener('click', closeDrawer);
+    elDrawerOverlay.addEventListener('click', closeDrawer);
     elGridSearchInput.addEventListener('input', (e) => {
       renderGridItems(e.target.value);
     });
@@ -671,7 +686,8 @@
         updateStats();
         updateFilteredIndices();
         renderCurrentQuestion();
-        closeGridModal();
+        renderGridItems();
+        closeDrawer();
       }
     });
 
@@ -702,7 +718,6 @@
     elBtnReviewWrong.addEventListener('click', () => {
       elExamResultModal.style.display = 'none';
       setMode('study');
-      // Set filter to wrong
       document.querySelector('.filter-pill[data-filter="wrong"]').click();
     });
 
@@ -729,6 +744,7 @@
       saveState();
       updateStats();
       renderCurrentQuestion();
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     });
 
     // Toggle Explanation
@@ -750,6 +766,7 @@
       saveState();
       updateStats();
       renderCurrentQuestion();
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     });
 
     // Navigation buttons
@@ -758,14 +775,13 @@
 
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
-      // Don't capture when typing in search input
       if (e.target.tagName === 'INPUT') {
-        if (e.key === 'Escape') closeGridModal();
+        if (e.key === 'Escape') closeDrawer();
         return;
       }
 
       if (e.key === 'Escape') {
-        closeGridModal();
+        closeDrawer();
         closeLightbox();
         elExamResultModal.style.display = 'none';
         return;
@@ -780,15 +796,17 @@
       } else if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
         if (mode === 'study') elBtnToggleExplanation.click();
-      } else if (e.key === 'b' || e.key === 'B') {
+      } else if (e.key === 'b' || e.key === 'B' || e.key === 'f' || e.key === 'F') {
         e.preventDefault();
         elBtnBookmark.click();
       } else if (e.key === 'g' || e.key === 'G') {
         e.preventDefault();
-        if (elGridModal.style.display === 'flex') closeGridModal();
-        else openGridModal();
+        if (elQuestionDrawer.classList.contains('translate-x-full')) {
+          openDrawer();
+        } else {
+          closeDrawer();
+        }
       } else {
-        // Options selection via keys 1-4 or A-D
         const keyMap = {
           '1': 'A', 'a': 'A', 'A': 'A',
           '2': 'B', 'b': 'B', 'B': 'B',
@@ -808,6 +826,6 @@
     });
   }
 
-  // Run app
+  // Run
   initApp();
 })();

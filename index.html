@@ -1,222 +1,402 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html class="dark" lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI-103 Quiz - Ôn luyện trắc nghiệm</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>AI-103: Azure AI Apps and Agents Developer Associate</title>
+  
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  
+  <!-- Fonts: Geist & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#0a0e18",
+            "surface-dim": "#0f131d",
+            "surface": "#0f131d",
+            "surface-container-low": "#171b26",
+            "surface-container": "#1c1f2a",
+            "surface-container-high": "#262a35",
+            "surface-container-highest": "#313540",
+            "surface-bright": "#353944",
+            "primary": "#38bdf8",
+            "primary-container": "#0078d4",
+            "on-primary-container": "#ffffff",
+            "primary-fixed": "#d3e3ff",
+            "secondary": "#10b981",
+            "secondary-container": "#00a572",
+            "on-secondary": "#003824",
+            "tertiary": "#f87171",
+            "tertiary-container": "#ef4444",
+            "tertiary-fixed-dim": "#fbbf24",
+            "error-container": "#93000a",
+            "outline": "#8a919e",
+            "outline-variant": "#404752",
+            "on-surface": "#dfe2f1",
+            "on-surface-variant": "#94a3b8",
+            "on-background": "#dfe2f1"
+          },
+          fontFamily: {
+            sans: ["Geist", "Inter", "-apple-system", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div id="app">
-    <!-- Top Minimalist Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <span class="exam-tag">AI-103</span>
-        <h1 class="exam-title">Azure AI Apps and Agents Developer</h1>
-      </div>
 
-      <div class="header-center">
-        <div class="mode-tabs">
-          <button class="mode-btn active" id="btnStudyMode" title="Xem kết quả và giải thích ngay khi chọn">Ôn luyện</button>
-          <button class="mode-btn" id="btnExamMode" title="Làm bài thi tính giờ, chấm điểm khi nộp bài">Thi thử</button>
-        </div>
-      </div>
-
-      <div class="header-right">
-        <div class="exam-timer" id="examTimer" style="display: none;">
-          <span class="timer-icon">⏱</span>
-          <span id="timerText">00:00</span>
-        </div>
-        <button class="icon-btn" id="btnOpenGrid" title="Danh sách câu hỏi (G)">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span class="btn-text">Danh sách</span>
-        </button>
-        <button class="icon-btn" id="btnThemeToggle" title="Chuyển chế độ Sáng / Tối">
-          <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- Sub-bar: Filters & Progress -->
-    <section class="toolbar">
-      <div class="filters-scroll">
-        <button class="filter-pill active" data-filter="all">Tất cả <span class="count-badge" id="countAll">175</span></button>
-        <button class="filter-pill" data-filter="unanswered">Chưa làm <span class="count-badge" id="countUnanswered">175</span></button>
-        <button class="filter-pill" data-filter="wrong">Làm sai <span class="count-badge" id="countWrong">0</span></button>
-        <button class="filter-pill" data-filter="correct">Làm đúng <span class="count-badge" id="countCorrect">0</span></button>
-        <button class="filter-pill" data-filter="bookmarked">Đã lưu ★ <span class="count-badge" id="countBookmarked">0</span></button>
-      </div>
-
-      <div class="progress-container">
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
-        </div>
-        <span class="progress-label" id="progressLabel">0 / 175 đã làm</span>
-      </div>
-    </section>
-
-    <!-- Main Content: Focused Question Reader -->
-    <main class="main-container">
-      <div class="question-card" id="questionCard">
-        <!-- Question Meta -->
-        <div class="question-meta">
-          <div class="meta-left">
-            <span class="q-number" id="qNumber">Câu 1 / 175</span>
-            <span class="q-type-badge" id="qTypeBadge">Trắc nghiệm</span>
+<body class="bg-surface-container-lowest text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen relative overflow-x-hidden">
+  
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-30 w-full bg-surface-container-lowest/90 glass-surface border-b border-outline-variant/30">
+    <div class="flex justify-between items-center w-full px-4 sm:px-6 py-2.5 max-w-7xl mx-auto">
+      
+      <!-- Brand & Exam Title -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-primary-container/20 border border-primary-container/40 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[18px]">cloud</span>
           </div>
-          <div class="meta-right">
-            <button class="btn-bookmark" id="btnBookmark" title="Lưu câu hỏi (B)">
-              <svg class="star-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>Đánh dấu</span>
-            </button>
-          </div>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-primary-container/30 border border-primary-container text-primary font-mono text-xs font-semibold tracking-wide">
+            AI-103
+          </span>
+        </div>
+        <div class="h-4 w-px bg-outline-variant/40 hidden sm:block"></div>
+        <h1 class="text-sm sm:text-base font-medium text-on-surface tracking-tight truncate max-w-xs md:max-w-md hidden sm:block">
+          Azure AI Apps and Agents Developer
+        </h1>
+      </div>
+
+      <!-- Center: Mode Switcher Tabs -->
+      <nav class="flex items-center bg-surface-container rounded-lg p-1 border border-outline-variant/40">
+        <button id="btnStudyMode" class="px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all bg-primary-container text-on-primary-container shadow-sm">
+          Ôn luyện
+        </button>
+        <button id="btnExamMode" class="px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all text-on-surface-variant hover:text-on-surface">
+          Thi thử
+        </button>
+      </nav>
+
+      <!-- Trailing Controls & Tools -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Live Timer Badge (Visible in Exam mode) -->
+        <div id="examTimer" class="hidden items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-surface-container-low border border-outline-variant/30 text-on-surface-variant font-mono text-xs sm:text-sm">
+          <span class="material-symbols-outlined text-secondary text-[16px]">timer</span>
+          <span id="timerText" class="text-on-surface font-medium">00:00</span>
         </div>
 
-        <!-- Question Prompt Text -->
-        <div class="question-text" id="questionText">
-          Đang tải dữ liệu câu hỏi...
-        </div>
+        <!-- Question Grid Trigger Button -->
+        <button id="toggleDrawerBtn" class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-surface-container border border-outline-variant/40 hover:bg-surface-container-high hover:text-on-surface transition-all text-on-surface-variant text-xs sm:text-sm font-medium active:scale-[0.98]">
+          <span class="material-symbols-outlined text-[18px]">grid_view</span>
+          <span class="hidden sm:inline">Danh sách [G]</span>
+          <span class="px-1.5 py-0.2 rounded-full bg-primary-container text-on-primary-container text-[11px] font-mono">175</span>
+        </button>
 
-        <!-- Attached Images / Diagrams -->
-        <div class="question-images" id="questionImages" style="display: none;">
-          <!-- Dynamically populated images -->
-        </div>
+        <!-- Theme Toggle -->
+        <button id="btnThemeToggle" class="p-1.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container-high transition-colors text-on-surface-variant" title="Chuyển chế độ Sáng / Tối">
+          <span id="themeIconSun" class="material-symbols-outlined text-[18px]">light_mode</span>
+          <span id="themeIconMoon" class="material-symbols-outlined text-[18px] hidden">dark_mode</span>
+        </button>
+      </div>
 
-        <!-- Options Container -->
-        <div class="options-container" id="optionsContainer">
-          <!-- Dynamic options rendered here -->
-        </div>
+    </div>
 
-        <!-- Action / Explanation Reveal Area -->
-        <div class="question-action-bar" id="questionActionBar">
-          <button class="btn-primary" id="btnToggleExplanation">
-            <span id="toggleExplText">Xem đáp án & giải thích</span>
-            <span class="key-hint">(Space)</span>
+    <!-- FILTER & PROGRESS SUB-TOOLBAR -->
+    <div class="w-full bg-surface-container-lowest/50 border-t border-outline-variant/20 py-2">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        
+        <!-- Filter Tabs -->
+        <div class="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto no-scrollbar py-0.5">
+          <button class="filter-pill active px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center space-x-1.5 transition-all" data-filter="all">
+            <span>Tất cả</span>
+            <span id="countAll" class="bg-surface-container-highest px-1.5 py-0.5 rounded-full text-xs font-mono">175</span>
           </button>
-          <button class="btn-outline" id="btnResetAnswer" style="display: none;">Làm lại câu này</button>
-          <button class="btn-primary" id="btnExamSubmit" style="display: none;">Nộp bài thi</button>
+          <button class="filter-pill px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center space-x-1.5 transition-all" data-filter="unanswered">
+            <span>Chưa làm</span>
+            <span id="countUnanswered" class="bg-surface-container-highest px-1.5 py-0.5 rounded-full text-xs font-mono">175</span>
+          </button>
+          <button class="filter-pill px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center space-x-1.5 transition-all" data-filter="wrong">
+            <span>Làm sai</span>
+            <span id="countWrong" class="bg-tertiary-container/30 text-tertiary px-1.5 py-0.5 rounded-full text-xs font-mono">0</span>
+          </button>
+          <button class="filter-pill px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center space-x-1.5 transition-all" data-filter="correct">
+            <span>Làm đúng</span>
+            <span id="countCorrect" class="bg-secondary/20 text-secondary px-1.5 py-0.5 rounded-full text-xs font-mono">0</span>
+          </button>
+          <button class="filter-pill px-3 py-1 rounded-full text-xs sm:text-sm font-medium flex items-center space-x-1.5 transition-all" data-filter="bookmarked">
+            <span class="text-tertiary-fixed-dim">★</span>
+            <span>Đã lưu</span>
+            <span id="countBookmarked" class="bg-surface-container-highest px-1.5 py-0.5 rounded-full text-xs font-mono">0</span>
+          </button>
         </div>
 
-        <!-- Explanation Section -->
-        <div class="explanation-box" id="explanationBox" style="display: none;">
-          <div class="expl-header">
-            <span class="expl-badge">Đáp án chuẩn</span>
-            <div class="expl-correct-answer" id="explCorrectAnswer"></div>
+        <!-- Session Progress Indicator -->
+        <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+          <span class="text-xs sm:text-sm text-on-surface-variant whitespace-nowrap">
+            <span id="progressLabel"><strong class="text-on-surface font-medium">0</strong> / 175 hoàn thành</span>
+          </span>
+          <div class="w-24 sm:w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden flex">
+            <div id="progressBarFill" class="h-full bg-secondary rounded-full transition-all duration-300" style="width: 0%;"></div>
           </div>
-          <div class="expl-body" id="explBody"></div>
         </div>
-      </div>
-    </main>
 
-    <!-- Bottom Navigation Bar -->
-    <footer class="app-footer">
-      <div class="footer-left">
-        <button class="nav-btn" id="btnPrev">
-          <span class="arrow">←</span>
-          <span class="text">Câu trước</span>
-          <span class="key-hint">([)</span>
-        </button>
       </div>
+    </div>
+  </header>
 
-      <div class="footer-center">
-        <span class="nav-status" id="navStatus">1 / 175</span>
-      </div>
-
-      <div class="footer-right">
-        <button class="nav-btn" id="btnNext">
-          <span class="text">Câu tiếp theo</span>
-          <span class="arrow">→</span>
-          <span class="key-hint">(])</span>
-        </button>
-      </div>
-    </footer>
-
-    <!-- Question Grid Drawer Modal -->
-    <div class="modal-overlay" id="gridModal" style="display: none;">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h2>Danh sách 175 câu hỏi</h2>
-          <button class="close-btn" id="btnCloseGrid">&times;</button>
+  <!-- MAIN CANVAS CONTAINER -->
+  <main class="max-w-[880px] mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-32">
+    
+    <!-- QUESTION ARTICLE CARD -->
+    <article class="bg-surface-container-low/80 border border-outline-variant/30 rounded-xl p-6 sm:p-8 backdrop-blur-md relative overflow-hidden transition-all duration-200 shadow-xl">
+      
+      <!-- Card Header: Meta Badges & Star Button -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-outline-variant/20">
+        <div class="flex flex-wrap items-center gap-2">
+          <span id="qNumber" class="px-2.5 py-1 rounded-md bg-surface-container-high text-on-surface font-mono text-xs sm:text-sm font-semibold border border-outline-variant/40">
+            Câu 1 / 175
+          </span>
+          <span id="qTypeBadge" class="px-2.5 py-1 rounded-md bg-primary-container/15 text-primary border border-primary-container/30 text-xs font-medium">
+            Trắc nghiệm đơn
+          </span>
         </div>
         
-        <div class="grid-search-bar">
-          <input type="text" id="gridSearchInput" placeholder="Tìm kiếm từ khóa (Foundry, Search, Content Safety...)" />
-          <div class="grid-stats">
-            <span class="stat-dot dot-correct"></span> Đúng
-            <span class="stat-dot dot-wrong"></span> Sai
-            <span class="stat-dot dot-unanswered"></span> Chưa làm
-            <span class="stat-dot dot-bookmarked"></span> Đã lưu
+        <!-- Bookmark / Flag Action -->
+        <button id="btnBookmark" class="flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-surface-container text-on-surface-variant border border-outline-variant/40 hover:bg-surface-container-high transition-colors text-xs sm:text-sm">
+          <span class="material-symbols-outlined text-[18px]">bookmark</span>
+          <span id="bookmarkText">Đánh dấu [B]</span>
+        </button>
+      </div>
+
+      <!-- Question Text Narrative -->
+      <div class="py-6">
+        <div id="questionText" class="text-base sm:text-lg text-on-surface leading-relaxed whitespace-pre-line">
+          Đang tải dữ liệu câu hỏi...
+        </div>
+      </div>
+
+      <!-- Attached Images / Diagrams -->
+      <div id="questionImages" class="mb-6 flex flex-col gap-3" style="display: none;">
+        <!-- Images injected here dynamically -->
+      </div>
+
+      <!-- Interactive Options Container -->
+      <div id="optionsContainer" class="space-y-3 mb-6">
+        <!-- Option items injected here dynamically -->
+      </div>
+
+      <!-- Action Button Row -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-5 border-t border-outline-variant/20">
+        <div class="flex items-center space-x-2">
+          <button id="btnToggleExplanation" class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface text-xs sm:text-sm font-medium flex items-center space-x-2 border border-outline-variant/40 transition-colors active:scale-[0.98]">
+            <span class="material-symbols-outlined text-[18px]">visibility</span>
+            <span id="toggleExplText">Xem đáp án & giải thích</span>
+            <kbd class="px-1.5 py-0.5 rounded bg-surface-container-lowest text-[10px] font-mono text-on-surface-variant border border-outline-variant/40">Space</kbd>
+          </button>
+          
+          <button id="btnResetAnswer" class="px-3.5 py-2 rounded-lg bg-transparent hover:bg-surface-container text-on-surface-variant hover:text-on-surface text-xs sm:text-sm flex items-center space-x-1.5 transition-colors" style="display: none;">
+            <span class="material-symbols-outlined text-[18px]">replay</span>
+            <span>Làm lại</span>
+          </button>
+          
+          <button id="btnExamSubmit" class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary-container/90 text-xs sm:text-sm font-medium transition-all shadow-sm" style="display: none;">
+            Nộp bài thi thử
+          </button>
+        </div>
+
+        <div class="text-xs text-on-surface-variant/70 font-mono hidden sm:block">
+          AI-103 Practice
+        </div>
+      </div>
+
+      <!-- Expandable Explanation Box -->
+      <div id="explanationBox" class="mt-6 rounded-xl bg-surface-container border border-outline-variant/40 p-5 sm:p-6 space-y-5" style="display: none;">
+        <!-- Header status badge -->
+        <div class="flex items-center justify-between pb-3 border-b border-outline-variant/20">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-secondary/15 border border-secondary/30 text-secondary text-xs sm:text-sm font-medium">
+            <span class="material-symbols-outlined text-[16px]">verified</span>
+            <span id="explCorrectAnswer">Đáp án chính xác</span>
+          </div>
+          <span class="text-[11px] font-mono text-on-surface-variant uppercase tracking-wider">Deep Dive Analysis</span>
+        </div>
+
+        <!-- Section: Phân tích chi tiết -->
+        <div class="space-y-2">
+          <h4 class="text-sm sm:text-base text-on-surface font-semibold flex items-center space-x-2">
+            <span class="material-symbols-outlined text-primary text-[18px]">psychology</span>
+            <span>Phân tích chi tiết</span>
+          </h4>
+          <div id="explBody" class="text-xs sm:text-sm text-on-surface-variant leading-relaxed whitespace-pre-line"></div>
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <!-- BOTTOM STICKY FLOATING NAVIGATION BAR -->
+  <footer class="fixed bottom-0 left-0 right-0 z-30 bg-surface-container-lowest/90 glass-surface border-t border-outline-variant/30 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      
+      <!-- Previous Question Button -->
+      <button id="btnPrev" class="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface text-xs sm:text-sm font-medium border border-outline-variant/40 transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span class="hidden sm:inline">Câu trước</span>
+        <kbd class="hidden md:inline px-1.5 py-0.5 rounded bg-surface-container-lowest text-[10px] font-mono text-on-surface-variant border border-outline-variant/40">[</kbd>
+      </button>
+
+      <!-- Question Counter -->
+      <div class="flex flex-col items-center space-y-1">
+        <div class="flex items-center space-x-2 font-mono text-xs sm:text-sm">
+          <span id="navStatus" class="text-primary font-semibold">1 / 175</span>
+        </div>
+      </div>
+
+      <!-- Next Question Button & Keyboard shortcuts guide -->
+      <div class="flex items-center space-x-3 sm:space-x-4">
+        <div class="hidden lg:flex items-center space-x-1 text-[11px] font-mono text-on-surface-variant/80">
+          <span>Phím tắt:</span>
+          <kbd class="px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/40">[←]</kbd>
+          <kbd class="px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/40">[→]</kbd>
+          <kbd class="px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/40">[1-4]</kbd>
+          <kbd class="px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant/40">[Space]</kbd>
+        </div>
+
+        <button id="btnNext" class="flex items-center space-x-2 px-4 sm:px-5 py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary-container/90 text-xs sm:text-sm font-medium transition-all shadow-sm active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed">
+          <span>Câu tiếp theo</span>
+          <kbd class="hidden md:inline px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono text-white border border-white/20">]</kbd>
+          <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </button>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SLIDE-OVER QUESTION MATRIX DRAWER -->
+  <div id="drawerOverlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-opacity opacity-0 pointer-events-none"></div>
+
+  <aside id="questionDrawer" class="fixed top-0 right-0 h-full w-full max-w-sm z-50 bg-surface-container-low border-l border-outline-variant/30 shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out">
+    
+    <!-- Top Header of Drawer -->
+    <div class="p-4 border-b border-outline-variant/30">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-primary-container/20 border border-primary-container/40 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[18px]">apps</span>
+          </div>
+          <div>
+            <h2 class="text-sm font-medium text-on-surface leading-tight">Danh sách câu hỏi</h2>
+            <p class="text-xs text-on-surface-variant font-mono">175 Questions</p>
           </div>
         </div>
+        <button id="closeDrawerBtn" class="p-1 rounded-lg hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" title="Đóng [ESC]">
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
 
-        <div class="grid-container" id="gridContainer">
-          <!-- 175 grid item buttons rendered dynamically -->
+      <!-- Quick Search Bar -->
+      <div class="relative mt-2">
+        <span class="material-symbols-outlined absolute left-2.5 top-2.5 text-[16px] text-on-surface-variant">search</span>
+        <input id="gridSearchInput" class="w-full bg-surface-container-lowest border border-outline-variant/40 rounded-lg pl-8 pr-3 py-1.5 text-xs sm:text-sm font-sans text-on-surface placeholder-on-surface-variant/50 focus:outline-none focus:border-primary transition-colors" placeholder="Tìm theo từ khóa (Foundry, Search...)" type="text" />
+      </div>
+
+      <!-- Legend -->
+      <div class="pt-3 grid grid-cols-2 gap-2 text-xs text-on-surface-variant font-mono">
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-secondary"></span>
+          <span>Đúng</span>
         </div>
-
-        <div class="modal-footer">
-          <button class="btn-danger-outline" id="btnResetAllProgress">Đặt lại toàn bộ tiến độ</button>
-          <button class="btn-primary" id="btnCloseGridBtn">Đóng</button>
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-tertiary-container"></span>
+          <span>Sai</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded bg-surface-container border border-outline-variant/50"></span>
+          <span>Chưa làm</span>
+        </div>
+        <div class="flex items-center space-x-1.5">
+          <span class="text-tertiary-fixed-dim">★</span>
+          <span>Đã lưu</span>
         </div>
       </div>
     </div>
 
-    <!-- Image Lightbox Modal -->
-    <div class="lightbox-overlay" id="lightboxModal" style="display: none;">
-      <div class="lightbox-content">
-        <button class="lightbox-close" id="btnCloseLightbox">&times;</button>
-        <img id="lightboxImg" src="" alt="Hình ảnh phóng to" />
-      </div>
+    <!-- Scrollable Numbered Matrix Grid -->
+    <div id="gridContainer" class="flex-1 overflow-y-auto p-4 grid grid-cols-5 gap-2 font-mono text-xs no-scrollbar">
+      <!-- 175 grid buttons injected dynamically -->
     </div>
 
-    <!-- Exam Result Modal -->
-    <div class="modal-overlay" id="examResultModal" style="display: none;">
-      <div class="modal-card result-card">
-        <div class="modal-header">
-          <h2>Kết quả bài thi thử</h2>
-          <button class="close-btn" id="btnCloseExamResult">&times;</button>
-        </div>
-        <div class="result-content">
-          <div class="score-circle">
-            <span class="score-num" id="resultScorePercent">0%</span>
-            <span class="score-label" id="resultPassStatus">Chưa đạt</span>
-          </div>
-          <div class="result-breakdown">
-            <div class="res-item">
-              <span class="res-label">Tổng số câu:</span>
-              <span class="res-val" id="resTotal">175</span>
-            </div>
-            <div class="res-item text-green">
-              <span class="res-label">Số câu đúng:</span>
-              <span class="res-val" id="resCorrect">0</span>
-            </div>
-            <div class="res-item text-red">
-              <span class="res-label">Số câu sai:</span>
-              <span class="res-val" id="resWrong">0</span>
-            </div>
-            <div class="res-item text-muted">
-              <span class="res-label">Chưa trả lời:</span>
-              <span class="res-val" id="resSkipped">0</span>
-            </div>
-            <div class="res-item">
-              <span class="res-label">Thời gian làm bài:</span>
-              <span class="res-val" id="resTime">00:00</span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn-outline" id="btnReviewWrong">Xem lại các câu sai</button>
-          <button class="btn-primary" id="btnRestartExam">Làm lại bài thi</button>
-        </div>
-      </div>
+    <!-- Drawer Footer Actions -->
+    <div class="p-4 border-t border-outline-variant/30 bg-surface-container-lowest/80 space-y-2">
+      <button id="btnResetAllProgress" class="w-full py-2 rounded-lg bg-surface-container-high hover:bg-surface-bright text-tertiary text-xs font-medium border border-outline-variant/40 transition-all active:scale-[0.99]">
+        Đặt lại toàn bộ tiến độ
+      </button>
     </div>
 
+  </aside>
+
+  <!-- IMAGE LIGHTBOX MODAL -->
+  <div id="lightboxModal" class="lightbox-overlay" style="display: none;">
+    <div class="lightbox-content">
+      <button id="btnCloseLightbox" class="lightbox-close">&times;</button>
+      <img id="lightboxImg" src="" alt="Hình ảnh phóng to" />
+    </div>
   </div>
 
-  <!-- Fallback standalone data script (ensures zero CORS issue when running file://) -->
+  <!-- EXAM RESULT MODAL -->
+  <div id="examResultModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card result-card">
+      <div class="modal-header">
+        <h2>Kết quả bài thi thử</h2>
+        <button id="btnCloseExamResult" class="close-btn">&times;</button>
+      </div>
+      <div class="result-content">
+        <div class="score-circle">
+          <span id="resultScorePercent" class="score-num">0%</span>
+          <span id="resultPassStatus" class="score-label">Chưa đạt</span>
+        </div>
+        <div class="result-breakdown">
+          <div class="res-item">
+            <span>Tổng số câu:</span>
+            <span id="resTotal">175</span>
+          </div>
+          <div class="res-item text-green">
+            <span>Số câu đúng:</span>
+            <span id="resCorrect">0</span>
+          </div>
+          <div class="res-item text-red">
+            <span>Số câu sai:</span>
+            <span id="resWrong">0</span>
+          </div>
+          <div class="res-item text-muted">
+            <span>Chưa trả lời:</span>
+            <span id="resSkipped">0</span>
+          </div>
+          <div class="res-item">
+            <span>Thời gian hoàn thành:</span>
+            <span id="resTime">00:00</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnReviewWrong" class="btn-outline">Xem lại câu sai</button>
+        <button id="btnRestartExam" class="btn-primary">Làm lại bài thi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data and Application Script -->
   <script src="data/questions-data.js"></script>
   <script src="app.js"></script>
 </body>
