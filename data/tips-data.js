@@ -2,7 +2,7 @@
  * AI-103 Quiz Studio - Curated Tips & Exam Tricks Data
  * Standardized for Microsoft Certified: Azure AI Engineer Associate (AI-103)
  */
-window.AI103_TIPS_DATA = [
+var AI103_TIPS_DATA = window.AI103_TIPS_DATA = [
   {
     id: 1,
     category: "keywords",

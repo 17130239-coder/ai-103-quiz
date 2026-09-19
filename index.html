@@ -42,7 +42,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260919_3" />
 </head>
 <body class="bg-[#fcfaf8] dark:bg-[#0c0f17] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased min-h-screen flex flex-col selection:bg-orange-500/20 selection:text-orange-400 transition-colors duration-200 pb-28">
 
@@ -56,13 +56,13 @@
           AI-103
         </span>
         <div class="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-lg text-xs font-medium">
-          <button id="btnStudyMode" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs whitespace-nowrap">
+          <button id="btnStudyMode" onclick="window.setMode && window.setMode('study')" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs whitespace-nowrap">
             Ôn tập
           </button>
-          <button id="btnExamMode" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap">
+          <button id="btnExamMode" onclick="window.setMode && window.setMode('exam')" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap">
             Thi thử
           </button>
-          <button id="btnTipsMode" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap flex items-center space-x-1">
+          <button id="btnTipsMode" onclick="window.setMode && window.setMode('tips')" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap flex items-center space-x-1">
             <span class="material-symbols-outlined text-[13px] text-amber-500">lightbulb</span>
             <span>Tips & Mẹo</span>
           </button>
@@ -169,7 +169,7 @@
     </div>
 
     <!-- VIEW 2: TIPS & TRICKS (Tips & Mẹo) -->
-    <div id="viewTips" class="hidden space-y-5 transition-opacity duration-200">
+    <div id="viewTips" class="hidden space-y-5 transition-opacity duration-200" style="display: none;">
       
       <!-- Tips Banner Hero (iOS 18 Inset Card) -->
       <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-orange-500/[0.08] via-amber-500/[0.04] to-transparent border border-orange-500/20 backdrop-blur-xl relative overflow-hidden shadow-xs">
@@ -424,8 +424,8 @@
   </div>
 
   <!-- Data & Scripts -->
-  <script src="data/questions-data.js"></script>
-  <script src="data/tips-data.js"></script>
-  <script src="app.js"></script>
+  <script src="data/questions-data.js?v=20260919_3"></script>
+  <script src="data/tips-data.js?v=20260919_3"></script>
+  <script src="app.js?v=20260919_3"></script>
 </body>
 </html>

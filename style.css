@@ -79,6 +79,9 @@ html.dark .skeleton-shimmer {
   cursor: pointer;
   user-select: none;
 }
+.zen-mode-btn * {
+  pointer-events: none;
+}
 .zen-mode-btn.active {
   background-color: #ffffff;
   color: #0f172a;

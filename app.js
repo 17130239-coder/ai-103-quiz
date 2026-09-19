@@ -193,6 +193,7 @@
 
   // --- Initializer ---
   async function initApp() {
+    setupEventListeners();
     loadSavedTheme();
     loadSavedState();
     initTipCategoryCounts();
@@ -212,8 +213,6 @@
         elQuestionText.textContent = 'Không thể nạp file dữ liệu câu hỏi.';
       }
     }
-
-    setupEventListeners();
   }
 
   function onDataReady() {
@@ -1213,8 +1212,16 @@
   function setMode(newMode) {
     mode = newMode;
 
+    const btnStudy = elBtnStudyMode || document.getElementById('btnStudyMode');
+    const btnExam = elBtnExamMode || document.getElementById('btnExamMode');
+    const btnTips = elBtnTipsMode || document.getElementById('btnTipsMode');
+    const viewQuiz = elViewQuiz || document.getElementById('viewQuiz');
+    const viewTips = elViewTips || document.getElementById('viewTips');
+    const navContainer = elFloatingNavContainer || document.getElementById('floatingNavContainer');
+    const timer = elExamTimer || document.getElementById('examTimer');
+
     // Reset all segmented control buttons
-    [elBtnStudyMode, elBtnExamMode, elBtnTipsMode].forEach(btn => {
+    [btnStudy, btnExam, btnTips].forEach(btn => {
       if (btn) {
         btn.classList.remove('active');
         btn.classList.add('text-slate-500', 'dark:text-slate-400');
@@ -1222,16 +1229,26 @@
     });
 
     if (mode === 'tips') {
-      if (elBtnTipsMode) {
-        elBtnTipsMode.classList.add('active');
-        elBtnTipsMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      if (btnTips) {
+        btnTips.classList.add('active');
+        btnTips.classList.remove('text-slate-500', 'dark:text-slate-400');
       }
-      if (elViewQuiz) elViewQuiz.classList.add('hidden');
-      if (elViewTips) elViewTips.classList.remove('hidden');
-      if (elFloatingNavContainer) elFloatingNavContainer.classList.add('hidden');
-      if (elExamTimer) {
-        elExamTimer.classList.add('hidden');
-        elExamTimer.classList.remove('flex');
+      if (viewQuiz) {
+        viewQuiz.classList.add('hidden');
+        viewQuiz.style.setProperty('display', 'none', 'important');
+      }
+      if (viewTips) {
+        viewTips.classList.remove('hidden');
+        viewTips.style.setProperty('display', 'block', 'important');
+      }
+      if (navContainer) {
+        navContainer.classList.add('hidden');
+        navContainer.style.setProperty('display', 'none', 'important');
+      }
+      if (timer) {
+        timer.classList.add('hidden');
+        timer.classList.remove('flex');
+        timer.style.setProperty('display', 'none', 'important');
       }
       stopExamTimer();
       renderTipsList();
@@ -1240,38 +1257,54 @@
     }
 
     // Study or Exam mode
-    if (elViewTips) elViewTips.classList.add('hidden');
-    if (elViewQuiz) elViewQuiz.classList.remove('hidden');
-    if (elFloatingNavContainer) elFloatingNavContainer.classList.remove('hidden');
+    if (viewTips) {
+      viewTips.classList.add('hidden');
+      viewTips.style.setProperty('display', 'none', 'important');
+    }
+    if (viewQuiz) {
+      viewQuiz.classList.remove('hidden');
+      viewQuiz.style.removeProperty('display');
+    }
+    if (navContainer) {
+      navContainer.classList.remove('hidden');
+      navContainer.style.removeProperty('display');
+    }
 
     if (mode === 'study') {
-      if (elBtnStudyMode) {
-        elBtnStudyMode.classList.add('active');
-        elBtnStudyMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      if (btnStudy) {
+        btnStudy.classList.add('active');
+        btnStudy.classList.remove('text-slate-500', 'dark:text-slate-400');
       }
-      if (elExamTimer) {
-        elExamTimer.classList.add('hidden');
-        elExamTimer.classList.remove('flex');
+      if (timer) {
+        timer.classList.add('hidden');
+        timer.classList.remove('flex');
+        timer.style.setProperty('display', 'none', 'important');
       }
       stopExamTimer();
     } else if (mode === 'exam') {
-      if (elBtnExamMode) {
-        elBtnExamMode.classList.add('active');
-        elBtnExamMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      if (btnExam) {
+        btnExam.classList.add('active');
+        btnExam.classList.remove('text-slate-500', 'dark:text-slate-400');
       }
-      if (elExamTimer) {
-        elExamTimer.classList.remove('hidden');
-        elExamTimer.classList.add('flex');
+      if (timer) {
+        timer.classList.remove('hidden');
+        timer.classList.add('flex');
+        timer.style.removeProperty('display');
       }
       startExamTimer();
     }
     renderCurrentQuestion();
   }
 
+  // Global exposure for inline HTML onclick and external triggers
+  window.setMode = setMode;
+  window.goToQuestionFromTips = goToQuestionFromTips;
+
   // --- Tips & Tricks Renderer ---
   function renderTipsList() {
-    if (!elTipsListContainer) return;
-    const allTips = window.AI103_TIPS_DATA || [];
+    const listContainer = elTipsListContainer || document.getElementById('tipsListContainer');
+    if (!listContainer) return;
+    const allTips = (typeof AI103_TIPS_DATA !== 'undefined' && AI103_TIPS_DATA) || window.AI103_TIPS_DATA || [];
     
     // Filter
     const kw = (tipSearchKeyword || '').trim().toLowerCase();
@@ -1299,14 +1332,15 @@
     });
 
     // Toggle No results state
+    const noRes = elTipNoResults || document.getElementById('tipNoResults');
     if (filtered.length === 0) {
-      elTipsListContainer.innerHTML = '';
-      if (elTipNoResults) elTipNoResults.classList.remove('hidden');
+      listContainer.innerHTML = '';
+      if (noRes) noRes.classList.remove('hidden');
       return;
     }
-    if (elTipNoResults) elTipNoResults.classList.add('hidden');
+    if (noRes) noRes.classList.add('hidden');
 
-    elTipsListContainer.innerHTML = '';
+    listContainer.innerHTML = '';
 
     filtered.forEach((tip) => {
       const card = document.createElement('article');
@@ -1414,11 +1448,11 @@
       }
 
       card.innerHTML = html;
-      elTipsListContainer.appendChild(card);
+      listContainer.appendChild(card);
     });
 
     // Attach copy events
-    elTipsListContainer.querySelectorAll('.tip-code-copy-btn').forEach(btn => {
+    listContainer.querySelectorAll('.tip-code-copy-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetId = btn.getAttribute('data-copy-target');
         const pre = document.getElementById(targetId);
@@ -1433,7 +1467,7 @@
     });
 
     // Attach jump events
-    elTipsListContainer.querySelectorAll('.btn-tip-jump').forEach(btn => {
+    listContainer.querySelectorAll('.btn-tip-jump').forEach(btn => {
       btn.addEventListener('click', () => {
         const qid = parseInt(btn.getAttribute('data-qid'), 10);
         if (qid) {
