@@ -1,6 +1,6 @@
 /* ==========================================================================
    AI-103 Studio - Zen Modern Minimalist Stylesheet
-   Inspired by Linear, Raycast, and Apple HIG
+   Mobile-First Responsive, Zero-Jank & High-Performance
    ========================================================================== */
 
 /* Base Typography & Smooth Rendering */
@@ -8,6 +8,7 @@ body {
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Material Symbols Rendering */
@@ -109,19 +110,21 @@ html.dark .zen-filter-pill:hover {
   opacity: 0.95;
 }
 
-/* Modern Option Cards (Zen Bento) */
+/* Modern Option Cards (Ergonomic Touch Targets) */
 .option-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.875rem;
-  padding: 0.875rem 1.125rem;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  min-height: 52px;
   border-radius: 0.75rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
   background-color: rgba(255, 255, 255, 0.7);
   cursor: pointer;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
   user-select: none;
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 html.dark .option-item {
   border-color: rgba(255, 255, 255, 0.08);
@@ -166,7 +169,7 @@ html.dark .option-key {
 .option-body {
   font-size: 0.9375rem;
   color: #1e293b;
-  line-height: 1.65;
+  line-height: 1.6;
   flex: 1;
 }
 html.dark .option-body {
@@ -245,7 +248,7 @@ html.dark .interactive-guide {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.75rem;
-  padding: 0.75rem;
+  padding: 0.625rem;
   text-align: center;
   cursor: zoom-in;
   transition: border-color 0.15s ease;
@@ -261,6 +264,7 @@ html.dark .q-img-wrap {
 .q-img-frame {
   position: relative;
   width: 100%;
+  max-height: min(420px, 50vh);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -270,6 +274,21 @@ html.dark .q-img-wrap {
 }
 html.dark .q-img-frame {
   background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Smooth Explanation Box Reveal */
+#explanationBox {
+  animation: explanationSlide 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes explanationSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Drawer Grid Items (10px squircle) */
@@ -348,11 +367,11 @@ html.dark .grid-item.current {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 20px;
+  padding: 16px;
 }
 .lightbox-content {
   position: relative;
-  max-width: 90vw;
+  max-width: 94vw;
   max-height: 90vh;
   display: flex;
   align-items: center;
@@ -360,14 +379,14 @@ html.dark .grid-item.current {
 }
 .lightbox-content img {
   max-width: 100%;
-  max-height: 90vh;
-  border-radius: 12px;
+  max-height: 85vh;
+  border-radius: 10px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   background: white;
 }
 .lightbox-close {
   position: absolute;
-  top: -44px;
+  top: -42px;
   right: 0;
   background: rgba(255, 255, 255, 0.2);
   border: none;
@@ -397,13 +416,13 @@ html.dark .grid-item.current {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  padding: 20px;
+  padding: 16px;
 }
 .modal-card {
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 1rem;
-  max-width: 440px;
+  border-radius: 1.25rem;
+  max-width: 420px;
   width: 100%;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
@@ -425,7 +444,7 @@ html.dark .modal-card {
   }
 }
 .modal-header {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 1.25rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
@@ -435,7 +454,7 @@ html.dark .modal-header {
   border-color: rgba(255, 255, 255, 0.08);
 }
 .modal-header h2 {
-  font-size: 1.125rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #0f172a;
 }
@@ -460,22 +479,16 @@ html.dark .close-btn {
   background: rgba(255, 255, 255, 0.08);
   color: #94a3b8;
 }
-.close-btn:hover {
-  color: #0f172a;
-}
-html.dark .close-btn:hover {
-  color: #ffffff;
-}
 .result-content {
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 .score-circle {
-  width: 110px;
-  height: 110px;
+  width: 100px;
+  height: 100px;
   border-radius: 9999px;
   background-color: rgba(14, 165, 233, 0.08);
   border: 3px solid #0ea5e9;
@@ -485,7 +498,7 @@ html.dark .close-btn:hover {
   justify-content: center;
 }
 .score-num {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: #0ea5e9;
 }
@@ -504,21 +517,21 @@ html.dark .score-label {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 .res-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.625rem 0.875rem;
+  padding: 0.5rem 0.75rem;
   background-color: rgba(0, 0, 0, 0.03);
   border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
 }
 html.dark .res-item {
   background-color: rgba(255, 255, 255, 0.04);
 }
 .modal-footer {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
   border-top: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
@@ -532,9 +545,9 @@ html.dark .modal-footer {
   background-color: #0ea5e9;
   color: #ffffff;
   border: none;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.15rem;
   border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -546,9 +559,9 @@ html.dark .modal-footer {
   background: transparent;
   border: 1px solid rgba(0, 0, 0, 0.12);
   color: #64748b;
-  padding: 0.5rem 1.25rem;
+  padding: 0.5rem 1.15rem;
   border-radius: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -556,12 +569,4 @@ html.dark .modal-footer {
 html.dark .btn-outline {
   border-color: rgba(255, 255, 255, 0.12);
   color: #94a3b8;
-}
-.btn-outline:hover {
-  color: #0f172a;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-html.dark .btn-outline:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.06);
 }

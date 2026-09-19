@@ -1,13 +1,13 @@
 // ==========================================================================
 // AI-103 Studio Application Logic
-// Zen Modern Minimalist Interface with Zero-Jank Image Performance & Preloader
+// Mobile-First Responsive, Zero-CLS & Jitter-Free Performance
 // ==========================================================================
 
 (function () {
   'use strict';
 
   // --- App State ---
-  const STORAGE_KEY = 'ai103_quiz_state_v5';
+  const STORAGE_KEY = 'ai103_quiz_state_v6';
   
   let questions = [];
   let currentIndex = 0;
@@ -22,7 +22,7 @@
   let examTimerId = null;
   let examSeconds = 0;
 
-  // --- Image Cache Preloader ---
+  // --- Intelligent Image Preloader ---
   const preloadedImageUrls = new Set();
 
   function preloadImageUrl(url) {
@@ -34,7 +34,6 @@
   }
 
   function preloadAdjacentImages() {
-    // Immediately preload upcoming questions and previous question
     const targetIndices = [
       currentIndex + 1,
       currentIndex + 2,
@@ -52,7 +51,6 @@
   }
 
   function startIdlePreloadAllImages() {
-    // Progressively cache all 123 images during browser idle periods
     const allImages = [];
     questions.forEach(q => {
       if (q.images && q.images.length > 0) {
@@ -70,7 +68,7 @@
         if ('requestIdleCallback' in window) {
           window.requestIdleCallback(preloadBatch, { timeout: 1000 });
         } else {
-          setTimeout(preloadBatch, 250);
+          setTimeout(preloadBatch, 200);
         }
       }
     }
@@ -110,7 +108,6 @@
   const elOptionsContainer = document.getElementById('optionsContainer');
 
   const elBtnToggleExplanation = document.getElementById('btnToggleExplanation');
-  const elToggleExplText = document.getElementById('toggleExplText');
   const elExamSubmitContainer = document.getElementById('examSubmitContainer');
   const elBtnExamSubmit = document.getElementById('btnExamSubmit');
   const elExplanationBox = document.getElementById('explanationBox');
@@ -120,6 +117,7 @@
   const elBtnPrev = document.getElementById('btnPrev');
   const elBtnNext = document.getElementById('btnNext');
   const elNavStatus = document.getElementById('navStatus');
+  const elBtnNavMatrix = document.getElementById('btnNavMatrix');
 
   // Drawer
   const elToggleDrawerBtn = document.getElementById('toggleDrawerBtn');
@@ -182,7 +180,7 @@
   // --- Persistence ---
   function loadSavedState() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v4') || localStorage.getItem('ai103_quiz_state_v3');
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v5') || localStorage.getItem('ai103_quiz_state_v4');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed.userAnswers) userAnswers = parsed.userAnswers;
@@ -212,7 +210,7 @@
     if (saved !== null) {
       isDarkMode = saved === 'true';
     } else {
-      isDarkMode = true; // Modern dark slate default
+      isDarkMode = true;
     }
     applyTheme(isDarkMode);
   }
@@ -263,6 +261,10 @@
     if (newIndex < 0 || newIndex >= questions.length) return;
     currentIndex = newIndex;
     saveState();
+    
+    // Crucial: Instant scroll to top to prevent jitter / scroll desync
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
     renderCurrentQuestion();
     updateNavButtons();
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
@@ -317,7 +319,7 @@
       if (icon) icon.textContent = 'bookmark';
     } else {
       elBtnBookmark.classList.remove('bookmarked');
-      elBookmarkText.textContent = 'Đánh dấu [B]';
+      elBookmarkText.textContent = 'Lưu [B]';
       if (icon) icon.textContent = 'bookmark_border';
     }
 
@@ -347,7 +349,7 @@
       q.images.forEach((imgObj, i) => {
         const wrap = document.createElement('div');
         wrap.className = 'q-img-wrap';
-        wrap.title = 'Bấm để phóng to';
+        wrap.title = 'Bấm để xem ảnh lớn';
 
         // Reserved aspect-ratio container prevents any layout shift (CLS = 0)
         const frame = document.createElement('div');
@@ -357,7 +359,6 @@
         } else {
           frame.style.aspectRatio = '16 / 9';
         }
-        frame.style.maxHeight = '480px';
 
         // Shimmer skeleton placeholder
         const shimmer = document.createElement('div');
@@ -371,9 +372,9 @@
         if (imgObj.height) img.height = imgObj.height;
         img.loading = 'eager';
         img.decoding = 'async';
-        img.className = 'w-full h-full object-contain rounded-lg opacity-0 transition-opacity duration-300';
+        img.className = 'w-full h-full object-contain rounded-lg opacity-0 transition-opacity duration-200';
 
-        // If cached already by preloader, show immediately
+        // If cached already by preloader, show immediately without flicker
         if (img.complete && img.naturalHeight !== 0) {
           img.classList.remove('opacity-0');
           shimmer.style.display = 'none';
@@ -392,7 +393,7 @@
 
         const hint = document.createElement('div');
         hint.className = 'flex items-center justify-center space-x-1.5 text-xs text-slate-400 mt-2 font-mono';
-        hint.innerHTML = `<span class="material-symbols-outlined text-[14px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Bấm phóng to</span>`;
+        hint.innerHTML = `<span class="material-symbols-outlined text-[14px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Chạm để phóng to</span>`;
 
         wrap.appendChild(frame);
         wrap.appendChild(hint);
@@ -443,10 +444,10 @@
         body.textContent = opt.text;
 
         const trailing = document.createElement('div');
-        trailing.className = 'shrink-0 flex items-center ml-2';
+        trailing.className = 'shrink-0 flex items-center ml-1 sm:ml-2';
         trailing.innerHTML = `
           ${statusBadgeHtml}
-          <span class="text-[10px] font-mono text-slate-400 opacity-50 group-hover:opacity-100 ml-2 hidden sm:inline">[${optIndex + 1}]</span>
+          <span class="text-[10px] font-mono text-slate-400 opacity-50 group-hover:opacity-100 ml-1.5 hidden sm:inline">[${optIndex + 1}]</span>
         `;
 
         item.appendChild(keyBadge);
@@ -462,7 +463,7 @@
         const confirmWrap = document.createElement('div');
         confirmWrap.className = 'pt-2 flex justify-end';
         const btnConfirm = document.createElement('button');
-        btnConfirm.className = 'px-4 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all';
+        btnConfirm.className = 'w-full sm:w-auto px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95';
         btnConfirm.textContent = 'Kiểm tra kết quả lựa chọn';
         btnConfirm.addEventListener('click', () => {
           submitMultiChoice(q);
@@ -479,7 +480,7 @@
         <span class="material-symbols-outlined text-sky-500 text-[18px] shrink-0 mt-0.5">info</span>
         <div>
           <strong class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
-          <span>Câu hỏi này sử dụng sơ đồ hoặc khối mã ở trên. Hãy đọc đề, suy nghĩ đáp án rồi bấm <strong>"Giải thích [Space]"</strong> bên dưới để đối chiếu phân tích chính thức từ Microsoft.</span>
+          <span>Câu hỏi này sử dụng sơ đồ hoặc khối mã ở trên. Hãy đọc đề, suy nghĩ đáp án rồi bấm <strong>icon bóng đèn</strong> bên dưới để đối chiếu phân tích chính thức từ Microsoft.</span>
         </div>
       `;
       elOptionsContainer.appendChild(helper);
@@ -561,10 +562,8 @@
       elExplanationBox.style.display = 'block';
       elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
       elExplBody.textContent = q.explanation;
-      elToggleExplText.textContent = 'Ẩn giải thích';
     } else {
       elExplanationBox.style.display = 'none';
-      elToggleExplText.textContent = 'Giải thích';
     }
   }
 
@@ -614,16 +613,18 @@
     if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${answered}/${questions.length}`;
   }
 
-  // --- Slide-over Drawer ---
+  // --- Drawer (Bottom sheet on Mobile, Slide-over on Desktop) ---
   function openDrawer() {
-    elQuestionDrawer.classList.remove('translate-x-full');
+    elQuestionDrawer.classList.remove('translate-y-full', 'sm:translate-x-full');
+    elQuestionDrawer.classList.add('translate-y-0', 'sm:translate-x-0');
     elDrawerOverlay.classList.remove('opacity-0', 'pointer-events-none');
     renderGridItems(elGridSearchInput.value);
     elGridSearchInput.focus();
   }
 
   function closeDrawer() {
-    elQuestionDrawer.classList.add('translate-x-full');
+    elQuestionDrawer.classList.add('translate-y-full', 'sm:translate-x-full');
+    elQuestionDrawer.classList.remove('translate-y-0', 'sm:translate-x-0');
     elDrawerOverlay.classList.add('opacity-0', 'pointer-events-none');
   }
 
@@ -775,6 +776,7 @@
 
     // Drawer Toggle
     elToggleDrawerBtn.addEventListener('click', openDrawer);
+    if (elBtnNavMatrix) elBtnNavMatrix.addEventListener('click', openDrawer);
     elCloseDrawerBtn.addEventListener('click', closeDrawer);
     elDrawerOverlay.addEventListener('click', closeDrawer);
     elGridSearchInput.addEventListener('input', (e) => {
@@ -895,7 +897,7 @@
         elBtnBookmark.click();
       } else if (e.key === 'g' || e.key === 'G') {
         e.preventDefault();
-        if (elQuestionDrawer.classList.contains('translate-x-full')) {
+        if (elQuestionDrawer.classList.contains('translate-y-full') || elQuestionDrawer.classList.contains('sm:translate-x-full')) {
           openDrawer();
         } else {
           closeDrawer();
