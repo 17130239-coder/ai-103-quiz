@@ -780,3 +780,76 @@ html.dark .pool-tag {
   border-color: rgba(251, 146, 60, 0.3);
 }
 
+/* ==========================================================================
+   Tips & Tricks View Styles (iOS 18 Inset Grouped)
+   ========================================================================== */
+.zen-tip-pill {
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  transition: all 0.15s ease;
+}
+.zen-tip-pill.active {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 1px 4px var(--primary-glow);
+}
+.zen-tip-pill:hover:not(.active) {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #0f172a;
+}
+html.dark .zen-tip-pill:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+/* Interactive Question Jump Chips */
+.btn-tip-jump {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+.btn-tip-jump:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(249, 115, 22, 0.2);
+}
+
+/* Code Snippet Box */
+.tip-code-block {
+  position: relative;
+  background-color: #0d111a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+.tip-code-copy-btn {
+  opacity: 0.7;
+  transition: opacity 0.15s ease, background-color 0.15s ease;
+}
+.tip-code-copy-btn:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Global Transient Toast */
+#globalToast {
+  position: fixed;
+  top: 4rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 60;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#globalToast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+

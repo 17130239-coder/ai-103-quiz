@@ -51,16 +51,20 @@
     <div class="max-w-3xl mx-auto px-3 sm:px-6 h-12 flex items-center justify-between">
       
       <!-- Left: Monogram Badge & Mode Switcher -->
-      <div class="flex items-center space-x-2">
-        <span class="px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+      <div class="flex items-center space-x-1.5 sm:space-x-2">
+        <span class="hidden sm:inline-block px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
           AI-103
         </span>
         <div class="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-lg text-xs font-medium">
-          <button id="btnStudyMode" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs">
+          <button id="btnStudyMode" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs whitespace-nowrap">
             Ôn tập
           </button>
-          <button id="btnExamMode" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs">
+          <button id="btnExamMode" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap">
             Thi thử
+          </button>
+          <button id="btnTipsMode" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap flex items-center space-x-1">
+            <span class="material-symbols-outlined text-[13px] text-amber-500">lightbulb</span>
+            <span>Tips & Mẹo</span>
           </button>
         </div>
       </div>
@@ -97,74 +101,171 @@
   <!-- MAIN CANVAS (Centered, Distraction-Free & Ergonomic) -->
   <main class="flex-1 max-w-3xl w-full mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-28">
     
-    <!-- Meta Info Bar -->
-    <div class="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08] mb-4">
-      <div class="flex items-center space-x-1.5 sm:space-x-2">
-        <span id="qNumber" class="text-[11px] sm:text-xs font-mono font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 sm:px-2.5 py-0.5 rounded-full border border-orange-500/20">
-          Câu 1 / 175
-        </span>
-        <span id="qTypeBadge" class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2 sm:px-2.5 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06]">
-          Trắc nghiệm đơn
-        </span>
-      </div>
-
-      <!-- Bookmark Action -->
-      <button id="btnBookmark" class="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors font-medium active:scale-95">
-        <span class="material-symbols-outlined text-[17px]">bookmark_border</span>
-        <span id="bookmarkText">Lưu [B]</span>
-      </button>
-    </div>
-
-    <!-- Question Prompt (Compact, Balanced Typography) -->
-    <article class="mb-5">
-      <h1 id="questionText" class="text-[14.5px] sm:text-[15.5px] font-medium leading-[1.62] sm:leading-[1.7] text-slate-800 dark:text-slate-100 tracking-[-0.01em] whitespace-pre-line">
-        Đang tải nội dung câu hỏi...
-      </h1>
-    </article>
-
-    <!-- Attached Diagrams / Code Screenshots (Zero-CLS container) -->
-    <div id="questionImages" class="flex flex-col gap-3 mb-5" style="display: none;">
-      <!-- Dynamic images injected -->
-    </div>
-
-    <!-- Options Container -->
-    <div id="optionsContainer" class="space-y-2.5 sm:space-y-3 mb-6">
-      <!-- Options injected dynamically -->
-    </div>
-
-    <!-- Exam Submit Button (Visible only in Exam mode) -->
-    <div id="examSubmitContainer" class="flex justify-end mb-6" style="display: none;">
-      <button id="btnExamSubmit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-medium text-xs shadow-xs transition-all active:scale-95">
-        Nộp bài thi & Chấm điểm
-      </button>
-    </div>
-
-    <!-- Deep Dive / Explanation Card (Minimalist Linear disclosure) -->
-    <section id="explanationBox" class="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 sm:p-5 space-y-3 transition-all" style="display: none;">
-      <div class="flex items-center justify-between pb-2.5 border-b border-emerald-500/20">
-        <div class="flex items-center space-x-2">
-          <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-            <span class="material-symbols-outlined text-[14px]">check</span>
+    <!-- VIEW 1: QUIZ & PRACTICE (Study & Exam) -->
+    <div id="viewQuiz" class="space-y-0 transition-opacity duration-200">
+      <!-- Meta Info Bar -->
+      <div class="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08] mb-4">
+        <div class="flex items-center space-x-1.5 sm:space-x-2">
+          <span id="qNumber" class="text-[11px] sm:text-xs font-mono font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 sm:px-2.5 py-0.5 rounded-full border border-orange-500/20">
+            Câu 1 / 175
           </span>
-          <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
-            Đáp án chính xác
+          <span id="qTypeBadge" class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2 sm:px-2.5 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06]">
+            Trắc nghiệm đơn
           </span>
         </div>
-        <span class="text-[10px] sm:text-[11px] font-mono text-slate-400">Microsoft Learn</span>
+
+        <!-- Bookmark Action -->
+        <button id="btnBookmark" class="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors font-medium active:scale-95">
+          <span class="material-symbols-outlined text-[17px]">bookmark_border</span>
+          <span id="bookmarkText">Lưu [B]</span>
+        </button>
       </div>
 
-      <div id="explBody" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans">
+      <!-- Question Prompt (Compact, Balanced Typography) -->
+      <article class="mb-5">
+        <h1 id="questionText" class="text-[14.5px] sm:text-[15.5px] font-medium leading-[1.62] sm:leading-[1.7] text-slate-800 dark:text-slate-100 tracking-[-0.01em] whitespace-pre-line">
+          Đang tải nội dung câu hỏi...
+        </h1>
+      </article>
+
+      <!-- Attached Diagrams / Code Screenshots (Zero-CLS container) -->
+      <div id="questionImages" class="flex flex-col gap-3 mb-5" style="display: none;">
+        <!-- Dynamic images injected -->
       </div>
 
-      <!-- Container for official answer images from the exam -->
-      <div id="explImages" class="pt-2 flex flex-col gap-3" style="display: none;">
+      <!-- Options Container -->
+      <div id="optionsContainer" class="space-y-2.5 sm:space-y-3 mb-6">
+        <!-- Options injected dynamically -->
       </div>
-    </section>
+
+      <!-- Exam Submit Button (Visible only in Exam mode) -->
+      <div id="examSubmitContainer" class="flex justify-end mb-6" style="display: none;">
+        <button id="btnExamSubmit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-medium text-xs shadow-xs transition-all active:scale-95">
+          Nộp bài thi & Chấm điểm
+        </button>
+      </div>
+
+      <!-- Deep Dive / Explanation Card (Minimalist Linear disclosure) -->
+      <section id="explanationBox" class="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 sm:p-5 space-y-3 transition-all" style="display: none;">
+        <div class="flex items-center justify-between pb-2.5 border-b border-emerald-500/20">
+          <div class="flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-[14px]">check</span>
+            </span>
+            <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
+              Đáp án chính xác
+            </span>
+          </div>
+          <span class="text-[10px] sm:text-[11px] font-mono text-slate-400">Microsoft Learn</span>
+        </div>
+
+        <div id="explBody" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans">
+        </div>
+
+        <!-- Container for official answer images from the exam -->
+        <div id="explImages" class="pt-2 flex flex-col gap-3" style="display: none;">
+        </div>
+      </section>
+    </div>
+
+    <!-- VIEW 2: TIPS & TRICKS (Tips & Mẹo) -->
+    <div id="viewTips" class="hidden space-y-5 transition-opacity duration-200">
+      
+      <!-- Tips Banner Hero (iOS 18 Inset Card) -->
+      <div class="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-orange-500/[0.08] via-amber-500/[0.04] to-transparent border border-orange-500/20 backdrop-blur-xl relative overflow-hidden shadow-xs">
+        <div class="flex items-start justify-between gap-3">
+          <div class="space-y-1.5">
+            <div class="flex items-center space-x-2">
+              <span class="w-7 h-7 rounded-lg bg-orange-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <span class="material-symbols-outlined text-[17px]">tips_and_updates</span>
+              </span>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-[-0.01em]">
+                Cẩm nang Bí kíp & Mẹo thi AI-103
+              </h2>
+            </div>
+            <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl">
+              Tổng hợp 16 quy tắc cốt lõi, bẫy từ khóa của Microsoft, công thức phân biệt độ đo và phương pháp xử lý câu hỏi tương tác kéo thả.
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Summary Metrics -->
+        <div class="mt-3.5 pt-3 border-t border-orange-500/15 flex flex-wrap items-center gap-2 text-[11px] font-mono">
+          <span class="px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 font-semibold">
+            16 Tips chọn lọc
+          </span>
+          <span class="px-2 py-0.5 rounded-full bg-black/[0.03] dark:bg-white/[0.06] text-slate-600 dark:text-slate-300 border border-black/[0.05] dark:border-white/[0.06]">
+            6 Chủ đề trọng điểm
+          </span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-semibold">
+            Bấm câu để ôn ngay ↗
+          </span>
+        </div>
+      </div>
+
+      <!-- Search & Category Filters (Sticky for smooth navigation) -->
+      <div class="sticky top-12 z-20 py-2.5 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 bg-white/90 dark:bg-[#0c0f17]/90 backdrop-blur-xl border-b border-black/[0.05] dark:border-white/[0.06] space-y-2">
+        <!-- Quick Search -->
+        <div class="relative">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-[17px] text-slate-400">search</span>
+          <input id="tipSearchInput" class="w-full pl-9 pr-8 py-1.5 bg-black/[0.03] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-xl text-xs font-sans text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-orange-500 transition-all" placeholder="Tìm kiếm mẹo (Prompt Shield, Precision, Video, OpenTelemetry, Managed Identity...)" type="text" />
+          <button id="btnClearTipSearch" class="hidden absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+            <span class="material-symbols-outlined text-[16px]">cancel</span>
+          </button>
+        </div>
+
+        <!-- Filter Pills Bar -->
+        <div id="tipCategoryPills" class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar pt-0.5 pb-0.5">
+          <button class="zen-tip-pill active px-3 py-1 rounded-lg text-xs font-medium transition-all shrink-0" data-category="all">
+            Tất cả (16)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="keywords">
+            Từ khóa vàng (4)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="interactive">
+            Câu tương tác (4)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="cheatsheet">
+            Code & SDK (3)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="security">
+            Bảo mật & Mạng (3)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="metrics">
+            Công thức (1)
+          </button>
+          <button class="zen-tip-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-category="strategy">
+            Chiến thuật (1)
+          </button>
+        </div>
+      </div>
+
+      <!-- Tips List Container -->
+      <div id="tipsListContainer" class="space-y-4 pt-1">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <!-- No Results State -->
+      <div id="tipNoResults" class="hidden text-center py-12 space-y-2">
+        <span class="material-symbols-outlined text-[36px] text-slate-400">search_off</span>
+        <p class="text-sm font-medium text-slate-600 dark:text-slate-300">Không tìm thấy mẹo nào phù hợp</p>
+        <p class="text-xs text-slate-400">Thử tìm kiếm với từ khóa khác như "Foundry", "SDK", "Precision", hoặc "VNet"</p>
+      </div>
+
+      <!-- Back To Top Floating Action Button -->
+      <div class="flex justify-center pt-6 pb-12">
+        <button id="btnTipsScrollTop" class="flex items-center space-x-1.5 px-4 py-2 rounded-full bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium text-slate-600 dark:text-slate-300 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+          <span>Lên đầu trang</span>
+        </button>
+      </div>
+
+    </div>
 
   </main>
 
   <!-- FLOATING THUMB-FRIENDLY NAV CAPSULE (Mobile Optimized) -->
-  <div class="fixed bottom-0 inset-x-0 z-30 flex justify-center items-center px-4 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] pt-2 pointer-events-none">
+  <div id="floatingNavContainer" class="fixed bottom-0 inset-x-0 z-30 flex justify-center items-center px-4 pb-[calc(env(safe-area-inset-bottom,0px)+0.75rem)] pt-2 pointer-events-none">
     <nav aria-label="Điều hướng câu hỏi" class="pointer-events-auto rounded-full bg-white/95 dark:bg-[#111726]/95 backdrop-blur-xl border border-black/[0.08] dark:border-white/[0.1] shadow-xl shadow-black/10 dark:shadow-black/40 flex items-center justify-between px-2 py-1.5 w-full max-w-[340px] sm:max-w-sm">
       
       <!-- Previous -->
@@ -316,8 +417,15 @@
     </div>
   </div>
 
+  <!-- Global Transient Toast -->
+  <div id="globalToast" class="flex items-center space-x-2 px-3.5 py-2 rounded-full bg-slate-900/90 dark:bg-slate-100/95 text-white dark:text-slate-900 text-xs font-medium shadow-xl backdrop-blur-xl border border-white/10 pointer-events-none">
+    <span id="globalToastIcon" class="material-symbols-outlined text-[16px] text-orange-500">info</span>
+    <span id="globalToastMsg">Thông báo</span>
+  </div>
+
   <!-- Data & Scripts -->
   <script src="data/questions-data.js"></script>
+  <script src="data/tips-data.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

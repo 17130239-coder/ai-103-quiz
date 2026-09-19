@@ -89,6 +89,45 @@
   // --- DOM Elements ---
   const elBtnStudyMode = document.getElementById('btnStudyMode');
   const elBtnExamMode = document.getElementById('btnExamMode');
+  const elBtnTipsMode = document.getElementById('btnTipsMode');
+  const elViewQuiz = document.getElementById('viewQuiz');
+  const elViewTips = document.getElementById('viewTips');
+  const elFloatingNavContainer = document.getElementById('floatingNavContainer');
+  const elTipSearchInput = document.getElementById('tipSearchInput');
+  const elBtnClearTipSearch = document.getElementById('btnClearTipSearch');
+  const elTipCategoryPills = document.querySelectorAll('#tipCategoryPills .zen-tip-pill');
+  const elTipsListContainer = document.getElementById('tipsListContainer');
+  const elTipNoResults = document.getElementById('tipNoResults');
+  const elBtnTipsScrollTop = document.getElementById('btnTipsScrollTop');
+  const elGlobalToast = document.getElementById('globalToast');
+  const elGlobalToastMsg = document.getElementById('globalToastMsg');
+  const elGlobalToastIcon = document.getElementById('globalToastIcon');
+
+  let currentTipCategory = 'all';
+  let tipSearchKeyword = '';
+  let toastTimeoutId = null;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function showToast(msg, icon = 'info') {
+    if (!elGlobalToast) return;
+    if (toastTimeoutId) clearTimeout(toastTimeoutId);
+    if (elGlobalToastMsg) elGlobalToastMsg.textContent = msg;
+    if (elGlobalToastIcon) elGlobalToastIcon.textContent = icon;
+    elGlobalToast.classList.add('show');
+    toastTimeoutId = setTimeout(() => {
+      elGlobalToast.classList.remove('show');
+    }, 2400);
+  }
+
   const elExamTimer = document.getElementById('examTimer');
   const elTimerText = document.getElementById('timerText');
   const elBtnThemeToggle = document.getElementById('btnThemeToggle');
@@ -156,6 +195,7 @@
   async function initApp() {
     loadSavedTheme();
     loadSavedState();
+    initTipCategoryCounts();
 
     const inlineData = window.QUIZ_DATA || window.__QUESTIONS_DATA__;
     if (inlineData && inlineData.questions) {
@@ -1169,27 +1209,276 @@
     elLightboxImg.src = '';
   }
 
-  // --- Exam Mode Logic ---
+  // --- Mode Logic (Study | Exam | Tips) ---
   function setMode(newMode) {
     mode = newMode;
-    if (mode === 'study') {
-      elBtnStudyMode.classList.add('active');
-      elBtnStudyMode.classList.remove('text-slate-500', 'dark:text-slate-400');
-      elBtnExamMode.classList.remove('active');
-      elBtnExamMode.classList.add('text-slate-500', 'dark:text-slate-400');
-      elExamTimer.classList.add('hidden');
-      elExamTimer.classList.remove('flex');
+
+    // Reset all segmented control buttons
+    [elBtnStudyMode, elBtnExamMode, elBtnTipsMode].forEach(btn => {
+      if (btn) {
+        btn.classList.remove('active');
+        btn.classList.add('text-slate-500', 'dark:text-slate-400');
+      }
+    });
+
+    if (mode === 'tips') {
+      if (elBtnTipsMode) {
+        elBtnTipsMode.classList.add('active');
+        elBtnTipsMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      }
+      if (elViewQuiz) elViewQuiz.classList.add('hidden');
+      if (elViewTips) elViewTips.classList.remove('hidden');
+      if (elFloatingNavContainer) elFloatingNavContainer.classList.add('hidden');
+      if (elExamTimer) {
+        elExamTimer.classList.add('hidden');
+        elExamTimer.classList.remove('flex');
+      }
       stopExamTimer();
-    } else {
-      elBtnExamMode.classList.add('active');
-      elBtnExamMode.classList.remove('text-slate-500', 'dark:text-slate-400');
-      elBtnStudyMode.classList.remove('active');
-      elBtnStudyMode.classList.add('text-slate-500', 'dark:text-slate-400');
-      elExamTimer.classList.remove('hidden');
-      elExamTimer.classList.add('flex');
+      renderTipsList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    // Study or Exam mode
+    if (elViewTips) elViewTips.classList.add('hidden');
+    if (elViewQuiz) elViewQuiz.classList.remove('hidden');
+    if (elFloatingNavContainer) elFloatingNavContainer.classList.remove('hidden');
+
+    if (mode === 'study') {
+      if (elBtnStudyMode) {
+        elBtnStudyMode.classList.add('active');
+        elBtnStudyMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      }
+      if (elExamTimer) {
+        elExamTimer.classList.add('hidden');
+        elExamTimer.classList.remove('flex');
+      }
+      stopExamTimer();
+    } else if (mode === 'exam') {
+      if (elBtnExamMode) {
+        elBtnExamMode.classList.add('active');
+        elBtnExamMode.classList.remove('text-slate-500', 'dark:text-slate-400');
+      }
+      if (elExamTimer) {
+        elExamTimer.classList.remove('hidden');
+        elExamTimer.classList.add('flex');
+      }
       startExamTimer();
     }
     renderCurrentQuestion();
+  }
+
+  // --- Tips & Tricks Renderer ---
+  function renderTipsList() {
+    if (!elTipsListContainer) return;
+    const allTips = window.AI103_TIPS_DATA || [];
+    
+    // Filter
+    const kw = (tipSearchKeyword || '').trim().toLowerCase();
+    const filtered = allTips.filter(tip => {
+      // Category match
+      if (currentTipCategory !== 'all' && tip.category !== currentTipCategory) {
+        return false;
+      }
+      // Keyword search match
+      if (kw) {
+        const textToSearch = [
+          tip.title,
+          tip.highlight,
+          tip.summary,
+          ...(tip.tags || []),
+          ...(tip.rules ? tip.rules.map(r => r.text) : []),
+          tip.codeSnippet || ''
+        ].join(' ').toLowerCase();
+        
+        if (!textToSearch.includes(kw)) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    // Toggle No results state
+    if (filtered.length === 0) {
+      elTipsListContainer.innerHTML = '';
+      if (elTipNoResults) elTipNoResults.classList.remove('hidden');
+      return;
+    }
+    if (elTipNoResults) elTipNoResults.classList.add('hidden');
+
+    elTipsListContainer.innerHTML = '';
+
+    filtered.forEach((tip) => {
+      const card = document.createElement('article');
+      card.className = 'rounded-2xl border border-black/[0.06] dark:border-white/[0.08] bg-white/80 dark:bg-[#111726]/80 backdrop-blur-xl p-4 sm:p-5 shadow-xs transition-all hover:border-orange-500/30';
+      
+      // Category colors mapping
+      const categoryTheme = {
+        keywords: { badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20', icon: 'key' },
+        interactive: { badge: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20', icon: 'touch_app' },
+        metrics: { badge: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20', icon: 'calculate' },
+        cheatsheet: { badge: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20', icon: 'code' },
+        security: { badge: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20', icon: 'shield_lock' },
+        strategy: { badge: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20', icon: 'timer' }
+      }[tip.category] || { badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20', icon: 'lightbulb' };
+
+      // Header row: Badges + Number
+      let html = `
+        <div class="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-black/[0.04] dark:border-white/[0.06]">
+          <div class="flex items-center space-x-1.5">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider border ${categoryTheme.badge}">
+              ${escapeHtml(tip.categoryLabel)}
+            </span>
+            <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+              #${String(tip.id).padStart(2, '0')}
+            </span>
+          </div>
+          <span class="material-symbols-outlined text-[18px] text-orange-500/80">
+            ${tip.icon || 'lightbulb'}
+          </span>
+        </div>
+
+        <h3 class="text-sm sm:text-[15px] font-semibold text-slate-900 dark:text-slate-100 tracking-[-0.01em] mb-2.5 leading-snug">
+          ${escapeHtml(tip.title)}
+        </h3>
+
+        <!-- Core Highlight Pill Banner -->
+        <div class="p-3 rounded-xl bg-orange-500/[0.07] dark:bg-orange-500/[0.12] border-l-[3px] border-orange-500 text-xs sm:text-[13px] text-slate-800 dark:text-orange-100 font-medium mb-3 flex items-start gap-2 leading-relaxed">
+          <span class="material-symbols-outlined text-[16px] text-orange-500 shrink-0 mt-0.5">bolt</span>
+          <div>${escapeHtml(tip.highlight)}</div>
+        </div>
+
+        <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+          ${escapeHtml(tip.summary)}
+        </p>
+      `;
+
+      // Rules / Key Points
+      if (tip.rules && tip.rules.length > 0) {
+        html += `<div class="space-y-2 mb-3">`;
+        tip.rules.forEach(rule => {
+          const isPick = rule.type === 'pick';
+          const icon = isPick ? 'check_circle' : 'cancel';
+          const iconColor = isPick ? 'text-emerald-500' : 'text-rose-500';
+          const bgColor = isPick 
+            ? 'bg-emerald-500/[0.04] dark:bg-emerald-500/[0.08] border-emerald-500/20' 
+            : 'bg-rose-500/[0.04] dark:bg-rose-500/[0.08] border-rose-500/20';
+          const textColor = isPick 
+            ? 'text-emerald-950 dark:text-emerald-200' 
+            : 'text-rose-950 dark:text-rose-200';
+
+          html += `
+            <div class="flex items-start gap-2 p-2 sm:p-2.5 rounded-lg border ${bgColor} text-xs leading-relaxed">
+              <span class="material-symbols-outlined text-[15px] ${iconColor} shrink-0 mt-0.5">${icon}</span>
+              <span class="${textColor}">${escapeHtml(rule.text)}</span>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      // Code Snippet (if any)
+      if (tip.codeSnippet) {
+        const snippetId = `tip_snippet_${tip.id}`;
+        html += `
+          <div class="tip-code-block mb-3">
+            <div class="flex items-center justify-between px-3 py-1.5 bg-black/20 border-b border-white/[0.06] text-[11px] font-mono text-slate-400">
+              <span>Code / Payload</span>
+              <button class="tip-code-copy-btn flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] text-slate-300 active:scale-95" data-copy-target="${snippetId}">
+                <span class="material-symbols-outlined text-[12px]">content_copy</span>
+                <span>Sao chép</span>
+              </button>
+            </div>
+            <pre id="${snippetId}" class="p-3 text-[11.5px] font-mono leading-relaxed text-slate-200 overflow-x-auto no-scrollbar whitespace-pre"><code>${escapeHtml(tip.codeSnippet)}</code></pre>
+          </div>
+        `;
+      }
+
+      // Related Questions (Interactive Links)
+      if (tip.relatedQuestions && tip.relatedQuestions.length > 0) {
+        html += `
+          <div class="pt-2.5 border-t border-black/[0.04] dark:border-white/[0.06] flex items-center flex-wrap gap-1.5">
+            <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
+              Ôn luyện câu:
+            </span>
+        `;
+        tip.relatedQuestions.forEach(qid => {
+          html += `
+            <button class="btn-tip-jump px-2 py-0.5 rounded-md bg-orange-500/10 hover:bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-[11px] font-mono font-semibold transition-all active:scale-95" data-qid="${qid}">
+              Câu ${qid} ↗
+            </button>
+          `;
+        });
+        html += `</div>`;
+      }
+
+      card.innerHTML = html;
+      elTipsListContainer.appendChild(card);
+    });
+
+    // Attach copy events
+    elTipsListContainer.querySelectorAll('.tip-code-copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-copy-target');
+        const pre = document.getElementById(targetId);
+        if (pre) {
+          navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+            showToast('Đã sao chép đoạn mã vào clipboard!', 'check');
+          }).catch(() => {
+            showToast('Không thể tự động sao chép', 'warning');
+          });
+        }
+      });
+    });
+
+    // Attach jump events
+    elTipsListContainer.querySelectorAll('.btn-tip-jump').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const qid = parseInt(btn.getAttribute('data-qid'), 10);
+        if (qid) {
+          goToQuestionFromTips(qid);
+        }
+      });
+    });
+  }
+
+  function goToQuestionFromTips(qid) {
+    const idx = questions.findIndex(q => q.id === qid);
+    if (idx !== -1) {
+      setMode('study');
+      goToIndex(idx);
+      showToast(`Đang mở Câu ${qid} để ôn tập ngay!`, 'verified');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showToast(`Không tìm thấy câu ${qid}`, 'error');
+    }
+  }
+
+  function initTipCategoryCounts() {
+    const allTips = window.AI103_TIPS_DATA || [];
+    const counts = { all: allTips.length };
+    allTips.forEach(t => {
+      counts[t.category] = (counts[t.category] || 0) + 1;
+    });
+    if (elTipCategoryPills) {
+      elTipCategoryPills.forEach(pill => {
+        const cat = pill.getAttribute('data-category');
+        const count = counts[cat] || 0;
+        const labelMap = {
+          all: 'Tất cả',
+          keywords: 'Từ khóa vàng',
+          interactive: 'Câu tương tác',
+          cheatsheet: 'Code & SDK',
+          security: 'Bảo mật & Mạng',
+          metrics: 'Công thức',
+          strategy: 'Chiến thuật'
+        };
+        if (labelMap[cat]) {
+          pill.textContent = `${labelMap[cat]} (${count})`;
+        }
+      });
+    }
   }
 
   function startExamTimer() {
@@ -1282,6 +1571,52 @@
     // Mode Switch
     elBtnStudyMode.addEventListener('click', () => setMode('study'));
     elBtnExamMode.addEventListener('click', () => setMode('exam'));
+    if (elBtnTipsMode) elBtnTipsMode.addEventListener('click', () => setMode('tips'));
+
+    // Tips & Mẹo Interactions
+    if (elTipSearchInput) {
+      elTipSearchInput.addEventListener('input', (e) => {
+        tipSearchKeyword = e.target.value;
+        if (elBtnClearTipSearch) {
+          if (tipSearchKeyword) elBtnClearTipSearch.classList.remove('hidden');
+          else elBtnClearTipSearch.classList.add('hidden');
+        }
+        renderTipsList();
+      });
+    }
+
+    if (elBtnClearTipSearch) {
+      elBtnClearTipSearch.addEventListener('click', () => {
+        if (elTipSearchInput) {
+          elTipSearchInput.value = '';
+          tipSearchKeyword = '';
+          elBtnClearTipSearch.classList.add('hidden');
+          renderTipsList();
+          elTipSearchInput.focus();
+        }
+      });
+    }
+
+    if (elTipCategoryPills) {
+      elTipCategoryPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          elTipCategoryPills.forEach(p => {
+            p.classList.remove('active');
+            p.classList.add('text-slate-500', 'dark:text-slate-400');
+          });
+          pill.classList.add('active');
+          pill.classList.remove('text-slate-500', 'dark:text-slate-400');
+          currentTipCategory = pill.getAttribute('data-category') || 'all';
+          renderTipsList();
+        });
+      });
+    }
+
+    if (elBtnTipsScrollTop) {
+      elBtnTipsScrollTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
 
     // Theme Toggle
     elBtnThemeToggle.addEventListener('click', () => {
@@ -1395,6 +1730,10 @@
         closeDrawer();
         closeLightbox();
         elExamResultModal.style.display = 'none';
+        return;
+      }
+
+      if (mode === 'tips') {
         return;
       }
 
