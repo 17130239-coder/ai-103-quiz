@@ -1,13 +1,13 @@
 // ==========================================================================
-// AI-103 Quiz Application Logic
-// Optimized for Apple iOS 18 Human Interface Guidelines Minimalist Design
+// AI-103 Studio Application Logic
+// Zen Modern Minimalist Interface (Inspired by Linear & Raycast)
 // ==========================================================================
 
 (function () {
   'use strict';
 
   // --- App State ---
-  const STORAGE_KEY = 'ai103_quiz_state_v4';
+  const STORAGE_KEY = 'ai103_quiz_state_v5';
   
   let questions = [];
   let currentIndex = 0;
@@ -30,8 +30,9 @@
   const elBtnThemeToggle = document.getElementById('btnThemeToggle');
   const elThemeIconSun = document.getElementById('themeIconSun');
   const elThemeIconMoon = document.getElementById('themeIconMoon');
+  const elDrawerTriggerCount = document.getElementById('drawerTriggerCount');
 
-  const elFilterPills = document.querySelectorAll('.ios-filter-pill, .filter-pill');
+  const elFilterPills = document.querySelectorAll('.zen-filter-pill, .ios-filter-pill, .filter-pill');
   const elCountAll = document.getElementById('countAll');
   const elCountUnanswered = document.getElementById('countUnanswered');
   const elCountWrong = document.getElementById('countWrong');
@@ -50,7 +51,7 @@
 
   const elBtnToggleExplanation = document.getElementById('btnToggleExplanation');
   const elToggleExplText = document.getElementById('toggleExplText');
-  const elBtnResetAnswer = document.getElementById('btnResetAnswer');
+  const elExamSubmitContainer = document.getElementById('examSubmitContainer');
   const elBtnExamSubmit = document.getElementById('btnExamSubmit');
   const elExplanationBox = document.getElementById('explanationBox');
   const elExplCorrectAnswer = document.getElementById('explCorrectAnswer');
@@ -120,7 +121,7 @@
   // --- Persistence ---
   function loadSavedState() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v3');
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v4') || localStorage.getItem('ai103_quiz_state_v3');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed.userAnswers) userAnswers = parsed.userAnswers;
@@ -150,8 +151,7 @@
     if (saved !== null) {
       isDarkMode = saved === 'true';
     } else {
-      // Respect system preference if no manual setting
-      isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      isDarkMode = true; // Modern dark slate default
     }
     applyTheme(isDarkMode);
   }
@@ -293,8 +293,8 @@
         img.loading = 'lazy';
 
         const hint = document.createElement('div');
-        hint.className = 'flex items-center justify-center space-x-1.5 text-xs text-ios-gray mt-2.5 font-medium';
-        hint.innerHTML = `<span class="material-symbols-outlined text-[15px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Bấm để xem kích thước lớn</span>`;
+        hint.className = 'flex items-center justify-center space-x-1.5 text-xs text-slate-400 mt-2 font-mono';
+        hint.innerHTML = `<span class="material-symbols-outlined text-[14px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Bấm phóng to</span>`;
 
         wrap.appendChild(img);
         wrap.appendChild(hint);
@@ -329,10 +329,10 @@
           const isKeyCorrect = q.answer_keys.includes(opt.key);
           if (isKeyCorrect) {
             item.classList.add('correct');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded-full bg-ios-green/15 text-ios-green text-[11px] font-semibold ml-2 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>Chính xác</span></span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>Chính xác</span></span>`;
           } else if (isSelected && !isKeyCorrect) {
             item.classList.add('wrong');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded-full bg-ios-red/15 text-ios-red text-[11px] font-semibold ml-2 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>Bạn đã chọn</span></span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>Bạn đã chọn</span></span>`;
           }
         }
 
@@ -348,7 +348,7 @@
         trailing.className = 'shrink-0 flex items-center ml-2';
         trailing.innerHTML = `
           ${statusBadgeHtml}
-          <span class="text-[10px] font-mono text-ios-gray px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/5 ml-2 hidden sm:inline opacity-50 group-hover:opacity-100">${optIndex + 1}</span>
+          <span class="text-[10px] font-mono text-slate-400 opacity-50 group-hover:opacity-100 ml-2 hidden sm:inline">[${optIndex + 1}]</span>
         `;
 
         item.appendChild(keyBadge);
@@ -359,12 +359,12 @@
         elOptionsContainer.appendChild(item);
       });
 
-      // Multi-choice confirmation button
+      // Multi-choice check button
       if (isMulti && mode === 'study' && ansState.selectedKeys.length > 0 && !ansState.revealed) {
         const confirmWrap = document.createElement('div');
-        confirmWrap.className = 'pt-2';
+        confirmWrap.className = 'pt-2 flex justify-end';
         const btnConfirm = document.createElement('button');
-        btnConfirm.className = 'btn-primary';
+        btnConfirm.className = 'px-4 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all';
         btnConfirm.textContent = 'Kiểm tra kết quả lựa chọn';
         btnConfirm.addEventListener('click', () => {
           submitMultiChoice(q);
@@ -378,10 +378,10 @@
       const helper = document.createElement('div');
       helper.className = 'interactive-guide flex items-start space-x-3';
       helper.innerHTML = `
-        <span class="material-symbols-outlined text-ios-blue text-[20px] shrink-0 mt-0.5">info</span>
+        <span class="material-symbols-outlined text-sky-500 text-[18px] shrink-0 mt-0.5">info</span>
         <div>
-          <strong class="font-semibold text-ios-blue block mb-1">Dạng câu hỏi tương tác / Đối chiếu</strong>
-          <span>Câu hỏi này sử dụng sơ đồ, khối mã hoặc bảng tương tác ở trên. Hãy suy nghĩ phương án giải quyết rồi bấm <strong>"Xem giải thích"</strong> bên dưới để đối chiếu đáp án chi tiết từ Microsoft.</span>
+          <strong class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
+          <span>Câu hỏi này sử dụng sơ đồ hoặc khối mã ở trên. Hãy đọc đề, suy nghĩ đáp án rồi bấm <strong>"Giải thích [Space]"</strong> bên dưới để đối chiếu phân tích chính thức từ Microsoft.</span>
         </div>
       `;
       elOptionsContainer.appendChild(helper);
@@ -466,26 +466,17 @@
       elToggleExplText.textContent = 'Ẩn giải thích';
     } else {
       elExplanationBox.style.display = 'none';
-      elToggleExplText.textContent = 'Xem giải thích';
+      elToggleExplText.textContent = 'Giải thích';
     }
   }
 
   function updateActionButtons(q) {
-    const ansState = userAnswers[q.id];
-
     if (mode === 'study') {
       elBtnToggleExplanation.style.display = 'flex';
-      elBtnExamSubmit.style.display = 'none';
-
-      if (ansState && ansState.selectedKeys.length > 0) {
-        elBtnResetAnswer.style.display = 'inline-flex';
-      } else {
-        elBtnResetAnswer.style.display = 'none';
-      }
+      if (elExamSubmitContainer) elExamSubmitContainer.style.display = 'none';
     } else {
       elBtnToggleExplanation.style.display = 'none';
-      elBtnResetAnswer.style.display = 'none';
-      elBtnExamSubmit.style.display = 'inline-flex';
+      if (elExamSubmitContainer) elExamSubmitContainer.style.display = 'flex';
     }
   }
 
@@ -513,15 +504,16 @@
     const unanswered = questions.length - answered;
     const bookmarkedCount = bookmarks.size;
 
-    elCountAll.textContent = questions.length;
-    elCountUnanswered.textContent = unanswered;
-    elCountWrong.textContent = wrong;
-    elCountCorrect.textContent = correct;
-    elCountBookmarked.textContent = bookmarkedCount;
+    if (elCountAll) elCountAll.textContent = questions.length;
+    if (elCountUnanswered) elCountUnanswered.textContent = unanswered;
+    if (elCountWrong) elCountWrong.textContent = wrong;
+    if (elCountCorrect) elCountCorrect.textContent = correct;
+    if (elCountBookmarked) elCountBookmarked.textContent = bookmarkedCount;
 
     const percent = Math.round((answered / (questions.length || 1)) * 100);
     elProgressBarFill.style.width = `${percent}%`;
-    elProgressLabel.textContent = `${answered} / ${questions.length} câu (${percent}%)`;
+    if (elProgressLabel) elProgressLabel.textContent = `${answered} / ${questions.length} câu (${percent}%)`;
+    if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${answered}/${questions.length}`;
   }
 
   // --- Slide-over Drawer ---
@@ -588,17 +580,17 @@
     mode = newMode;
     if (mode === 'study') {
       elBtnStudyMode.classList.add('active');
-      elBtnStudyMode.classList.remove('text-ios-gray');
+      elBtnStudyMode.classList.remove('text-slate-500', 'dark:text-slate-400');
       elBtnExamMode.classList.remove('active');
-      elBtnExamMode.classList.add('text-ios-gray');
+      elBtnExamMode.classList.add('text-slate-500', 'dark:text-slate-400');
       elExamTimer.classList.add('hidden');
       elExamTimer.classList.remove('flex');
       stopExamTimer();
     } else {
       elBtnExamMode.classList.add('active');
-      elBtnExamMode.classList.remove('text-ios-gray');
+      elBtnExamMode.classList.remove('text-slate-500', 'dark:text-slate-400');
       elBtnStudyMode.classList.remove('active');
-      elBtnStudyMode.classList.add('text-ios-gray');
+      elBtnStudyMode.classList.add('text-slate-500', 'dark:text-slate-400');
       elExamTimer.classList.remove('hidden');
       elExamTimer.classList.add('flex');
       startExamTimer();
@@ -732,7 +724,7 @@
     elBtnReviewWrong.addEventListener('click', () => {
       elExamResultModal.style.display = 'none';
       setMode('study');
-      const wrongPill = document.querySelector('.ios-filter-pill[data-filter="wrong"], .filter-pill[data-filter="wrong"]');
+      const wrongPill = document.querySelector('.zen-filter-pill[data-filter="wrong"], .filter-pill[data-filter="wrong"]');
       if (wrongPill) wrongPill.click();
     });
 
@@ -771,17 +763,6 @@
       userAnswers[q.id] = ans;
       saveState();
       renderExplanation(q);
-    });
-
-    // Reset current question
-    elBtnResetAnswer.addEventListener('click', () => {
-      const q = questions[currentIndex];
-      if (!q) return;
-      delete userAnswers[q.id];
-      saveState();
-      updateStats();
-      renderCurrentQuestion();
-      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     });
 
     // Navigation buttons

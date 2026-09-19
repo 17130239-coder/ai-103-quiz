@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
-  <title>AI-103: Azure AI Apps and Agents Developer Associate</title>
+  <title>AI-103: Azure AI Apps and Agents Developer Associate — Studio</title>
 
-  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <!-- Google Fonts: Geist & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Material Symbols Outlined -->
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
@@ -20,26 +20,8 @@
       darkMode: "class",
       theme: {
         extend: {
-          colors: {
-            ios: {
-              bg: "#F2F2F7",
-              bgDark: "#000000",
-              card: "#FFFFFF",
-              cardDark: "#1C1C1E",
-              cardSubtle: "#F8F8FA",
-              cardSubtleDark: "#2C2C2E",
-              blue: "#007AFF",
-              green: "#34C759",
-              red: "#FF3B30",
-              orange: "#FF9500",
-              gray: "#8E8E93",
-              grayLight: "#C7C7CC",
-              border: "rgba(60, 60, 67, 0.12)",
-              borderDark: "rgba(255, 255, 255, 0.12)"
-            }
-          },
           fontFamily: {
-            sans: ["-apple-system", "BlinkMacSystemFont", "SF Pro Text", "SF Pro Display", "Inter", "sans-serif"],
+            sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "Inter", "sans-serif"],
             mono: ["JetBrains Mono", "monospace"]
           }
         }
@@ -48,253 +30,210 @@
   </script>
   <link rel="stylesheet" href="style.css" />
 </head>
+<body class="bg-[#f8fafc] dark:bg-[#0a0e17] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased min-h-screen flex flex-col selection:bg-sky-500/20 selection:text-sky-400 transition-colors duration-200 pb-28">
 
-<body class="bg-ios-bg dark:bg-ios-bgDark text-[#1C1C1E] dark:text-[#F2F2F7] antialiased min-h-screen relative flex flex-col selection:bg-ios-blue selection:text-white transition-colors duration-200">
+  <!-- TOP PROGRESS LINE (Razor-thin 2px pinned at the very top) -->
+  <div class="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-black/5 dark:bg-white/5 pointer-events-none">
+    <div id="progressBarFill" class="h-full bg-gradient-to-r from-sky-500 via-cyan-400 to-emerald-400 transition-all duration-300 shadow-[0_0_8px_rgba(56,189,248,0.6)]" style="width: 0%;"></div>
+  </div>
 
-  <!-- TOP FROSTED GLASS NAVIGATION BAR (Apple iOS 18) -->
-  <header class="sticky top-0 z-30 w-full bg-ios-bg/85 dark:bg-ios-bgDark/85 ios-glass border-b border-ios-border dark:border-ios-borderDark">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+  <!-- SINGLE SLIM HEADER (48px, Zen Modern Minimalist) -->
+  <header class="sticky top-0 z-40 w-full h-12 bg-white/80 dark:bg-[#0a0e17]/85 backdrop-blur-xl border-b border-black/[0.06] dark:border-white/[0.08] transition-colors">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
       
-      <!-- Left: Logo & Exam Tag -->
-      <div class="flex items-center space-x-2.5">
-        <div class="w-7 h-7 rounded-lg bg-ios-blue flex items-center justify-center text-white shadow-sm">
-          <span class="material-symbols-outlined text-[17px]">psychology</span>
+      <!-- Left: Monogram Badge & Title & Mode -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+            AI-103
+          </span>
+          <span class="font-semibold text-xs sm:text-sm tracking-tight text-slate-900 dark:text-slate-100 hidden sm:inline">
+            Azure AI Developer
+          </span>
         </div>
-        <div class="flex items-baseline space-x-1.5">
-          <span class="font-semibold text-sm sm:text-base tracking-tight text-[#1C1C1E] dark:text-white">Azure AI Prep</span>
-          <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-black/5 dark:bg-white/10 text-ios-gray">AI-103</span>
+
+        <!-- Minimal Mode Switcher (Ôn tập · Thi thử) -->
+        <div class="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-lg border border-black/[0.04] dark:border-white/[0.06] text-xs font-medium">
+          <button id="btnStudyMode" class="zen-mode-btn active px-2.5 py-1 rounded-md transition-all">
+            Ôn tập
+          </button>
+          <button id="btnExamMode" class="zen-mode-btn px-2.5 py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">
+            Thi thử
+          </button>
         </div>
       </div>
 
-      <!-- Center: iOS 18 Segmented Control Switcher -->
-      <div class="flex items-center p-1 bg-black/5 dark:bg-white/10 rounded-full border border-black/5 dark:border-white/5">
-        <button id="btnStudyMode" class="segmented-pill active text-xs font-semibold px-3 py-1 rounded-full transition-all">
-          Ôn tập
-        </button>
-        <button id="btnExamMode" class="segmented-pill text-xs font-medium px-3 py-1 rounded-full transition-all text-ios-gray hover:text-[#1C1C1E] dark:hover:text-white">
-          Thi thử
-        </button>
-      </div>
-
-      <!-- Right: Action Controls -->
+      <!-- Right: Actions (Timer, Grid drawer [G], Theme) -->
       <div class="flex items-center space-x-2">
-        <!-- Live Exam Timer Pill -->
-        <div id="examTimer" class="hidden items-center space-x-1 px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 border border-ios-border dark:border-ios-borderDark text-xs font-mono font-medium">
-          <span class="material-symbols-outlined text-ios-blue text-[15px]">schedule</span>
+        <!-- Live Exam Timer -->
+        <div id="examTimer" class="hidden items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20 font-mono text-xs font-medium">
+          <span class="material-symbols-outlined text-[15px]">schedule</span>
           <span id="timerText">00:00</span>
         </div>
 
-        <!-- Question Grid Matrix Trigger -->
-        <button id="toggleDrawerBtn" class="flex items-center space-x-1 px-2.5 py-1 rounded-full bg-ios-card dark:bg-ios-cardDark border border-ios-border dark:border-ios-borderDark hover:bg-black/5 dark:hover:bg-white/5 transition-all text-xs font-medium active:scale-95 shadow-2xs">
-          <span class="material-symbols-outlined text-[16px] text-ios-blue">grid_view</span>
-          <span class="hidden sm:inline">175 câu [G]</span>
+        <!-- Matrix Drawer Button -->
+        <button id="toggleDrawerBtn" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium text-slate-700 dark:text-slate-300 transition-all active:scale-95">
+          <span class="material-symbols-outlined text-[15px] text-sky-500">grid_view</span>
+          <span class="font-mono" id="drawerTriggerCount">175 câu</span>
+          <kbd class="hidden md:inline px-1 py-0.2 rounded bg-black/5 dark:bg-white/10 text-[10px] font-mono text-slate-400">G</kbd>
         </button>
 
-        <!-- Theme Toggle Button -->
-        <button id="btnThemeToggle" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 transition-all text-ios-gray active:scale-95" title="Sáng / Tối">
+        <!-- Theme Toggle -->
+        <button id="btnThemeToggle" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-all" title="Chế độ Sáng / Tối">
           <span id="themeIconSun" class="material-symbols-outlined text-[18px]">light_mode</span>
           <span id="themeIconMoon" class="material-symbols-outlined text-[18px] hidden">dark_mode</span>
         </button>
       </div>
 
     </div>
-
-    <!-- SUB-BAR: FILTER PILLS & PROGRESS -->
-    <div class="border-t border-ios-border dark:border-ios-borderDark py-2 bg-ios-bg/50 dark:bg-ios-bgDark/50">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2.5">
-        
-        <!-- Filter Pills Scroll -->
-        <div class="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto no-scrollbar py-0.5">
-          <button class="ios-filter-pill active px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 transition-all" data-filter="all">
-            <span>Tất cả</span>
-            <span id="countAll" class="opacity-70 font-mono text-[11px]">175</span>
-          </button>
-          <button class="ios-filter-pill px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 transition-all" data-filter="unanswered">
-            <span>Chưa làm</span>
-            <span id="countUnanswered" class="opacity-70 font-mono text-[11px]">175</span>
-          </button>
-          <button class="ios-filter-pill px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 transition-all" data-filter="wrong">
-            <span>Làm sai</span>
-            <span id="countWrong" class="text-ios-red font-mono text-[11px]">0</span>
-          </button>
-          <button class="ios-filter-pill px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 transition-all" data-filter="correct">
-            <span>Làm đúng</span>
-            <span id="countCorrect" class="text-ios-green font-mono text-[11px]">0</span>
-          </button>
-          <button class="ios-filter-pill px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 transition-all" data-filter="bookmarked">
-            <span class="text-ios-orange">★</span>
-            <span>Đã lưu</span>
-            <span id="countBookmarked" class="opacity-70 font-mono text-[11px]">0</span>
-          </button>
-        </div>
-
-        <!-- Progress Indicator -->
-        <div class="flex items-center space-x-2.5 w-full sm:w-auto justify-end">
-          <span id="progressLabel" class="text-xs text-ios-gray font-medium">0 / 175 câu</span>
-          <div class="w-24 sm:w-28 h-1.5 bg-black/10 dark:bg-white/15 rounded-full overflow-hidden flex">
-            <div id="progressBarFill" class="h-full bg-ios-blue rounded-full transition-all duration-300" style="width: 0%;"></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
   </header>
 
-  <!-- MAIN CANVAS CONTAINER (Apple Inset Grouped presentation) -->
-  <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-32">
+  <!-- MAIN CANVAS (Centered, Distraction-Free Zen Reader) -->
+  <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 pt-8 pb-32">
     
-    <!-- QUESTION INSET CARD (20px Squircle) -->
-    <article class="bg-ios-card dark:bg-ios-cardDark border border-ios-border dark:border-ios-borderDark rounded-[20px] p-5 sm:p-8 shadow-xs space-y-6 transition-all duration-200">
-      
-      <!-- Top Question Meta Header -->
-      <div class="flex items-center justify-between pb-4 border-b border-ios-border dark:border-ios-borderDark">
-        <div class="flex items-center space-x-2">
-          <span id="qNumber" class="px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/10 text-xs font-semibold text-[#1C1C1E] dark:text-white font-mono">
-            Câu 1 / 175
-          </span>
-          <span id="qTypeBadge" class="px-2.5 py-1 rounded-full bg-ios-blue/10 text-ios-blue text-xs font-medium">
-            Trắc nghiệm đơn
-          </span>
-        </div>
-
-        <!-- Bookmark action -->
-        <button id="btnBookmark" class="inline-flex items-center space-x-1 text-ios-gray hover:text-ios-orange text-xs font-medium transition-colors">
-          <span class="material-symbols-outlined text-[18px]">bookmark_border</span>
-          <span id="bookmarkText">Đánh dấu [B]</span>
-        </button>
+    <!-- Meta Info Bar -->
+    <div class="flex items-center justify-between pb-4 border-b border-black/[0.06] dark:border-white/[0.08] mb-6">
+      <div class="flex items-center space-x-2">
+        <span id="qNumber" class="text-xs font-mono font-semibold text-sky-600 dark:text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-full border border-sky-500/20">
+          Câu 1 / 175
+        </span>
+        <span id="qTypeBadge" class="text-xs text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2.5 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06]">
+          Trắc nghiệm đơn
+        </span>
       </div>
 
-      <!-- Question Text Narrative -->
-      <div class="py-2">
-        <h1 id="questionText" class="text-[17px] sm:text-[18px] text-[#1C1C1E] dark:text-white font-medium leading-[1.65] tracking-[-0.01em] whitespace-pre-line">
-          Đang tải dữ liệu câu hỏi...
-        </h1>
-      </div>
+      <!-- Bookmark Action -->
+      <button id="btnBookmark" class="flex items-center space-x-1.5 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors font-medium">
+        <span class="material-symbols-outlined text-[17px]">bookmark_border</span>
+        <span id="bookmarkText">Đánh dấu [B]</span>
+      </button>
+    </div>
 
-      <!-- Attached Images / Architecture Diagrams -->
-      <div id="questionImages" class="flex flex-col gap-3" style="display: none;">
-        <!-- Images injected dynamically -->
-      </div>
-
-      <!-- Interactive Apple Inset Option Rows -->
-      <div id="optionsContainer" class="space-y-2.5 pt-2">
-        <!-- Inset option rows injected dynamically -->
-      </div>
-
-      <!-- Action Button Row -->
-      <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-ios-border dark:border-ios-borderDark">
-        <div class="flex items-center space-x-2">
-          <button id="btnToggleExplanation" class="px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/15 text-xs font-semibold text-[#1C1C1E] dark:text-white transition-all flex items-center space-x-1.5 active:scale-95">
-            <span class="material-symbols-outlined text-[16px]">help_outline</span>
-            <span id="toggleExplText">Xem giải thích</span>
-            <kbd class="px-1.5 py-0.2 rounded bg-black/5 dark:bg-white/10 text-[10px] font-mono text-ios-gray">Space</kbd>
-          </button>
-
-          <button id="btnResetAnswer" class="px-3 py-1.5 rounded-full text-xs font-medium text-ios-gray hover:text-[#1C1C1E] dark:hover:text-white transition-all" style="display: none;">
-            Làm lại câu này
-          </button>
-        </div>
-
-        <button id="btnExamSubmit" class="px-4 py-1.5 rounded-full bg-ios-blue text-white text-xs font-semibold shadow-xs hover:opacity-90 transition-all active:scale-95" style="display: none;">
-          Nộp bài thi
-        </button>
-      </div>
-
-      <!-- Explanation Callout Box (iOS Callout Style) -->
-      <div id="explanationBox" class="rounded-[16px] bg-ios-green/10 border border-ios-green/30 p-5 space-y-4" style="display: none;">
-        <!-- Verified header -->
-        <div class="flex items-center justify-between pb-2 border-b border-ios-green/20">
-          <div class="flex items-center space-x-2">
-            <span class="w-5 h-5 rounded-full bg-ios-green flex items-center justify-center text-white text-xs">
-              <span class="material-symbols-outlined text-[14px]">check</span>
-            </span>
-            <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-sm text-ios-green">
-              Đáp án chính xác
-            </span>
-          </div>
-          <span class="text-[11px] font-mono text-ios-gray uppercase tracking-wider">Phân tích chi tiết</span>
-        </div>
-
-        <!-- Body text -->
-        <div id="explBody" class="text-xs sm:text-sm text-[#3A3A3C] dark:text-[#D1D1D6] leading-[1.65] whitespace-pre-line"></div>
-      </div>
-
+    <!-- Question Prompt -->
+    <article class="mb-6">
+      <h1 id="questionText" class="text-[18px] sm:text-[19px] font-medium leading-[1.75] text-slate-900 dark:text-slate-100 tracking-[-0.01em] whitespace-pre-line">
+        Đang tải nội dung câu hỏi...
+      </h1>
     </article>
+
+    <!-- Attached Diagrams / Code Screenshots -->
+    <div id="questionImages" class="flex flex-col gap-3 mb-6" style="display: none;">
+      <!-- Dynamic images injected -->
+    </div>
+
+    <!-- Options Container -->
+    <div id="optionsContainer" class="space-y-3 mb-8">
+      <!-- Options injected dynamically -->
+    </div>
+
+    <!-- Exam Submit Button (Visible only in Exam mode) -->
+    <div id="examSubmitContainer" class="flex justify-end mb-8" style="display: none;">
+      <button id="btnExamSubmit" class="px-5 py-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-medium text-xs shadow-sm transition-all active:scale-95">
+        Nộp bài thi & Chấm điểm
+      </button>
+    </div>
+
+    <!-- Deep Dive / Explanation Card (Minimalist Linear disclosure) -->
+    <section id="explanationBox" class="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-5 sm:p-6 space-y-3 transition-all" style="display: none;">
+      <div class="flex items-center justify-between pb-3 border-b border-emerald-500/20">
+        <div class="flex items-center space-x-2">
+          <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[14px]">check</span>
+          </span>
+          <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
+            Đáp án chính xác
+          </span>
+        </div>
+        <span class="text-[11px] font-mono text-slate-400">Phân tích chi tiết Microsoft</span>
+      </div>
+
+      <div id="explBody" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans">
+      </div>
+    </section>
+
   </main>
 
-  <!-- FLOATING BOTTOM CAPSULE BAR (iOS 18 Island / Pill Dock) -->
-  <footer class="fixed bottom-5 inset-x-0 z-40 flex justify-center pointer-events-none px-4">
-    <div class="pointer-events-auto flex items-center gap-3 px-4 sm:px-5 py-2.5 rounded-full bg-ios-card/90 dark:bg-ios-cardDark/90 ios-glass shadow-xl border border-ios-border dark:border-ios-borderDark">
-      
-      <!-- Previous Question Button -->
-      <button id="btnPrev" class="flex items-center space-x-1 text-ios-gray hover:text-[#1C1C1E] dark:hover:text-white px-2.5 py-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed">
-        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
-        <span class="hidden sm:inline text-xs font-semibold">Câu trước</span>
-        <kbd class="hidden md:inline px-1 py-0.2 rounded bg-black/5 dark:bg-white/10 text-[10px] font-mono text-ios-gray">[</kbd>
-      </button>
+  <!-- FLOATING MINIMAL BOTTOM CAPSULE BAR -->
+  <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 px-3 py-1.5 backdrop-blur-xl bg-white/90 dark:bg-[#111726]/90 rounded-full border border-black/[0.08] dark:border-white/[0.1] shadow-xl shadow-black/10 dark:shadow-black/40">
+    
+    <!-- Previous -->
+    <button id="btnPrev" class="flex items-center space-x-1 px-3 py-1.5 rounded-full text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08] active:scale-95 transition-all text-xs font-medium disabled:opacity-30 disabled:cursor-not-allowed group">
+      <span class="material-symbols-outlined text-[15px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+      <span>Trước</span>
+      <kbd class="hidden sm:inline-block ml-1 px-1 py-0.2 bg-black/[0.05] dark:bg-white/[0.1] text-slate-400 text-[9px] font-mono rounded">[</kbd>
+    </button>
 
-      <!-- Center Question Indicator -->
-      <div class="flex items-center space-x-2 px-2 border-x border-ios-border dark:border-ios-borderDark">
-        <span id="navStatus" class="font-semibold text-xs sm:text-sm text-[#1C1C1E] dark:text-white font-mono">1 / 175</span>
-      </div>
-
-      <!-- Next Question Button (Primary Apple Blue Action) -->
-      <button id="btnNext" class="flex items-center space-x-1 bg-ios-blue hover:bg-ios-blue/90 text-white px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-semibold shadow-xs transition-all active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed">
-        <span>Câu tiếp theo</span>
-        <kbd class="hidden md:inline px-1 py-0.2 rounded bg-white/20 text-[10px] font-mono text-white">]</kbd>
-        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-      </button>
-
-      <!-- Shortcuts hint -->
-      <div class="hidden lg:flex items-center space-x-1 pl-1 text-[11px] font-mono text-ios-gray border-l border-ios-border dark:border-ios-borderDark">
-        <kbd class="px-1 py-0.5 bg-black/5 dark:bg-white/10 rounded border border-ios-border dark:border-ios-borderDark">Space</kbd>
-        <span>Giải thích</span>
-        <kbd class="px-1 py-0.5 bg-black/5 dark:bg-white/10 rounded border border-ios-border dark:border-ios-borderDark ml-1">1-4</kbd>
-        <span>Chọn</span>
-      </div>
-
+    <!-- Center Indicator -->
+    <div id="navStatus" class="px-2.5 py-1 text-xs font-mono font-semibold text-sky-600 dark:text-sky-400 bg-sky-500/10 rounded-full border border-sky-500/20">
+      1 / 175
     </div>
-  </footer>
 
-  <!-- QUESTION MATRIX DRAWER (iOS 18 Sheet / Drawer) -->
+    <!-- Explanation Toggle (Space) -->
+    <button id="btnToggleExplanation" class="flex items-center space-x-1 px-3 py-1.5 rounded-full text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.08] active:scale-95 transition-all text-xs font-medium">
+      <span class="material-symbols-outlined text-[15px]">lightbulb</span>
+      <span id="toggleExplText">Giải thích</span>
+      <kbd class="hidden sm:inline-block ml-1 px-1 py-0.2 bg-black/[0.05] dark:bg-white/[0.1] text-slate-400 text-[9px] font-mono rounded">Space</kbd>
+    </button>
+
+    <!-- Next -->
+    <button id="btnNext" class="flex items-center space-x-1 px-3.5 py-1.5 rounded-full bg-sky-500 hover:bg-sky-400 text-white active:scale-95 transition-all text-xs font-semibold shadow-xs disabled:opacity-40 disabled:cursor-not-allowed group">
+      <span>Tiếp</span>
+      <kbd class="hidden sm:inline-block ml-1 px-1 py-0.2 bg-white/20 text-white text-[9px] font-mono rounded">]</kbd>
+      <span class="material-symbols-outlined text-[15px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+    </button>
+
+  </nav>
+
+  <!-- QUESTION MATRIX DRAWER (Slide-Over from Right) -->
   <div id="drawerOverlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 transition-opacity opacity-0 pointer-events-none"></div>
 
-  <aside id="questionDrawer" class="fixed top-0 right-0 h-full w-full max-w-sm z-50 bg-ios-card dark:bg-ios-cardDark border-l border-ios-border dark:border-ios-borderDark shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out">
+  <aside id="questionDrawer" class="fixed top-0 right-0 h-full w-full max-w-sm z-50 bg-white dark:bg-[#0e1422] border-l border-black/[0.08] dark:border-white/[0.08] shadow-2xl flex flex-col justify-between transform translate-x-full transition-transform duration-300 ease-in-out">
     
-    <!-- Drawer Header -->
-    <div class="p-4 border-b border-ios-border dark:border-ios-borderDark space-y-3">
+    <!-- Drawer Header & Filters -->
+    <div class="p-4 border-b border-black/[0.06] dark:border-white/[0.08] space-y-3">
       <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2">
-          <span class="font-semibold text-sm text-[#1C1C1E] dark:text-white">Danh sách 175 câu hỏi</span>
-        </div>
-        <button id="closeDrawerBtn" class="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/5 dark:hover:bg-white/10 text-ios-gray transition-colors" title="Đóng [ESC]">
+        <span class="font-semibold text-sm text-slate-900 dark:text-slate-100">Danh sách 175 câu hỏi</span>
+        <button id="closeDrawerBtn" class="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors" title="Đóng [ESC]">
           <span class="material-symbols-outlined text-[18px]">close</span>
         </button>
       </div>
 
-      <!-- iOS Search Bar -->
+      <!-- Quick Search Bar -->
       <div class="relative">
-        <span class="material-symbols-outlined absolute left-3 top-2 text-[16px] text-ios-gray">search</span>
-        <input id="gridSearchInput" class="w-full pl-8 pr-3 py-1.5 bg-black/5 dark:bg-white/10 border-0 rounded-full text-xs font-sans text-[#1C1C1E] dark:text-white placeholder-ios-gray focus:ring-1 focus:ring-ios-blue transition-all" placeholder="Tìm kiếm từ khóa (Foundry, Search...)" type="text" />
+        <span class="material-symbols-outlined absolute left-3 top-2 text-[16px] text-slate-400">search</span>
+        <input id="gridSearchInput" class="w-full pl-8 pr-3 py-1.5 bg-black/[0.03] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-lg text-xs font-sans text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-all" placeholder="Tìm kiếm từ khóa (Foundry, Search, Code...)" type="text" />
       </div>
 
-      <!-- Legend -->
-      <div class="grid grid-cols-2 gap-2 text-[11px] text-ios-gray font-mono pt-1">
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-ios-green"></span>
-          <span>Đúng</span>
-        </div>
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-ios-red"></span>
-          <span>Sai</span>
-        </div>
-        <div class="flex items-center space-x-1.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-black/10 dark:bg-white/20"></span>
+      <!-- Filter Pills (Compact inside drawer) -->
+      <div class="flex items-center space-x-1 overflow-x-auto no-scrollbar pt-1">
+        <button class="zen-filter-pill active px-2.5 py-1 rounded-md text-[11px] font-medium transition-all" data-filter="all">
+          <span>Tất cả</span>
+          <span id="countAll" class="opacity-70 font-mono text-[10px]">175</span>
+        </button>
+        <button class="zen-filter-pill px-2.5 py-1 rounded-md text-[11px] font-medium transition-all" data-filter="unanswered">
           <span>Chưa làm</span>
-        </div>
-        <div class="flex items-center space-x-1.5">
-          <span class="text-ios-orange">★</span>
-          <span>Đã lưu</span>
+          <span id="countUnanswered" class="opacity-70 font-mono text-[10px]">175</span>
+        </button>
+        <button class="zen-filter-pill px-2.5 py-1 rounded-md text-[11px] font-medium transition-all" data-filter="wrong">
+          <span>Sai</span>
+          <span id="countWrong" class="text-rose-500 font-mono text-[10px]">0</span>
+        </button>
+        <button class="zen-filter-pill px-2.5 py-1 rounded-md text-[11px] font-medium transition-all" data-filter="correct">
+          <span>Đúng</span>
+          <span id="countCorrect" class="text-emerald-500 font-mono text-[10px]">0</span>
+        </button>
+        <button class="zen-filter-pill px-2.5 py-1 rounded-md text-[11px] font-medium transition-all" data-filter="bookmarked">
+          <span class="text-amber-400">★</span>
+          <span id="countBookmarked" class="opacity-70 font-mono text-[10px]">0</span>
+        </button>
+      </div>
+
+      <!-- Progress summary in drawer -->
+      <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono pt-1">
+        <span id="progressLabel">0 / 175 câu (0%)</span>
+        <div class="flex items-center space-x-2">
+          <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Đúng</span></span>
+          <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Sai</span></span>
         </div>
       </div>
     </div>
@@ -305,8 +244,8 @@
     </div>
 
     <!-- Drawer Footer -->
-    <div class="p-4 border-t border-ios-border dark:border-ios-borderDark bg-ios-bg/50 dark:bg-ios-bgDark/50">
-      <button id="btnResetAllProgress" class="w-full py-2 rounded-xl text-xs font-semibold text-ios-red bg-ios-red/10 hover:bg-ios-red/15 transition-all">
+    <div class="p-4 border-t border-black/[0.06] dark:border-white/[0.08]">
+      <button id="btnResetAllProgress" class="w-full py-2 rounded-lg text-xs font-semibold text-rose-500 bg-rose-500/10 hover:bg-rose-500/15 transition-all">
         Đặt lại toàn bộ tiến độ
       </button>
     </div>
@@ -323,7 +262,7 @@
 
   <!-- EXAM RESULT MODAL -->
   <div id="examResultModal" class="modal-overlay" style="display: none;">
-    <div class="modal-card result-card">
+    <div class="modal-card">
       <div class="modal-header">
         <h2>Kết quả bài thi thử</h2>
         <button id="btnCloseExamResult" class="close-btn">&times;</button>
@@ -338,15 +277,15 @@
             <span>Tổng số câu:</span>
             <span id="resTotal">175</span>
           </div>
-          <div class="res-item text-green">
+          <div class="res-item text-emerald-500">
             <span>Số câu đúng:</span>
             <span id="resCorrect">0</span>
           </div>
-          <div class="res-item text-red">
+          <div class="res-item text-rose-500">
             <span>Số câu sai:</span>
             <span id="resWrong">0</span>
           </div>
-          <div class="res-item text-muted">
+          <div class="res-item text-slate-400">
             <span>Chưa trả lời:</span>
             <span id="resSkipped">0</span>
           </div>
@@ -363,7 +302,7 @@
     </div>
   </div>
 
-  <!-- Data & Script -->
+  <!-- Data & Scripts -->
   <script src="data/questions-data.js"></script>
   <script src="app.js"></script>
 </body>
