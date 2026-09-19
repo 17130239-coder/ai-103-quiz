@@ -78,7 +78,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent. \nThe agent accepts user-uploaded screenshots and uses a multimodal chat model. Some screenshots contain \npotentially malicious embedded text. \nYou need to prevent a prompt injection attack and ensure that third-party content is treated as lower trust. \nHow should you configure prompt shields for document attacks?",
       "options": [],
-      "answer": "Prompt shields action: Set action to block.",
+      "answer": "Prompt shields action: Set action to block | Additional mitigation: Enable Spotlighting",
       "answer_keys": [],
       "explanation": "Correct Answers: \nPrompt shields action: Set action to block. \nSetting the prompt shield action to block ensures that any detected prompt injection attack in uploaded \nscreenshots or documents is prevented from reaching the multimodal language model. Since the \nscreenshots may contain malicious embedded text, blocking the request provides the highest level of \nprotection by stopping the attack before it can influence the model's behavior. \nAdditional mitigation: Enable Spotlighting. \nSpotlighting is designed to help the model distinguish between trusted system instructions and untrusted \nthird-party content, such as uploaded screenshots and documents. It marks external content as lower trust, \nreducing the likelihood that malicious instructions embedded within the content will be followed by the \nmodel. This is the recommended mitigation for defending against indirect prompt injection attacks. \n \nIncorrect Answers: \nDisable the shield. \nDisabling the shield removes protection against prompt injection attacks and leaves the application \nvulnerable. \n\n \nSet action to annotate. \nAnnotate detects and flags potential prompt injection attempts but still allows the request to continue. Since \nthe requirement is to prevent the attack, blocking is the appropriate choice. \nCreate a custom blocklist. \nA custom blocklist filters specific words or phrases but does not protect against prompt injection attacks or \nestablish trust boundaries between trusted and untrusted content. \nUse optical character recognition (OCR) to extract the text from the images first. \nOCR only extracts text from images. It does not detect or prevent prompt injection attacks, and the extracted \ntext could still contain malicious instructions.",
       "images": [
@@ -205,7 +205,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains an agent used by the financial analysts at your \ncompany. You need to optimize the agent workflow by providing additional data access and processing \ncapabilities. The solution must meet the following requirements: \n• Ensure that the agent can perform calculations during conversations. \n• Ensure that the agent can access up-to-date information from public websites. \n• Ensure that the agent can retrieve information from documents uploaded directly to the agent. \nWhat should you use for each requirement? To answer, drag the appropriate tools to the correct \nrequirements. Each tool may be used once, more than once, or not at all.",
       "options": [],
-      "answer": "Access up-to-date information from public websites: Grounding with Bing Search",
+      "answer": "Access up-to-date information from public websites: Grounding with Bing Search | Perform calculations during conversations: Code interpreter | Retrieve information from documents uploaded directly to the agent: File search",
       "answer_keys": [],
       "explanation": "Correct Answers: \nAccess up-to-date information from public websites: Grounding with Bing Search \nGrounding with Bing Search enables an agent to retrieve current information from the public web during a \nconversation. Since the model's training data is static, Bing Search provides access to the latest information, \nmaking it ideal for answering questions about recent events, current facts, or publicly available data. \nPerform calculations during conversations: Code interpreter \nThe Code Interpreter tool allows the agent to execute Python code to perform mathematical calculations, \ndata analysis, statistical operations, and other computational tasks. This enables the agent to produce \naccurate calculation results instead of relying solely on the language model's reasoning capabilities. \nRetrieve information from documents uploaded directly to the agent: File search \nFile Search indexes documents uploaded directly to the agent and retrieves relevant content during \nconversations. It enables the agent to answer questions based on the uploaded files using retrieval-\naugmented generation, without requiring external search services. \n\n \n \nIncorrect Answers: \nComputer use \nComputer Use is designed to interact with graphical user interfaces and perform actions on applications. It is \nnot intended for calculations, web grounding, or searching uploaded documents. \nMicrosoft Fabric \nMicrosoft Fabric is an analytics and data platform used for enterprise data engineering, warehousing, and \nbusiness intelligence. It is not the appropriate tool for these agent capabilities.",
       "images": [
@@ -339,7 +339,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a customer support agent. The agent is deployed by \nusing a GitHub Actions workflow. \nThe organization has the following requirements: \n• Every deployment to the production environment must use the latest approved evaluation baseline.  \n• Deployments must stop automatically if the current evaluation scores regress beyond the configured \ntolerance.  \nHow should you configure the workflow?",
       "options": [],
-      "answer": "Evaluation comparison: Compare against the latest approved baseline",
+      "answer": "Evaluation comparison: Compare against the latest approved baseline | If evaluation regression exceeds tolerance: Fail the workflow",
       "answer_keys": [],
       "explanation": "Correct Answers: \nEvaluation comparison: Compare against the latest approved baseline \nThe requirement states that every deployment to the production environment must use the latest approved \nevaluation baseline. Configuring the workflow to compare the current evaluation results against the latest \napproved baseline ensures that new deployments are validated against the organization's approved quality \nstandard rather than against previous runs or source code changes. \nIf evaluation regression exceeds the configured tolerance: Fail the workflow \nFailing the workflow automatically stops the deployment whenever evaluation scores regress beyond the \nconfigured tolerance. This prevents lower-quality models or agents from reaching the production \nenvironment and enforces the organization's deployment quality gates. \n \nIncorrect Answers: \nCompare against the previous workflow run \nThe previous workflow run may not represent the latest approved baseline and therefore does not satisfy the \nrequirement. \nCompare against the production deployment logs \nProduction logs contain runtime information and are not used as evaluation baselines for deployment \nvalidation. \nCompare against the repository default branch \nThe repository's default branch contains source code, not approved evaluation results for comparison. \nContinue deployment and send an alert \nThis allows a deployment with degraded evaluation scores to reach production, which violates the \nrequirement to stop deployments automatically. \nRetry the evaluation automatically \nRetrying an evaluation does not address a genuine regression in evaluation scores. \n\n \nLock the target branch \nLocking the branch prevents code changes but does not stop a deployment based on evaluation regression.",
       "images": [
@@ -398,7 +398,7 @@
       "type": "yes_no",
       "question": "Your company is piloting a customer support agent in a Microsoft Foundry project name Project1. \nProject1 is connected to an existing Application Insights resource, and the company’s support team reviews \nruns in the Traces tab. \nThe Foundry Agent Service is configured to perform the following actions: \n \nRetrieve the Application Insights connection string by calling \nproject_client.telemetry.get_application_insights_connection_string().    \nCall configure_azure_monitor(connection_string=...) to enable telemetry. \n \nA separate LangChain service is configured to use OpenTelemetry and has the following configurations:  \nUses AzureAIOpenTelemetryTracer(connection_string=..., enable_content_recording=False) \n \nPasses the tracer by using config= “callbacks”:[azure_tracer] Company policy has the following requirements: \n• Telemetry from LangChain and OpenTelemetry must be distinguishable within the same Application \nInsights resource. \n• Secrets and credentials must NOT be stored in prompts, tool arguments, or span attributes.  \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "1. The LangChain service will appear in Traces without configuring a tracer. — No",
+      "answer": "The LangChain service will appear in Traces without configuring a tracer.: No | Setting different OTEL_SERVICE_NAME values separates the services in Application Insights.: Yes | When using enable_content_recording=False, prompts and tool data will be captured in the telemetry.: No",
       "answer_keys": [],
       "explanation": "Correct Answers: \n1. The LangChain service will appear in Traces without configuring a tracer. — No \nLangChain does not automatically send telemetry to Application Insights. To capture LangChain traces, you \nmust configure an OpenTelemetry tracer, such as AzureAIOpenTelemetryTracer, and pass it to LangChain \nthrough the callback configuration. Without configuring a tracer, LangChain activity will not appear in the \nTraces view. \n2. Setting different OTEL_SERVICE_NAME values separates the services in Application Insights. — Yes \nThe OTEL_SERVICE_NAME resource attribute identifies the originating service for OpenTelemetry telemetry. \nAssigning different service names allows telemetry from multiple applications or services to be distinguished \nwithin the same Application Insights resource, making it easier to filter and analyze traces for each service \nindependently. \n3. When using enable_content_recording=False, prompts and tool data will be captured in the telemetry. \n— No \nSetting enable_content_recording=False disables recording of sensitive content such as prompts, model \nresponses, and tool inputs or outputs. This helps prevent secrets, credentials, or other sensitive information \nfrom being stored in telemetry, aligning with the company's security policy.",
       "images": [
@@ -517,7 +517,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent. The agent uses tools to retrieve internal \ncontent and call external APIs. The agent is configured to let the model decide when to call the tools. \nYou need to publish the agent for a compliance workflow.  \nThe solution must meet the following requirements:  \n• Each workflow run must include a retrieval step before generating a response. \n• Tool calls must authenticate by using the published agent’s own identity. \n• Tool access must use an identity isolated from other project resources.  \n• Tool access must use support audit tracing. \nWhat should you do?",
       "options": [],
-      "answer": "Set tool_choice to: required",
+      "answer": "Set tool_choice to: required | Configure the tool to authenticate by: Using a distinct agent identity bound to the client application",
       "answer_keys": [],
       "explanation": "Correct Answers: \nSet tool_choice to: required \nSetting tool_choice to required ensures that the model must invoke a tool before generating a response. \nSince the compliance workflow requires every workflow run to include a retrieval step, this setting \nguarantees that the retrieval tool is always called instead of leaving the decision to the model. \nConfigure the tool to authenticate by: Using a distinct agent identity bound to the client application \nUsing a distinct agent identity provides an isolated identity for the published agent, separate from other \nproject resources. This approach supports least-privilege access, enables comprehensive audit tracing of tool \ncalls, and ensures that all tool invocations are performed using the published agent's own identity. It satisfies \nthe requirements for identity isolation and compliance auditing. \n \nIncorrect Answers: \nauto \nThe model decides whether to call a tool. This does not guarantee that every workflow run performs the \nrequired retrieval step. \nnone \nThe model is prevented from calling any tools, making it impossible to perform the mandatory retrieval step. \n \nStoring API keys in prompts \nEmbedding API keys in prompts is insecure and violates security best practices. It also does not support \nidentity-based authentication or audit tracing. \nUsing the shared project agent identity \nA shared project identity is not isolated from other project resources and does not meet the requirement for \ndedicated identity isolation for the published agent.",
       "images": [
@@ -644,7 +644,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains a deployed ticket-triage agent. \nYou discover that sometimes the agent responds without calling any tools, even when a tool is required. You \nneed to ensure that the agent calls a tool during execution. \nHow should you complete the Python code?  \nTo answer, drag the appropriate values to the correct targets. Each value may be used once, more than once, \nor not at all.",
       "options": [],
-      "answer": "First blank: \"tool_choice\"",
+      "answer": "First blank (in run payload): tool_choice | Second blank (value for tool_choice): required",
       "answer_keys": [],
       "explanation": "Correct Answers: \nFirst blank: \"tool_choice\" \nThe tool_choice parameter controls whether the language model can decide to use a tool or must use one. It \ndetermines the model's tool invocation behavior during execution. Since the requirement is to ensure that a \ntool is always called, the payload must include the tool_choice parameter. \nSecond blank: \"required\" \nSetting tool_choice to required forces the model to invoke at least one tool before generating a response. \nThis guarantees that the deployed ticket-triage agent does not respond directly without calling the necessary \nretrieval or action tool. \n \nIncorrect Answers: \n\"auto\" \nThe model decides whether to call a tool. It may generate a response without using any tool, which does not \nsatisfy the requirement. \n\"response_format\" \nThis parameter controls the structure of the model's output, not whether tools are invoked. \n\n \n\"tools\" \nThe tools property defines the available tools but does not force the model to use them. \n\"type\" \nThe type field specifies the type of a tool or schema and does not control tool invocation behavior.",
       "images": [
@@ -767,7 +767,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent that answers questions by using Retrieval-\nAugmented Generation (RAG). \nA GitHub Actions workflow automatically deploys updates whenever a pull request is approved. \nThe organization has the following requirements: \n• Validate that responses remain grounded in the retrieved documents before deployment.  \n• Prevent pull requests from being merged if the evaluation does not satisfy the required quality \nthresholds.",
       "options": [],
-      "answer": "Evaluation to execute: Groundedness evaluation",
+      "answer": "Evaluation to execute: Groundedness evaluation | Pull request policy: Require the evaluation workflow to succeed before merging",
       "answer_keys": [],
       "explanation": "Correct Answers: \nEvaluation to execute: Groundedness evaluation \nGroundedness evaluation verifies whether the agent's responses are supported by the retrieved documents. \nSince the agent uses Retrieval-Augmented Generation (RAG), this evaluation ensures that answers remain \nfaithful to the retrieved content and do not introduce hallucinations. This directly satisfies the requirement to \nvalidate that responses remain grounded before deployment. \nPull request policy: Require the evaluation workflow to succeed before merging \nRequiring the evaluation workflow to succeed before merging enforces quality gates in the CI/CD pipeline. If \n\n \nthe groundedness evaluation fails to meet the configured quality thresholds, the pull request cannot be \nmerged, preventing unvalidated changes from being deployed to production. \n \nIncorrect Answers: \nFluency evaluation \nFluency evaluates grammar, readability, and language quality, but it does not verify whether responses are \ngrounded in retrieved documents. \nSimilarity evaluation \nSimilarity compares responses against reference answers but does not determine whether the responses are \nsupported by the retrieved documents. \nContent Safety evaluation \nContent Safety evaluates harmful or unsafe content. It does not measure whether responses are grounded in \nthe retrieved knowledge. \nAutomatically rerun failed evaluations until they pass \nAutomatically retrying evaluations does not resolve genuine quality issues and does not enforce deployment \nquality standards. \nNotify reviewers when evaluations fail \nNotification alone does not prevent a pull request from being merged. \nAllow the merge and run evaluations after deployment \nThis allows potentially poor-quality changes to reach production, violating the requirement to validate \nresponses before deployment.",
       "images": [
@@ -928,7 +928,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an internal Q&A agent.  \nUsers report the following issues when they ask the agent questions: \nAn increase in the following response: “No relevant information found”  \nPeriodic HTTP 429 rate limit exceeded errors during peak hours \nYou need to identify whether each issue is caused by model unavailability, resource limits, or inference \nfailures.  \nWhat should you do?",
       "options": [],
-      "answer": "Metrics to enable: Model Availability Rate and Provisioned Utilization",
+      "answer": "Metrics to enable: Model Availability Rate and Provisioned Utilization | Diagnostic log to collect: RequestResponse",
       "answer_keys": [],
       "explanation": "Correct Answers: \nMetrics to enable: Model Availability Rate and Provisioned Utilization \nModel Availability Rate helps determine whether requests are failing because the model deployment is \nunavailable. Provisioned Utilization shows how much of the model's allocated capacity is being consumed, \nmaking it possible to identify whether HTTP 429 errors are caused by resource exhaustion during peak \nusage. Together, these metrics help distinguish between model unavailability and capacity-related throttling. \nDiagnostic log to collect: RequestResponse \nThe RequestResponse diagnostic log captures detailed information about inference requests and responses, \nincluding HTTP status codes, error details, latency, and failure reasons. This enables developers to determine \nwhether requests failed because of inference errors, throttling, or other runtime issues, making it the \nappropriate diagnostic log for troubleshooting the reported problems. \n \nIncorrect Answers: \nOnly Tokens Cache Match Rate \nThis metric measures cache effectiveness and does not help identify model availability or throttling issues. \nOnly Total Requests filtered to status code 200 \nMonitoring only successful requests ignores failed requests, including HTTP 429 errors and inference \nfailures. \nTime To Response and Total Tokens \nThese metrics measure latency and token consumption but do not identify whether failures are caused by \nmodel availability or resource limits. \n \nAllMetrics \nAllMetrics provides aggregated performance metrics but does not include the detailed request and response \ninformation required to diagnose inference failures. \n\n \naudit \nAudit logs record administrative and management operations, not inference request failures. \ntrace \nTrace logs provide execution traces but do not capture the complete inference request and response details \nneeded to analyze HTTP 429 and inference failures.",
       "images": [
@@ -1060,7 +1060,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains a customer support agent grounded in internal \ndocumentation. After a recent update, users report the following issues: \n• Some answers are unsupported by retrieved documents. \n• A small number of responses are flagged for policy violations.  \nYou need to evaluate each issue. \nWhich observability signals should you use for each issue?  \nTo answer, drag the appropriate observability signals to the correct issues. Each observability signal may be \nused once, more than once, or not at all.",
       "options": [],
-      "answer": "Unsupported responses: Groundedness evaluation metrics",
+      "answer": "Unsupported responses: Groundedness evaluation metrics | Policy violations: Risk and safety metrics",
       "answer_keys": [],
       "explanation": "Correct Answers: \nUnsupported responses: Groundedness evaluation metrics \nGroundedness evaluation metrics measure whether an agent's responses are supported by the retrieved \ndocuments in a Retrieval-Augmented Generation (RAG) solution. If answers are not backed by the retrieved \ncontent, these metrics help identify hallucinations and determine whether the response is properly grounded \nin the knowledge source. Since users report that some answers are unsupported by the retrieved \ndocuments, groundedness evaluation metrics are the appropriate observability signal. \nPolicy violations: Risk and safety metrics \nRisk and safety metrics evaluate responses for content policy violations, including harmful, unsafe, or \notherwise non-compliant content. They help identify responses that violate organizational or responsible AI \npolicies, making them the appropriate observability signal for monitoring policy violations. \n \nIncorrect Answers: \nLatency breakdown traces \nLatency breakdown traces measure the execution time of different stages of an agent run. They are useful for \nperformance analysis but do not evaluate grounding or policy compliance. \nToken usage analytics \nToken usage analytics track input and output token consumption for cost and usage analysis. They do not \ndetermine whether responses are grounded or whether they violate content policies.",
       "images": [
@@ -1181,7 +1181,7 @@
       "type": "matching_hot_area",
       "question": "You need to recommend a plan to create a customer support agent by using the Microsoft Foundry \nAgent Service.  \nThe agent must meet the following requirements: \n• Retain user preferences across multiple conversations. \n• Enable users to provide contextual grounding by directly uploading documents during a chat. \nWhich Foundry capability should you recommend for each requirement?",
       "options": [],
-      "answer": "To retain user preferences across conversations: Agent memory that uses persistent storage",
+      "answer": "To retain user preferences across conversations: Agent memory that uses persistent storage | To enable users to provide contextual grounding during chats: File search tool",
       "answer_keys": [],
       "explanation": "Correct Answers: \nTo retain user preferences across conversations: Agent memory that uses persistent storage \nPersistent agent memory is designed to store long-term user information such as preferences, allowing the \nagent to remember details across multiple conversations. This capability enables personalized interactions \nwithout requiring users to repeat their preferences in every new chat. \nTo enable users to provide contextual grounding during chats: File search tool \nThe File search tool allows users to upload documents directly during a conversation. The agent indexes \nthese uploaded files and retrieves relevant information from them to ground its responses. This enables \ncontextual question answering based on documents supplied by the user during the chat. \n \nIncorrect Answers: \nConversation history \nConversation history maintains messages within a conversation but is not intended for storing long-term \nuser preferences across multiple conversations. \n\n \nOrchestration-managed session context \nSession context exists only for the duration of the current conversation and is discarded when the session \nends. \nAzure AI Search tool \nAzure AI Search retrieves information from existing Azure AI Search indexes. It is not designed for users to \nupload documents directly during a chat. \nCode interpreter tool \nThe Code Interpreter executes code and analyzes uploaded files but is not intended to provide document \ngrounding through semantic document retrieval.",
       "images": [
@@ -1342,7 +1342,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent named PaymentAgent.  \nPaymentAgent includes a function tool that issues customer refunds by using an external API.  \nYou are creating a workflow in YAML. \nYou need to ensure that the workflow pauses for human approval and continues with the refund step only \nafter approval is granted. \nHow should you complete the workflow definition?",
       "options": [],
-      "answer": "Type: ask_question",
+      "answer": "Workflow step type: ask_question | Condition for execution: approval == \"approved\"",
       "answer_keys": [],
       "explanation": "Correct Answers: \n\n \nType: ask_question \nThe ask_question workflow step pauses execution and waits for human input before continuing. It is \ndesigned for Human-in-the-Loop (HITL) scenarios where a user or approver must review and approve an \naction before the workflow proceeds. Since the requirement is to pause the workflow until a human approves \nthe refund, this is the appropriate step type. \nCondition: approval == \"approved\" \nThe refund should only be executed after explicit approval is received. Setting the condition to approval == \n\"approved\" ensures that the execute_refund step runs only when the approval step returns the value \napproved, preventing unauthorized refunds. \n \nIncorrect Answers: \nbasic_chat \nA basic chat step generates conversational responses but does not pause the workflow for structured human \napproval. \ndata_transformation \nA data transformation step modifies or reshapes data. It is not intended for collecting human approval. \npropose_refund.output != null \nThis condition only checks whether the previous step produced an output. It does not verify that a human \napproved the refund. \ntrue \nThis condition always evaluates to true, causing the refund to execute regardless of whether approval was \ngranted.",
       "images": [
@@ -1469,7 +1469,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that processes procurement documents submitted by suppliers. \nYou need to implement two pipelines by using Azure Content Understanding in Foundry Tools.  \nThe solution must meet the following requirements: \n• Include a pipeline named Pipeline1 that supports cost-effective, high-volume processing of \nstandalone PDF invoices. \n• Include a pipeline named Pipeline2 that supports cross-document validation by using multi-step \nreasoning and reference data. \nHow should you configure each pipeline?  \nTo answer, drag the appropriate configurations to the correct pipelines. Each configuration may be used once, \nmore than once, of not at all.",
       "options": [],
-      "answer": "Pipeline1: Single-file task in standard mode",
+      "answer": "Pipeline1 (initial triage): Single-file task in standard mode | Pipeline2 (comprehensive evaluation): Multi-file task in pro mode",
       "answer_keys": [],
       "explanation": "Correct Answers: \nPipeline1: Single-file task in standard mode \nPipeline1 is intended for cost-effective, high-volume processing of standalone PDF invoices. Since each \ninvoice is processed independently and does not require advanced reasoning or cross-document analysis, a \n\n \nsingle-file task in standard mode is the most efficient and economical choice. Standard mode is optimized \nfor straightforward document extraction at scale. \nPipeline2: Multi-file task in pro mode \nPipeline2 must perform cross-document validation using multi-step reasoning and reference data. This \nrequires analyzing multiple related documents together, comparing information across them, and applying \nadvanced reasoning. A multi-file task in pro mode is specifically designed for these complex document \nunderstanding scenarios. \n \nIncorrect Answers: \nMulti-file task in standard mode \nStandard mode does not provide the advanced multi-step reasoning capabilities needed for cross-document \nvalidation. \nSingle-file task in pro mode \nAlthough Pro mode supports advanced reasoning, a single-file task cannot analyze relationships across \nmultiple documents and therefore does not meet the cross-document validation requirement.",
       "images": [
@@ -1693,7 +1693,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a workflow for a customer support triage process.  \nYou have an Ask a question node that stores user responses in a local variable named Var01. \nYou need to create the following Power Fx expressions: \n• An if/else condition expression that ensures that Var01 contains a value \n• A Send message expression that returns the stored user response in uppercase \nHow should you configure the expressions?",
       "options": [],
-      "answer": "If/else condition expression: Not(IsBlank(Local.Var01))",
+      "answer": "If/else condition expression: Not(IsBlank(Local.Var01)) | Send message expression: {Upper(Local.Var01)}",
       "answer_keys": [],
       "explanation": "Correct Answers: \nIf/else condition expression: Not(IsBlank(Local.Var01)) \nThe requirement is to ensure that Var01 contains a value before proceeding. The IsBlank() function returns \ntrue when the variable is empty or has no value. By wrapping it with Not(), the expression evaluates to true \nonly when Var01 contains a value, making it the correct condition for the If/Else node. \nSend message expression: {Upper(Local.Var01)} \nThe Upper() function converts the contents of the local variable to uppercase. Using {Upper(Local.Var01)} \nreturns the stored user response in uppercase while correctly referencing the local variable. \nIncorrect Answers: \nIsBlank(Local.Var01) \nThis returns true when the variable is empty, which is the opposite of the requirement. \nIsEmpty(Local.Var01) \nIsEmpty() is intended for tables and collections, not for checking whether a text variable contains a value. \n{Local.Var01} \nThis returns the stored value but does not convert it to uppercase. \n{Upper(Var01)} \nThis does not correctly reference the local variable. The variable should be referenced as Local.Var01.",
       "images": [
@@ -1716,10 +1716,9 @@
             "label": "If/else condition expression",
             "answer": "Not(IsBlank(Local.Var01))",
             "options": [
-              "Not(IsBlank(Local.Var01))",
               "IsBlank(Local.Var01)",
               "IsEmpty(Local.Var01)",
-              "HasValue(Local.Var01)"
+              "Not(IsBlank(Local.Var01))"
             ]
           },
           {
@@ -1727,10 +1726,9 @@
             "label": "Send message expression",
             "answer": "{Upper(Local.Var01)}",
             "options": [
-              "{Upper(Local.Var01)}",
               "{Local.Var01}",
-              "{Upper(Var01)}",
-              "{Trim(Var01)}"
+              "{Upper(Local.Var01)}",
+              "{Upper(Var01)}"
             ]
           }
         ]
@@ -1815,7 +1813,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that processes regulatory compliance documents submitted by \nregional offices. \nYou need to implement two pipelines by using Content Understanding in Microsoft Foundry Tools.  \nThe solution must meet the following requirements: \n• Include a pipeline named Pipeline1 that extracts key compliance information from individual audit \nreports while minimizing processing costs.  \n• Include a pipeline named Pipeline2 that analyzes multiple related audit reports together to identify \ninconsistencies across reporting periods by using advanced reasoning.  \nHow should you configure each pipeline? \nTo answer, drag the appropriate configurations to the correct pipelines. Each configuration may be used once, \nmore than once, or not at all.",
       "options": [],
-      "answer": "Pipeline1: Single-file task in standard mode",
+      "answer": "Pipeline1 (cost-effective initial check): Single-file task in standard mode | Pipeline2 (deep multimodal evaluation): Multi-file task in pro mode",
       "answer_keys": [],
       "explanation": "Correct Answers: \nPipeline1: Single-file task in standard mode \nPipeline1 processes individual audit reports and the primary goal is to minimize processing costs. Since \neach document is processed independently and does not require advanced reasoning or cross-document \nanalysis, a single-file task in standard mode is the most cost-effective configuration. It is optimized for high-\nvolume document extraction without the additional cost of advanced reasoning capabilities. \nPipeline2: Multi-file task in pro mode \nPipeline2 must analyze multiple related audit reports together to identify inconsistencies across reporting \nperiods using advanced reasoning. This requires comparing information across multiple documents and \nperforming multi-step reasoning. A multi-file task in pro mode is specifically designed for these advanced \ncross-document analysis scenarios. \n \nIncorrect Answers: \nMulti-file task in standard mode \nAlthough it processes multiple documents, Standard mode does not provide the advanced reasoning \ncapabilities required to identify inconsistencies across reporting periods. \nSingle-file task in pro mode \nPro mode supports advanced reasoning, but a single-file task cannot compare multiple related audit reports, \nso it does not meet the cross-document analysis requirement.",
       "images": [
@@ -1935,7 +1933,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent.  \nYou use a GitHub Actions workflow for CI/CD. \nYou need to configure the workflow to automatically evaluate the agent when a pull request (PR) is created \nand prevent branches from merging if the evaluation results do NOT meet the defined thresholds. \nHow should you configure the workflow?",
       "options": [],
-      "answer": "Authentication method: An Azure Login action that uses OpenID Connect (OIDC)",
+      "answer": "Authentication method: An Azure Login action that uses OpenID Connect (OIDC) | If the evaluation results are NOT met: Fail",
       "answer_keys": [],
       "explanation": "Correct Answers: \n\n \nAuthentication method: An Azure Login action that uses OpenID Connect (OIDC) \nThe recommended authentication method for GitHub Actions is Azure Login with OpenID Connect (OIDC). \nOIDC enables GitHub Actions to authenticate securely to Azure without storing long-lived credentials such as \nsecrets or personal access tokens. It follows Microsoft's recommended security best practices and is the \npreferred authentication mechanism for CI/CD workflows deploying Microsoft Foundry resources. \nIf the evaluation results are NOT met, configure the workflow to: Fail \nConfiguring the workflow to Fail ensures that the GitHub Actions workflow stops when evaluation thresholds \nare not met. Combined with GitHub branch protection rules that require the workflow to succeed before \nmerging, this prevents pull requests from being merged until the evaluation passes, satisfying the stated \nrequirement. \n \nIncorrect Answers: \nA personal access token (PAT) \nA PAT is a long-lived credential that requires manual management and is not the recommended \nauthentication method for Azure resources. \nA user-assigned managed identity \nManaged identities are intended for Azure-hosted resources and cannot be used directly by GitHub-hosted \nrunners. \nLock the target branch \nLocking a branch prevents all updates to the branch rather than preventing merges based on evaluation \nresults. \nSend an alert \nSending an alert notifies administrators but does not stop the pull request from being merged.",
       "images": [
@@ -1958,10 +1956,9 @@
             "label": "Authentication method",
             "answer": "An Azure Login action that uses OpenID Connect (OIDC)",
             "options": [
-              "An Azure Login action that uses OpenID Connect (OIDC)",
               "A personal access token (PAT)",
               "A user-assigned managed identity",
-              "A service principal with client secret"
+              "An Azure Login action that uses OpenID Connect (OIDC)"
             ]
           },
           {
@@ -1969,10 +1966,9 @@
             "label": "If the evaluation results are NOT met",
             "answer": "Fail",
             "options": [
-              "Fail",
-              "Send an alert",
               "Lock the target branch",
-              "Skip evaluation"
+              "Send an alert",
+              "Fail"
             ]
           }
         ]
@@ -2095,7 +2091,7 @@
       "type": "matching_hot_area",
       "question": "You have a Python application named App1 that integrates with a Microsoft Foundry project named \nProject1.  \nYou need to ensure that App1 meets the following requirements: \n• Authenticates by using a Microsoft Entra managed identity \n• Sends prompts to a deployed model by using the Azure OpenAI Responses API \nHow should you complete the Python code?",
       "options": [],
-      "answer": "Credential: DefaultAzureCredential",
+      "answer": "Credential class: DefaultAzureCredential | Responses API method: create",
       "answer_keys": [],
       "explanation": "Correct Answers: \n\n \nCredential: DefaultAzureCredential \nDefaultAzureCredential enables the application to authenticate by using Microsoft Entra ID, including a \nmanaged identity when the application is running in Azure. It automatically selects the appropriate \nauthentication mechanism based on the execution environment, making it the recommended credential for \napplications that use managed identities. \nResponses API method: create \nThe Azure OpenAI Responses API uses the responses.create() method to send prompts to a deployed model \nand generate responses. This is the standard method for creating a new model response through the \nResponses API. \n \nIncorrect Answers: \nAzureKeyCredential \nThis uses an API key rather than Microsoft Entra managed identity authentication. \nClientSecretCredential \nAlthough it uses Microsoft Entra ID, it requires storing a client secret instead of using a managed identity. \ncompact \nThis is not a valid method for sending requests to the Responses API. \nretrieve \nThis retrieves an existing response rather than creating a new one.",
       "images": [
@@ -2118,10 +2114,9 @@
             "label": "Credential class",
             "answer": "DefaultAzureCredential",
             "options": [
-              "DefaultAzureCredential",
               "AzureKeyCredential",
               "ClientSecretCredential",
-              "UsernamePasswordCredential"
+              "DefaultAzureCredential"
             ]
           },
           {
@@ -2129,10 +2124,9 @@
             "label": "Responses API method",
             "answer": "create",
             "options": [
-              "create",
               "compact",
-              "send",
-              "generate"
+              "create",
+              "retrieve"
             ]
           }
         ]
@@ -2221,7 +2215,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains a sales assistant agent. The agent retrieves product \ninformation from an Azure AI Search index and generates responses by using a large language model. \nAfter deploying a new version of the agent, users report the following issues: \n• The average response time has increased significantly when users ask complex questions.  \n• Monthly model inference costs have increased even though the number of user requests has \nremained unchanged.  \nYou need to evaluate each issue. \nWhich observability signals should you use for each issue? \nTo answer, drag the appropriate observability signals to the correct issues. Each observability signal may be \nused once, more than once, or not at all.",
       "options": [],
-      "answer": "Increased response time: Latency breakdown traces",
+      "answer": "Increased response time: Latency breakdown traces | Increased inference costs: Token usage analytics",
       "answer_keys": [],
       "explanation": "Correct Answers: \nIncreased response time: Latency breakdown traces \nLatency breakdown traces provide detailed timing information for every stage of an agent run, including \nAzure AI Search retrieval, tool invocations, prompt construction, and large language model inference. Since \nresponse times have increased for complex questions, latency traces help identify which component is \nintroducing the delay and where optimization is needed. \nIncreased inference costs: Token usage analytics \nToken usage analytics show the number of input tokens, output tokens, and token consumption during each \nrequest. Because user traffic has remained unchanged while inference costs have increased, token usage \n\n \nanalytics can determine whether the increase is caused by larger prompts, longer model responses, or \nincreased retrieval context. \n \nIncorrect Answers: \nGroundedness evaluation metrics \nGroundedness metrics determine whether responses are supported by retrieved documents. They do not \ndiagnose latency or inference costs. \nRisk and safety metrics \nRisk and safety metrics monitor content safety issues and policy violations. They do not provide information \nabout performance or token consumption.",
       "images": [
@@ -2341,7 +2335,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that processes engineering drawings stored in Azure Blob \nStorage. \nAzure AI Content Safety must retrieve images by using blob URLs to evaluate user-submitted images. \nThe solution must meet the following requirements: \n• Follow the principle of least privilege.  \n• Avoid using storage account keys or shared access signatures (SAS).  \n• Allow Content Safety to read images stored in Azure Blob Storage.",
       "options": [],
-      "answer": "Authentication: System-assigned managed identity",
+      "answer": "Authentication type: System-assigned managed identity | Azure RBAC role: Storage Blob Data Reader",
       "answer_keys": [],
       "explanation": "Correct Answers \nAuthentication: System-assigned managed identity \nA system-assigned managed identity enables Azure AI Content Safety to authenticate securely to Azure Blob \nStorage without using storage account keys or SAS tokens. This satisfies the requirement to avoid shared \nsecrets while leveraging Microsoft Entra ID authentication. \nAzure RBAC role: Storage Blob Data Reader \nThe Storage Blob Data Reader role grants read-only access to blob data. This follows the principle of least \nprivilege, allowing Content Safety to retrieve images for evaluation without permitting uploads, modifications, \nor deletions. \n \nIncorrect Answers: \nStorage account access keys \nThese provide full access to the storage account and violate the requirement to avoid storage account keys. \nShared Access Signature (SAS) \nAlthough SAS can provide limited access, the requirement explicitly states to avoid using SAS. \nUser-assigned managed identity \nA user-assigned managed identity could work technically, but unless there's a requirement to share the \nidentity across multiple resources, a system-assigned managed identity is the simpler and recommended \nchoice. \n \nStorage Blob Data Contributor \nThis role grants read, write, and delete permissions, exceeding the required read-only access. \nStorage Queue Data Contributor \nThis role applies to Azure Storage Queues, not Blob Storage. \nOwner \nThis grants full management permissions and violates the principle of least privilege.",
       "images": [
@@ -2501,7 +2495,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a customer support agent built by using the \nFoundry Agent Service. \nThe agent uploads user-provided screenshots to Azure Storage through a ticketing tool and receives a blob \nURL for additional reasoning. \nYou need to use image moderation during agent runs and prevent harmful content from being returned \nduring runs.  \nAzure AI Content Safety must access the images by using the blob URL. The solution must follow the \nprinciple of least privilege.",
       "options": [],
-      "answer": "Guardrails: Select User input, Output, Tool response, and Tool call and set Action to Block.",
+      "answer": "Guardrails configuration: Select User input, Output, Tool response, and Tool call and set Action to Block. | Storage access method: A system-assigned managed identity that is assigned the Storage Blob Data Reader role",
       "answer_keys": [],
       "explanation": "Correct Answers \nGuardrails: Select User input, Output, Tool response, and Tool call and set Action to Block. \nThe requirement is to prevent harmful content from being returned during agent runs. Setting the Content \nSafety guardrails to Block ensures that harmful content is stopped rather than merely annotated. Applying \nthe guardrails to User input, Output, Tool response, and Tool call provides end-to-end protection throughout \nthe agent execution pipeline. \nStorage access: A system-assigned managed identity that is assigned the Storage Blob Data Reader role. \nAzure AI Content Safety must retrieve images by using the blob URL. The solution must also follow the \nprinciple of least privilege. \nA system-assigned managed identity eliminates the need for storage account keys or SAS tokens, and the \nStorage Blob Data Reader role grants only the permissions required to read the images—nothing more. \n \nIncorrect Answers \nSelect Tool call and set Action to Block. \nThis protects only tool calls and does not inspect user input, tool responses, or model output. \nSelect User input and Output and set Action to Annotate. \nAnnotate only detects harmful content but does not prevent it from being returned. \nSelect User input and Tool response and set Action to Annotate. \nThis also annotates rather than blocks and does not protect all stages of the pipeline. \nStorage account access keys. \nThese provide excessive permissions and do not follow Microsoft's recommended identity-based \nauthentication. \nA user-assigned identity assigned the Storage Queue Data Contributor role. \nThis role applies to Azure Storage Queues, not Blob Storage. \n\n \nA system-assigned managed identity assigned the Storage Blob Data Contributor role. \nContributor grants write and delete permissions, exceeding the requirement to only read images.",
       "images": [
@@ -2628,7 +2622,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains an agent that answers employee questions by using \nRetrieval-Augmented Generation (RAG). \nAfter deployment, users report the following issues: \n• The retrieved documents are relevant, but the generated answers do not address the user's question.  \n• Responses generated by the agent are significantly longer than expected, increasing inference costs.  \nYou need to determine which diagnostic capability to use for each issue. \nWhich diagnostic capability should you use? \n \nTo answer, drag the appropriate diagnostic capabilities to the correct issues. Each diagnostic capability may \nbe used once, more than once, or not at all.",
       "options": [],
-      "answer": "Answers do not address the user's question: Relevance Evaluation",
+      "answer": "Answers do not address the user's question: Relevance Evaluation | Responses are longer than expected: Completion token analytics",
       "answer_keys": [],
       "explanation": "Correct Answers \nAnswers do not address the user's question: Relevance Evaluation \nThe retrieved documents are already relevant, so the retrieval stage is working correctly. The problem is that \nthe generated answer does not address the user's question. Relevance Evaluation measures whether the \nmodel's response is relevant to the user's query, making it the appropriate diagnostic capability. \nResponses are longer than expected: Completion token analytics \nLonger-than-expected responses directly increase inference costs because more completion tokens are \ngenerated. Completion token analytics helps identify excessive output token usage and determine whether \nlong model responses are driving the higher costs. \n \nIncorrect Answers \nGroundedness evaluation \nGroundedness checks whether the response is supported by the retrieved documents. In this scenario, the \ndocuments are already relevant. The issue is that the response does not answer the user's question, making \nRelevance Evaluation the better choice. \nPrompt traces \nPrompt traces help inspect prompts and model interactions for debugging but do not directly evaluate \nresponse relevance or output token usage. \nLatency timeline \nLatency timeline measures execution time across retrieval, tool execution, and inference. It is useful for \ndiagnosing performance issues, not response quality or inference costs.",
       "images": [
@@ -2750,7 +2744,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a customer support agent. The agent uses Azure AI \nSearch as a knowledge source to answer questions by using Retrieval-Augmented Generation (RAG). \nAfter a recent deployment, users report the following issues: \n• The agent occasionally generates responses that are not supported by the retrieved documents.  \n• Support engineers want the agent to return a fallback response instead of generating an answer \nwhen insufficient grounding evidence is available.  \nYou need to identify the evaluation metric and the recommended configuration to address the issues.",
       "options": [],
-      "answer": "Evaluation metric: Groundedness",
+      "answer": "Evaluation metric: Groundedness | Recommended configuration: Reject responses that do not meet the groundedness threshold.",
       "answer_keys": [],
       "explanation": "Correct Answers \n\n \nEvaluation metric: Groundedness \nThe issue states that the agent occasionally generates responses that are not supported by the retrieved \ndocuments.  \nThis is exactly what the Groundedness evaluation metric measures. It determines whether the generated \nresponse is supported by the retrieved knowledge source rather than containing hallucinations or \nunsupported claims. \nRecommended configuration: Reject responses that do not meet the groundedness threshold. \nThe second requirement is Return a fallback response instead of generating an answer when insufficient \ngrounding evidence is available.  \nThe appropriate configuration is to reject responses that fail the groundedness threshold. When a response \nis not sufficiently grounded, the application can return a fallback message such as \"I couldn't find enough \ninformation to answer that question.\" instead of returning a potentially hallucinated response. \n \nIncorrect Answers \nIncrease the model temperature. \nA higher temperature makes responses more creative and less deterministic, increasing the likelihood of \nunsupported answers. \nIncrease the maximum completion tokens. \nIncreasing completion tokens only allows longer responses. It does not improve grounding or reduce \nhallucinations. \nFine-tune the model by using the retrieved documents. \nRAG is designed to ground responses using retrieved documents at inference time. Fine-tuning is \nunnecessary for this requirement and does not ensure that every response is grounded in the retrieved \ncontent.",
       "images": [
@@ -2915,7 +2909,7 @@
       "type": "matching_hot_area",
       "question": "You need to recommend a solution for a legal research agent by using the Microsoft Foundry Agent \nService. \nThe solution must meet the following requirements: \n• Retain attorney preferences across multiple conversations.  \n• Enable the agent to retrieve reference material from documents uploaded during a conversation.  \nWhich Foundry capability should you recommend for each requirement?",
       "options": [],
-      "answer": "The correct answers are Agent memory that uses persistent storage and File search tool.",
+      "answer": "To retain attorney preferences across conversations: Agent memory that uses persistent storage | To retrieve uploaded documents: File search tool",
       "answer_keys": [],
       "explanation": "Correct Answers \nThe correct answers are Agent memory that uses persistent storage and File search tool. \nTo retain attorney preferences across multiple conversations, the agent must use persistent agent memory. \nUnlike conversation history or session context, persistent memory stores user preferences across sessions, \nallowing the agent to remember long-term information such as preferred legal terminology, citation style, or \ndocument formatting preferences. \nTo retrieve reference material from documents uploaded during a conversation, the File search tool is the \nappropriate capability. It indexes uploaded files and enables the agent to search their contents during the \nconversation, making it ideal for legal research scenarios where users upload contracts, case files, or other \nreference documents. \n \nIncorrect Answers: \nConversation history is incorrect because it maintains the messages within a conversation or thread but is \nnot intended for storing long-term user preferences across multiple conversations. \nOrchestration-managed session context is incorrect because it exists only for the duration of the current \nsession and is discarded afterward. \nPrompt cache is incorrect because it is an optimization feature that reduces latency and cost by caching \nrepeated prompts. It does not store user preferences. \nCode interpreter tool is incorrect because it is designed to execute Python code and analyze data rather than \nsearch uploaded documents. \nComputer use tool is incorrect because it automates interactions with graphical user interfaces and is \nunrelated to document retrieval. \nAzure AI Translator is incorrect because it translates text and documents but does not retrieve information \nfrom uploaded files.",
       "images": [
@@ -3041,7 +3035,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains an agent used by an insurance company. \nYou need to enhance the agent by using built-in tools. The solution must meet the following requirements: \n• Allow the agent to analyze claim spreadsheets uploaded during conversations and generate charts.  \n• Allow the agent to interact with a legacy claims management website that does not expose APIs.  \n• Allow the agent to answer questions by using policy documents uploaded directly to the current \nconversation.  \nWhat should you use for each requirement? \nTo answer, drag the appropriate tools to the correct requirements. Each tool may be used once, more than \nonce, or not at all.",
       "options": [],
-      "answer": "Analyze uploaded spreadsheets and generate charts: Code Interpreter",
+      "answer": "Analyze uploaded spreadsheets and generate charts: Code Interpreter | Interact with the legacy claims management website: Computer Use | Retrieve information from uploaded policy documents: File Search",
       "answer_keys": [],
       "explanation": "Correct Answers: \nAnalyze uploaded spreadsheets and generate charts: Code Interpreter \n\n \nThe Code Interpreter tool is designed to analyze uploaded files such as spreadsheets. It can execute Python \ncode to process claim data, perform calculations, and generate charts or other visualizations during the \nconversation. \nInteract with the legacy claims management website: Computer Use \nThe Computer Use tool enables an agent to interact with applications and websites that do not expose APIs. \nIt can navigate web pages, click buttons, enter text, and perform other user interface actions, making it ideal \nfor legacy web applications. \nRetrieve information from uploaded policy documents: File Search \nThe File Search tool indexes documents uploaded during the current conversation and allows the agent to \nretrieve relevant information from those files when answering user questions. \n \nIncorrect Answers: \nGrounding with Bing Search \nThis tool retrieves information from public websites on the internet. It cannot search documents uploaded \nduring a conversation or interact with internal legacy applications. \nMicrosoft Fabric \nMicrosoft Fabric is an analytics platform for enterprise data workloads. It is not intended for analyzing \nuploaded spreadsheets during a chat, interacting with websites, or retrieving information from conversation-\nuploaded documents.",
       "images": [
@@ -3167,7 +3161,7 @@
       "type": "matching_hot_area",
       "question": "You need to recommend a solution for a customer service agent by using the Microsoft Foundry Agent \nService. \nThe agent must meet the following requirements: \n• Execute Python code to analyze spreadsheets uploaded by users during conversations.  \n• Access current weather conditions from public websites without requiring users to upload \ndocuments.  \nWhich Foundry capability should you recommend for each requirement?",
       "options": [],
-      "answer": "To analyze uploaded spreadsheets: Code Interpreter Tool",
+      "answer": "To analyze uploaded spreadsheets: Code Interpreter Tool | To retrieve current weather information: Grounding with Bing Search",
       "answer_keys": [],
       "explanation": "Correct Answers: \n\n \nTo analyze uploaded spreadsheets: Code Interpreter Tool \nThe Code Interpreter Tool enables the agent to execute Python code on user-uploaded files. It can analyze \nspreadsheets, perform calculations, manipulate data, and generate charts or other visualizations during the \nconversation. \nTo retrieve current weather information: Grounding with Bing Search \nGrounding with Bing Search allows the agent to retrieve current, real-time information from public websites, \nincluding weather conditions, without requiring users to upload documents. It is specifically designed to \nground responses using live web content. \n \nIncorrect Answers: \nFile Search Tool \nThe File Search Tool retrieves information from files uploaded during the conversation. It cannot access live \ninformation from public websites such as current weather. \nComputer Use Tool \nThe Computer Use Tool automates interactions with graphical user interfaces and websites. It is intended for \noperating applications or websites that require user interface interactions, not for retrieving grounded public \nweb information. \nAzure AI Search Tool \nAzure AI Search queries enterprise search indexes. It is not intended for analyzing uploaded spreadsheets or \nretrieving current public weather information. \nMicrosoft Fabric Tool \nMicrosoft Fabric is an enterprise analytics platform and is not used to retrieve live weather information during \nagent conversations.",
       "images": [
@@ -3327,7 +3321,7 @@
       "type": "matching_hot_area",
       "question": "You need to recommend a solution for a procurement agent by using the Microsoft Foundry Agent \nService. \nThe solution must meet the following requirements: \n• Answer questions by using supplier contracts uploaded by users during conversations.  \n• Generate charts that summarize purchasing trends from uploaded Excel workbooks.  \nWhich Foundry capability should you recommend for each requirement?",
       "options": [],
-      "answer": "To answer questions from uploaded contracts: File Search Tool",
+      "answer": "To answer questions from uploaded contracts: File Search Tool | To generate charts from Excel workbooks: Code Interpreter Tool",
       "answer_keys": [],
       "explanation": "Correct Answers: \nTo answer questions from uploaded contracts: File Search Tool \nThe File Search Tool is designed to retrieve information from documents uploaded during a conversation. It \nindexes the uploaded supplier contracts and enables the agent to search them efficiently when answering \nuser questions. \nTo generate charts from Excel workbooks: Code Interpreter Tool \nThe Code Interpreter Tool can execute Python code to analyze uploaded Excel workbooks, perform \ncalculations, summarize purchasing trends, and generate charts and visualizations during the conversation. \n \n\n \nIncorrect Answers: \nGrounding with Bing Search \nThis tool retrieves information from public websites. It cannot search user-uploaded contracts or analyze \nExcel workbooks. \nComputer Use Tool \nThe Computer Use Tool is intended for interacting with graphical user interfaces and legacy applications. It is \nnot designed for document retrieval or spreadsheet analysis. \nAzure AI Search Tool \nAzure AI Search is used to query enterprise search indexes. The requirement is to use contracts uploaded \nduring the current conversation, making the File Search Tool the appropriate choice. \nMicrosoft Fabric Tool \nMicrosoft Fabric is an enterprise analytics platform. It is not the built-in tool used by Foundry agents to \nanalyze uploaded Excel files during a conversation.",
       "images": [
@@ -3453,7 +3447,7 @@
       "type": "drag_drop",
       "question": "You have a Microsoft Foundry project that contains a legal research agent. \nThe solution must meet the following requirements: \n• Research recently published court decisions available on public websites.  \n• Search contracts that attorneys upload during a conversation.  \n• Log in to a third-party compliance portal and download supporting evidence for the current case.  \nWhat should you use for each requirement? \nTo answer, drag the appropriate tools to the correct requirements. Each tool may be used once, more than \nonce, or not at all.",
       "options": [],
-      "answer": "Research recent court decisions: Grounding with Bing Search",
+      "answer": "Research recent court decisions: Grounding with Bing Search | Search uploaded contracts: File Search | Download evidence from the compliance portal: Computer Use",
       "answer_keys": [],
       "explanation": "Correct Answers: \nResearch recent court decisions: Grounding with Bing Search \nThe Grounding with Bing Search tool enables the agent to retrieve up-to-date information from public \nwebsites. Since recently published court decisions are available on public websites, this is the appropriate \ntool for accessing current legal information. \nSearch uploaded contracts: File Search \nThe File Search tool indexes documents uploaded during the current conversation and allows the agent to \nretrieve relevant information from those contracts when answering questions. \nDownload evidence from the compliance portal: Computer Use \n\n \nThe Computer Use tool allows an agent to interact with websites through their graphical user interfaces. It \ncan log in to third-party portals, navigate pages, click buttons, and download documents, making it the \ncorrect choice for interacting with a compliance portal that requires user interface automation. \n \nIncorrect Answers: \nCode Interpreter \nCode Interpreter is designed for executing Python code to analyze data and files. It is not intended for \nsearching public websites, retrieving uploaded documents, or automating interactions with web portals. \nMicrosoft Fabric \nMicrosoft Fabric is an enterprise analytics platform and is not used for web search, document retrieval during \nconversations, or browser automation",
       "images": [
@@ -3579,7 +3573,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent deployed to multiple environments. \nThe organization has adopted a passwordless authentication strategy. \nYou need to configure the GitHub Actions workflow to meet the following requirements: \n• Eliminate long-lived credentials.  \n• Authenticate securely to Azure resources.  \nHow should you configure the workflow?",
       "options": [],
-      "answer": "Authentication method: Azure Login action that uses OpenID Connect (OIDC)",
+      "answer": "Authentication method: Azure Login action that uses OpenID Connect (OIDC) | Credential management: Configure workload identity federation",
       "answer_keys": [],
       "explanation": "Correct Answers: \nAuthentication method: Azure Login action that uses OpenID Connect (OIDC) \n\n \nThe organization has adopted a passwordless authentication strategy and wants to eliminate long-lived \ncredentials. The Azure Login GitHub Action supports OpenID Connect (OIDC), allowing GitHub Actions to \nobtain short-lived Microsoft Entra tokens without storing secrets such as client secrets or passwords. \nCredential management: Configure workload identity federation \nWorkload identity federation establishes trust between GitHub Actions and Microsoft Entra ID. It enables \nGitHub workflows to exchange GitHub-issued OIDC tokens for Azure access tokens, eliminating the need for \nlong-lived credentials while providing secure authentication. \n \nIncorrect Answers: \nPersonal access token (PAT) \nPATs are long-lived credentials and do not support a passwordless authentication strategy. \nStorage account access key \nStorage account keys are long-lived secrets and violate the requirement to eliminate long-lived credentials. \nPublish Profile \nA publish profile contains long-lived deployment credentials and is not recommended for secure GitHub \nActions authentication. \nStore credentials as GitHub repository secrets \nAlthough repository secrets protect stored credentials, they are still long-lived secrets and do not satisfy the \npasswordless requirement. \nRotate PAT every 30 days \nRegular rotation improves security but still relies on long-lived credentials instead of passwordless \nauthentication. \nUse a shared administrator account \nThis violates security best practices and the principle of least privilege.",
       "images": [
@@ -3735,7 +3729,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a deployed chat model. \nYou have a Python service that sends API requests to the model. The service is integrated with an automated \nvalidation system that compares generated outputs against approved response patterns. \nStakeholders report that small wording differences are causing validation mismatches. \nYou need to update the request parameters to improve output stability. The solution must maximize \nreasoning quality. \nHow should you complete the Python code?",
       "options": [],
-      "answer": "Temperature: 0",
+      "answer": "temperature=: 0 | output_config={\"effort\": ...}: \"high\"",
       "answer_keys": [],
       "explanation": "Correct Answers: \nTemperature: 0 \nThe application uses an automated validation system that compares generated responses against approved \nresponse patterns. Setting the temperature to 0 makes the model's output as deterministic as possible, \nreducing wording variations between identical requests and improving output stability. \nOutput effort: \"high\" \nThe requirement also states to maximize reasoning quality. Setting output_config={\"effort\":\"high\"} instructs \nthe reasoning model to spend more effort generating accurate, well-reasoned responses while still producing \ndeterministic output due to the low temperature. \n \nIncorrect Answers: \nTemperature: 1 \nA temperature of 1 increases randomness and creativity, making responses less consistent and more likely to \nfail automated validation. \nTemperature: 2 \nA temperature of 2 produces even greater variability and is the least suitable option for deterministic outputs. \nOutput effort: \"low\" \nLow effort reduces reasoning depth and may produce lower-quality responses. \nOutput effort: \"medium\" \nMedium effort provides a balance between speed and reasoning quality but does not maximize reasoning as \nrequired.",
       "images": [
@@ -3756,24 +3750,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Temperature setting",
+            "label": "temperature=",
             "answer": "0",
             "options": [
               "0",
-              "0.5",
-              "0.7",
-              "1.0"
+              "1",
+              "2"
             ]
           },
           {
             "id": "b2",
-            "label": "Output effort setting",
-            "answer": "high",
+            "label": "output_config={\"effort\": ...}",
+            "answer": "\"high\"",
             "options": [
-              "high",
-              "medium",
-              "low",
-              "default"
+              "\"high\"",
+              "\"low\"",
+              "\"medium\""
             ]
           }
         ]
@@ -4071,9 +4063,9 @@
       "id": 103,
       "title": "Q103",
       "type": "matching_hot_area",
-      "question": "You have a Microsoft Founcy project that contains a Retrieval Augmented Generation (RAG) solution. \nYou need to run a pre-production evaluation by using labeled CSV dataset that contains the query, context, \nresponse and ground truth.  \nThe evaluation must measure the following: \n• Whether responses address the user query \n• Whether responses are supported by the provided context \n \n• Whether responses contain sensitive or proprietary information \nWhich AI quality evaluation metrics should you use?",
+      "question": "You have a Microsoft Foundry project that contains a Retrieval Augmented Generation (RAG) solution. \nYou need to run a pre-production evaluation by using labeled CSV dataset that contains the query, context, \nresponse and ground truth.  \nThe evaluation must measure the following: \n• Whether responses address the user query \n• Whether responses are supported by the provided context \n \n• Whether responses contain sensitive or proprietary information \nWhich AI quality evaluation metrics should you use?",
       "options": [],
-      "answer": "Groundedness and Relevance",
+      "answer": "To measure whether the responses are supported by the provided context and address the user query: Groundedness and Relevance | To measure whether responses contain sensitive or proprietary information: Protected material",
       "answer_keys": [],
       "explanation": "Correct Answer: \nGroundedness and Relevance \nGroundedness evaluates whether the generated response is supported by the provided context, ensuring \nthere are no hallucinations. Relevance measures whether the response appropriately addresses the user \nquery. Together, these metrics satisfy the requirement to verify that responses both answer the user’s \nquestion and are grounded in the retrieved context. \nProtected material \nProtected material detection identifies whether the response contains sensitive or proprietary information. \nThis directly satisfies the requirement to detect if responses include confidential or restricted data. \n \nIncorrect Answers: \nCoherence and Fluency \nThese measure readability and language quality, not grounding or relevance to the query. \n\n \nGPT similarity and F1 score \nThese compare generated responses with ground truth but do not verify grounding against context or detect \nsensitive content. \nGroundedness and ROUGE score \nROUGE measures overlap with reference text, not whether the response addresses the query or is relevant. \nHateful and unfair content \nThis detects toxicity or bias, not sensitive or proprietary information. \nIndirect attack \nThis identifies prompt injection or adversarial inputs, not sensitive data leakage. \nViolent content \nThis detects harmful or violent outputs, not proprietary or sensitive information.",
       "images": [
@@ -4094,13 +4086,24 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Quality metrics to evaluate",
+            "label": "To measure whether the responses are supported by the provided context and address the user query:",
             "answer": "Groundedness and Relevance",
             "options": [
-              "Groundedness and Relevance",
               "Coherence and Fluency",
-              "Similarity and BLEU",
-              "Recall and F1 score"
+              "GPT similarity and F1 score",
+              "Groundedness and Relevance",
+              "Groundedness and ROUGE score"
+            ]
+          },
+          {
+            "id": "b2",
+            "label": "To measure whether responses contain sensitive or proprietary information:",
+            "answer": "Protected material",
+            "options": [
+              "Hateful and unfair content",
+              "Indirect attack",
+              "Protected material",
+              "Violent content"
             ]
           }
         ]
@@ -4160,7 +4163,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that uses Azure Content Understanding in Foundry Tools to \nanalyze marketing videos. \nVideo segmentation is enabled. \nYou need to configure an analyzer to output a generated JSON field that describes the color scheme of each \nvideo segment. \nHow should you configure the analyzer?",
       "options": [],
-      "answer": "Field value type → string",
+      "answer": "Field value type: string | Field method: generate",
       "answer_keys": [],
       "explanation": "Correct Answer: \nField value type → string \nA string field type is used when the output is descriptive text. In this scenario, the requirement is to describe \nthe color scheme of each video segment. This is not structured multi-field JSON with defined subfields, but \nrather a natural language or textual description, which maps to a string. \nField method → generate \nThe generate method is used when the analyzer must create new content using AI rather than extract it \n\n \ndirectly from the source. Since the color scheme must be inferred from visual content and described, it \nrequires generative capability. \n \nIncorrect Answers: \ngroup \nGroup is used for structured JSON with predefined subfields. The question asks for a generated description, \nnot a structured schema with multiple named fields. \nclassify \nClassify is used when assigning predefined labels, not generating descriptive output. \ntable \nTable is used for structured tabular extraction, not descriptive generation.",
       "images": [
@@ -4176,29 +4179,24 @@
         107
       ],
       "interactive": {
-        "type": "dropdown",
-        "blanks": [
+        "type": "drag_drop_order",
+        "pool": [
+          "classify",
+          "generate",
+          "group",
+          "string",
+          "table"
+        ],
+        "targets": [
           {
-            "id": "b1",
-            "label": "Field value type",
-            "answer": "string",
-            "options": [
-              "string",
-              "int",
-              "boolean",
-              "array"
-            ]
+            "id": "t1",
+            "label": "Field value type:",
+            "answer": "string"
           },
           {
-            "id": "b2",
-            "label": "Field method",
-            "answer": "generate",
-            "options": [
-              "generate",
-              "classify",
-              "summarize",
-              "transform"
-            ]
+            "id": "t2",
+            "label": "Field method:",
+            "answer": "generate"
           }
         ]
       },
@@ -4252,7 +4250,7 @@
       "type": "yes_no",
       "question": "You have a Microsoft Foundry project that contains a customer support application.  \nYou create an evaluation named Run1 that has the following configurations: \n• Includes risk and safety metrics \n• Includes the protected material evaluation \n• Includes harmful content metrics that use a medium severity threshold  \n \nYou create an evaluation named Run2 that has the following configurations: \n• Includes risk and safety metrics \n• Includes the protected material evaluation \n• Includes harmful content metrics that use a high severity threshold \n \nYou run both evaluations against a dataset named DB1 and receive the following results: \n• Content harm defect rate of Run1: 12% \n• Content harm defect rate of Run2: 4% \n• Protected material evaluation of Run1: 6% \n• Protected material evaluation of Run1: 6% \n \nYou start a fine-tuning job by using DB1. The job fails during automatic RAI checks for multiple content harm \ntypes. You discover that the content filtering configuration is set to high severity. \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: No | Statement 2: Yes | Statement 3: Yes",
+      "answer": "Changing the content filtering configuration to low severity will resolve the fine-tuning job issues.: No | The difference between the 12% and 4% content harm defect rate is consistent with the different severity thresholds used in Run1 and Run2.: Yes | The identical 6% protected material evaluation values across Run1 and Run2 indicate that this metric is unaffected by the change in the severity threshold.: Yes",
       "answer_keys": [],
       "explanation": "Statement 1 --> No \nThis is incorrect because lowering the severity threshold only reduces how strictly harmful content is \nflagged, but it does not remove or fix the harmful content present in the dataset. The fine-tuning job fails due \nto actual content violations detected during RAI checks, so the dataset itself must be cleaned rather than just \nchanging the filtering level. \nStatement 2 --> Yes \nThis is correct because a medium severity threshold flags more content as harmful compared to a high \nseverity threshold, resulting in a higher defect rate (12% vs 4%). This difference directly reflects how varying \nseverity levels impact content harm detection sensitivity. \nStatement 3 --> Yes \nThis is correct because protected material evaluation is independent of harmful content severity thresholds. \nThe identical 6% values across both runs confirm that changing severity levels affects only harmful content \nmetrics and not protected material detection.",
       "images": [
@@ -4338,7 +4336,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains two agents named PolicyWriter and RskReviewer. \nPolicyWriter generates daft updates for customer polices, and RiskReviewer reviews the drafts. \nIn the visual builder, you need to create a workflow that meets the following requirements: \n• Finalizes low-risk updates without manual intervention \n• Ensures predictable execution across the agents \n• Requires user approval for highs updates \nWhat should you configure?",
       "options": [],
-      "answer": "Orchestration pattern → The sequential template that passes outputs node by-node",
+      "answer": "Orchestration pattern: The sequential template that passes outputs node by-node | Approval checkpoints: Add an Ask a question node.",
       "answer_keys": [],
       "explanation": "Correct Answer: \nOrchestration pattern → The sequential template that passes outputs node by-node \nThis is correct because the requirement is for predictable execution across agents. A sequential pattern \nensures PolicyWriter runs first and then RiskReviewer processes the output in a fixed, deterministic flow, \nwhich avoids dynamic routing and ensures consistency. \n\n \nApproval checkpoints → Add an Ask a question node \nThis is correct because high-risk updates require explicit user approval. An Ask a question node introduces a \nhuman-in-the-loop checkpoint, allowing the workflow to pause and request approval only when needed. \n \nIncorrect Answers: \nThe group chat template to dynamically route control between the agents \nThis introduces non-deterministic behavior, which violates the requirement for predictable execution. \nThe human-in-the-loop template that pauses execution of the workflow for input \nThis would pause all executions, not just high-risk cases, making it inefficient for low-risk updates. \nAdd a Basic chat node \nThis does not provide approval capability. \nAdd a Condition statement \nThis can route logic but cannot capture explicit user approval.",
       "images": [
@@ -4358,24 +4356,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Orchestration pattern",
+            "label": "Orchestration pattern:",
             "answer": "The sequential template that passes outputs node by-node",
             "options": [
               "The sequential template that passes outputs node by-node",
-              "The concurrent template executing all nodes simultaneously",
-              "The fan-out/fan-in parallel template",
-              "The agentic autonomous loop template"
+              "The group chat template to dynamically route control between the agents",
+              "The human-in-the-loop template that pauses execution of the workflow for input"
             ]
           },
           {
             "id": "b2",
-            "label": "Approval checkpoints",
-            "answer": "Add an Ask a question node",
+            "label": "Approval checkpoints:",
+            "answer": "Add an Ask a question node.",
             "options": [
-              "Add an Ask a question node",
-              "Add an Event Grid trigger",
-              "Add a Webhook callback",
-              "Add a Manual Polling task"
+              "Add a Basic chat node.",
+              "Add a Condition statement.",
+              "Add an Ask a question node."
             ]
           }
         ]
@@ -4498,7 +4494,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent. \nThe agent uses a stored access key to retrieve secrets from an Azure key vault, which violates a keyless-\ncredentials requirement. \nYou need to ensure that the agent can retrieve the secrets. The solution must follow the principle of least \nprivilege. What should you configure?",
       "options": [],
-      "answer": "Managed identity scope → Enable a system-assigned managed identity at the project level",
+      "answer": "Managed identity scope: Enable a system-assigned managed identity at the project level. | Key Vault authorization method: Assign the Key Vault Secrets User role to the managed identity.",
       "answer_keys": [],
       "explanation": "Correct Answer: \nManaged identity scope → Enable a system-assigned managed identity at the project level \nThis is correct because the agent runs within the Foundry project, so enabling a system-assigned managed \nidentity at the project level ensures secure, keyless authentication scoped specifically to that project, aligning \nwith least privilege. \nKey Vault authorization method → Assign the Key Vault Secrets User role to the managed identity \nThis is correct because RBAC-based access using the Secrets User role allows the agent to retrieve secrets \nwithout exposing keys, while granting only the minimum required permissions. \n \nIncorrect Answers: \nEnable a system-assigned managed identity at the Foundry level \nThis grants broader access than required and violates least privilege. \nCreate a service principal and store the principal’s client secret \nThis reintroduces credential management, which violates the keyless requirement. \nAdd an API key to application settings \nThis uses secrets instead of eliminating them. \nAdd a Key Vault access policy for the secrets \nAccess policies are legacy and less aligned with RBAC-based least privilege compared to role assignments.",
       "images": [
@@ -4518,24 +4514,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Managed identity scope",
-            "answer": "Enable a system-assigned managed identity at the project level",
+            "label": "Managed identity scope:",
+            "answer": "Enable a system-assigned managed identity at the project level.",
             "options": [
-              "Enable a system-assigned managed identity at the project level",
-              "Enable a user-assigned managed identity on the subscription",
-              "Use a service principal credential",
-              "Use Key Vault access policies"
+              "Enable a system-assigned managed identity at the Foundry level.",
+              "Enable a system-assigned managed identity at the project level.",
+              "Create a service principal and store the principal's client secret."
             ]
           },
           {
             "id": "b2",
-            "label": "Key Vault authorization method",
-            "answer": "Assign the Key Vault Secrets User role to the managed identity",
+            "label": "Key Vault authorization method:",
+            "answer": "Assign the Key Vault Secrets User role to the managed identity.",
             "options": [
-              "Assign the Key Vault Secrets User role to the managed identity",
-              "Assign the Key Vault Administrator role",
-              "Assign the Contributor role on the resource group",
-              "Generate a shared SAS token"
+              "Add an API key to application settings.",
+              "Add a Key Vault access policy for the secrets.",
+              "Assign the Key Vault Secrets User role to the managed identity."
             ]
           }
         ]
@@ -4590,7 +4584,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains a multi-agent solution. The agents use tool calling \nto query internal systems. \nYou need to implement responsible AI auditing to meet the following requirements: \n• Capture all the nested operations across the entire agent run. \n• Record tool invocation arguments and retuned results as metadata. \nWhat should you use for each requirement?",
       "options": [],
-      "answer": "Capture all the nested operations across the entire agent run → Hierarchical spans",
+      "answer": "Capture all the nested operations across the entire agent run: Hierarchical spans | Record tool invocation arguments and results: Tool call attributes",
       "answer_keys": [],
       "explanation": "Correct Answer: \nCapture all the nested operations across the entire agent run → Hierarchical spans \nThis is correct because hierarchical spans represent the full execution tree of an agent run, capturing parent-\nchild relationships between steps, sub-steps, and tool calls. This ensures complete visibility into nested \noperations for auditing and tracing. \nRecord tool invocation arguments and results → Tool call attributes \nThis is correct because tool call attributes store metadata about each tool invocation, including input \narguments and returned results. This enables detailed auditing of how tools were used and what data was \nprocessed. \n \nIncorrect Answers: \nA KQL query filter \nUsed for querying logs, not for capturing execution traces. \nSampling / Trace sampling policy \nUsed to limit data collection, not to ensure full capture of operations.",
       "images": [
@@ -4606,29 +4600,24 @@
         117
       ],
       "interactive": {
-        "type": "dropdown",
-        "blanks": [
+        "type": "drag_drop_order",
+        "pool": [
+          "Hierarchical spans",
+          "A KQL query filter",
+          "Sampling",
+          "Tool call attributes",
+          "Trace sampling policy"
+        ],
+        "targets": [
           {
-            "id": "b1",
-            "label": "Capture nested operations across the entire agent run",
-            "answer": "Hierarchical spans",
-            "options": [
-              "Hierarchical spans",
-              "Flat metric points",
-              "Custom application logs",
-              "Error traces only"
-            ]
+            "id": "t1",
+            "label": "Capture all the nested operations across the entire agent run:",
+            "answer": "Hierarchical spans"
           },
           {
-            "id": "b2",
-            "label": "Record tool invocation arguments and results",
-            "answer": "Tool call attributes",
-            "options": [
-              "Tool call attributes",
-              "Session tags",
-              "HTTP header baggage",
-              "Console stdout"
-            ]
+            "id": "t2",
+            "label": "Record tool invocation arguments and results:",
+            "answer": "Tool call attributes"
           }
         ]
       },
@@ -4682,7 +4671,7 @@
       "type": "yes_no",
       "question": "You develop a test method to verify the results retrieved from a call to the Azure Vision in Foundry \nTools API. The call is used to analyze the existence of company logos in images. The call returns a collection \nof brands named brands. \nYou have the following code segment: \n \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: Yes | Statement 2: Yes | Statement 3: No",
+      "answer": "The code will display the name of each detected brand with a confidence equal to or higher than 75 percent.: Yes | The code will display coordinates for the top-left corner of the rectangle that contains the brand logo of the displayed brands.: Yes | The code will display coordinates for the bottom-right corner of the rectangle that contains the brand logo of the displayed brands.: No",
       "answer_keys": [],
       "explanation": "Statement 1 --> Yes \nThis is correct because the code checks if brand.confidence >= 0.75, which ensures that only brands with \nconfidence equal to or greater than 75% are processed. It then prints brand.name, so the name of each \nqualifying detected brand will be displayed. \nStatement 2 --> Yes \nThis is correct because the code prints {brand.rectangle.x} and {brand.rectangle.y}, which represent the \ncoordinates of the top-left corner of the bounding rectangle around the detected logo. \nStatement 3 --> No \nThis is correct because the code prints width {brand.rectangle.w} and height {brand.rectangle.h}, not the \nbottom-right coordinates. Bottom-right coordinates would require calculating x + w and y + h, which is not \ndone here.",
       "images": [
@@ -4767,7 +4756,7 @@
       "type": "matching_hot_area",
       "question": "You plan to create a Microsoft Foundry project named Project1 that will contain an agent and use an \nAzure key vault named KV1. \nYou need to configure a connection from Project1 to KV1. \nHow should you complete the Bicep code?",
       "options": [],
-      "answer": "category → AzureKeyVault",
+      "answer": "category: 'AzureKeyVault' | authType: 'AccountManagedIdentity'",
       "answer_keys": [],
       "explanation": "Correct Answer: \ncategory → AzureKeyVault \nThis is correct because the connection is being created to an Azure Key Vault resource (KV1). The category \nmust match the target service type so that Foundry correctly identifies and integrates with Key Vault. \nauthType → AccountManagedIdentity \nThis is correct because managed identity enables secure, keyless authentication between the Foundry project \nand Key Vault. It aligns with best practices and avoids storing secrets like API keys while supporting least \nprivilege access. \n \n\n \nIncorrect Answers: \nAzureAIService / AzureOpenAI \nThese categories are for AI services, not Key Vault connections. \nAccountKey / ApiKey \nThese require storing secrets, which violates secure keyless authentication practices.",
       "images": [
@@ -4789,24 +4778,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Connection category",
-            "answer": "AzureKeyVault",
+            "label": "category:",
+            "answer": "'AzureKeyVault'",
             "options": [
-              "AzureKeyVault",
-              "CognitiveServices",
-              "CustomService",
-              "AzureBlobStorage"
+              "'AzureAIService'",
+              "'AzureKeyVault'",
+              "'AzureOpenAI'"
             ]
           },
           {
             "id": "b2",
-            "label": "Authentication type (authType)",
-            "answer": "AccountManagedIdentity",
+            "label": "authType:",
+            "answer": "'AccountManagedIdentity'",
             "options": [
-              "AccountManagedIdentity",
-              "ApiKey",
-              "AADToken",
-              "Anonymous"
+              "'AccountKey'",
+              "'AccountManagedIdentity'",
+              "'ApiKey'"
             ]
           }
         ]
@@ -4929,7 +4916,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project. \nYou need to create a customer support agent that meets the following requirements: \n• Grounds responses only in company policy documents stored in curated repositories \n• Retains customer preferences across separate chat sessions \nHow should you configure the agent?",
       "options": [],
-      "answer": "Knowledge grounding → Configure retrieval from approved data sources",
+      "answer": "Knowledge grounding requirement: Configure retrieval from approved data sources | Memory requirement: Enable agent memory that uses persistent storage",
       "answer_keys": [],
       "explanation": "Correct Answer: \nKnowledge grounding → Configure retrieval from approved data sources \nThis is correct because the requirement is to ground responses only in company policy documents stored in \ncurated repositories. Retrieval from approved data sources ensures controlled access to trusted content \nusing RAG, preventing the agent from using unverified or embedded information. \nMemory → Enable agent memory that uses persistent storage \nThis is correct because the agent must retain customer preferences across separate chat sessions. \nPersistent memory allows data to be stored beyond a single session, enabling long-term personalization and \ncontinuity. \n \nIncorrect Answers: \nUpload the policy documents direct to the agent / Embed the policy documents directly into the agent \ninstructions \nThese approaches are static, not scalable, and do not enforce controlled retrieval from curated repositories. \nUse orchestration-managed session context \nThis only retains information within a single session and does not persist across multiple interactions. \n\n \nRetain user preferences in the state of the client application \nThis is not centralized or reliable for enterprise scenarios and does not provide true persistent agent \nmemory.",
       "images": [
@@ -5022,7 +5009,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project that contains an agent. The agent uses threads and file uploads \nand calls an Azure OpenAI model deployment. \nDuring load testing, calls intermittently fall and return an HTTP 429 rate limit exceeded error. Some user \nuploads fail and generate an HTTP 400 file size exceeded error. \nYou need to mitigate the errors and reduce call failures. The solution must remain within the service and \nmodel limits. \nWhat should you do to resolve each error?",
       "options": [],
-      "answer": "HTTP 429 → Implement exponential backoff and jitter in the retry logic",
+      "answer": "HTTP 429: Implement exponential backoff and jitter in the retry logic. | HTTP 400: Split content into smaller files before uploading the files.",
       "answer_keys": [],
       "explanation": "Correct Answer: \nHTTP 429 → Implement exponential backoff and jitter in the retry logic \nThis is correct because HTTP 429 indicates rate limiting. The proper way to handle rate limits within service \nconstraints is to retry requests using exponential backoff with jitter. This reduces contention and prevents \noverwhelming the service while staying within allowed quotas. \nHTTP 400 → Split content into smaller files before uploading the files \nThis is correct because HTTP 400 with file size exceeded indicates that uploads are breaching the maximum \nfile size limit. Splitting files ensures each upload stays within the allowed limits and succeeds. \n \nIncorrect Answers: \nIncrease tenant-wide quotas \nThis violates the requirement to remain within service and model limits. \nMove large content to files and use file search \nThis helps with large prompts but does not directly resolve file upload size limit errors. \nUse additional agent tools to reduce the message size \nThis may reduce prompt size but does not address file upload size constraints or rate limiting directly.",
       "images": [
@@ -5039,29 +5026,24 @@
         129
       ],
       "interactive": {
-        "type": "dropdown",
-        "blanks": [
+        "type": "drag_drop_order",
+        "pool": [
+          "Increase tenant-wide quotas.",
+          "Move large content to files and use file search.",
+          "Use additional agent tools to reduce the message size.",
+          "Implement exponential backoff and jitter in the retry logic.",
+          "Split content into smaller files before uploading the files."
+        ],
+        "targets": [
           {
-            "id": "b1",
-            "label": "Resolution for HTTP 429",
-            "answer": "Implement exponential backoff and jitter in the retry logic",
-            "options": [
-              "Implement exponential backoff and jitter in the retry logic",
-              "Increase request payload size",
-              "Switch immediately to another region",
-              "Disable rate limiting header"
-            ]
+            "id": "t1",
+            "label": "HTTP 429:",
+            "answer": "Implement exponential backoff and jitter in the retry logic."
           },
           {
-            "id": "b2",
-            "label": "Resolution for HTTP 400",
-            "answer": "Split content into smaller files before uploading the files",
-            "options": [
-              "Split content into smaller files before uploading the files",
-              "Retry without changing request body",
-              "Upgrade service tier",
-              "Change API version to v1.0"
-            ]
+            "id": "t2",
+            "label": "HTTP 400:",
+            "answer": "Split content into smaller files before uploading the files."
           }
         ]
       },
@@ -5115,7 +5097,7 @@
       "type": "yes_no",
       "question": "You have a Python application that redacts sensitive information before sending prompt text to a \nlanguage model. The application has the following code: \n \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: No | Statement 2: No | Statement 3: Yes",
+      "answer": "For sample_text, audit will include entity records for Contact and SSN.: No | For sample_text, text_for_model will include john.doe@contoso.com and 859-98-0987.: No | For sample_text, text_for_model will contain entity type masks for John Doe and 312-555-1234.: Yes",
       "answer_keys": [],
       "explanation": "Statement 1 --> No \nThis is correct because the configuration restricts detection to \"piiCategories\": [\"Person\", \"PhoneNumber\"]. \nThe terms “Contact” and “SSN” are not included in these categories, so they will not be detected as entities \nand therefore will not appear in the audit output. \nStatement 2 --> No \nThis is correct because text_for_model uses redactedText, which applies masking (entityMask) to detected \nentities. Even if email and SSN are present in the text, they will either be masked (if detected) or excluded (if \nnot part of configured categories). Hence, the original values like john.doe@contoso.com and 859-98-0987 \nwill not appear. \nStatement 3 --> Yes \nThis is correct because the configuration includes \"Person\" and \"PhoneNumber\" with entityMask redaction. \nTherefore, “ John Doe” and “312-555-1234” will be detected and replaced with masked placeholders in \ntext_for_model.",
       "images": [
@@ -5201,7 +5183,7 @@
       "type": "matching_hot_area",
       "question": "You have an Azure subscription. \nYou need to create a new resource that will generate fictional stores in response to user prompts. The \nsolution must ensure that the resource uses a customer-managed key to protect data. \nHow should you complete the script?",
       "options": [],
-      "answer": "kind → OpenAI",
+      "answer": "az cognitiveservices account create ... --kind: OpenAI | CLI parameter for encryption block: --encryption",
       "answer_keys": [],
       "explanation": "Correct Answer: \nkind → OpenAI \nThis is correct because the requirement is to generate responses to user prompts (fictional stores), which \nrequires an Azure OpenAI resource. Therefore, the resource type must be set to OpenAI. \n\n \nparameter → --encryption \nThis is correct because customer-managed keys (CMK) are configured using the encryption property. The \nprovided JSON block specifies \"keySource\": \"Microsoft.KeyVault\" and Key Vault details, which are part of \nencryption settings for CMK. \n \nIncorrect Answers: \nAIServices / LanguageAuthoring \nThese resource kinds are used for other AI capabilities (vision, language authoring) and do not support \nOpenAI prompt-based generation. \n--api-properties / --assign-identity \nThese parameters do not configure customer-managed keys. CMK specifically requires the encryption \nconfiguration.",
       "images": [
@@ -5222,24 +5204,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Resource kind",
+            "label": "az cognitiveservices account create ... --kind",
             "answer": "OpenAI",
             "options": [
-              "OpenAI",
-              "CognitiveServices",
-              "TextAnalytics",
-              "SearchServices"
+              "AI Services",
+              "LanguageAuthoring",
+              "OpenAI"
             ]
           },
           {
             "id": "b2",
-            "label": "CLI command parameter",
+            "label": "CLI parameter for encryption block:",
             "answer": "--encryption",
             "options": [
-              "--encryption",
-              "--security-key",
-              "--keyvault-link",
-              "--cmk"
+              "--api-properties",
+              "--assign-identity",
+              "--encryption"
             ]
           }
         ]
@@ -5362,7 +5342,7 @@
       "type": "matching_hot_area",
       "question": "You have a Python application collects customer comments before posting them to a public forum. \nYou need to send a text comment to Azure AI Content Safety and return the self-harm severity from the \nresponse. How should you complete the code?",
       "options": [],
-      "answer": "request = AnalyzeTextOptions(text=comment)",
+      "answer": "request = [ ? ]: AnalyzeTextOptions(text=comment) | response = [ ? ]: client.analyze_text(request)",
       "answer_keys": [],
       "explanation": "Correct Answer: \nrequest = AnalyzeTextOptions(text=comment) \nTo analyze text using Azure AI Content Safety, you must create a request using AnalyzeTextOptions and pass \nthe actual text content. The parameter text=comment correctly sends the input string for analysis. \nresponse = client.analyze_text(request) \nThe correct method to send the text analysis request using the ContentSafetyClient is analyze_text(). This \nmethod processes the request and returns categorized analysis, including severity levels such as self-harm. \n \nIncorrect answers: \nAnalyzeTextOptions(categories=comment) \nThis is incorrect because categories is not used to pass input text; it is used to specify which categories to \nevaluate. \nAnalyzeTextOptions(text=[comment]) \nThis is incorrect because the method expects a string, not a list of strings. \nTextCategory.SELF_HARM(comment) \nThis is invalid syntax and TextCategory is used for filtering results, not for creating requests. \nclient.analyze_image(request) \nThis method is used for image analysis, not text. \nclient.moderate_text(request) \nThis is not the correct SDK method for Content Safety text analysis. \nclient.path(\"/text:analyze\").post(request) \nThis is a low-level REST call pattern and not the recommended SDK method for this scenario.",
       "images": [
@@ -5383,24 +5363,24 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Request initialization",
-            "answer": "request = AnalyzeTextOptions(text=comment)",
+            "label": "request = [ ? ]",
+            "answer": "AnalyzeTextOptions(text=comment)",
             "options": [
-              "request = AnalyzeTextOptions(text=comment)",
-              "request = AnalyzeOptions(comment)",
-              "request = TextContent(comment)",
-              "request = SafetyAnalysis(comment)"
+              "AnalyzeTextOptions(categories=comment)",
+              "AnalyzeTextOptions(text=[comment])",
+              "AnalyzeTextOptions(text=comment)",
+              "TextCategory.SELF_HARM(comment)"
             ]
           },
           {
             "id": "b2",
-            "label": "Analysis call",
-            "answer": "response = client.analyze_text(request)",
+            "label": "response = [ ? ]",
+            "answer": "client.analyze_text(request)",
             "options": [
-              "response = client.analyze_text(request)",
-              "response = client.execute(request)",
-              "response = client.check(request)",
-              "response = client.post(request)"
+              "client.analyze_image(request)",
+              "client.analyze_text(request)",
+              "client.moderate_text(request)",
+              "client.path(\"/text:analyze\").post(request)"
             ]
           }
         ]
@@ -5455,7 +5435,7 @@
       "type": "matching_hot_area",
       "question": "You are developing an application that will detect faulty components produced on a factory production \nline. The components are specific to your business. \nYou need to use the Azure Custom Vision API to help detect common faults. \nWhich three actions should you perform in sequence?",
       "options": [],
-      "answer": "1. Create a project.",
+      "answer": "First action: Create a project. | Second action: Upload and tag images. | Third action: Train the classifier model.",
       "answer_keys": [],
       "explanation": "Correct Answer: \n1. Create a project. \nThe first step in Azure Custom Vision is to create a project where you define the type of model (classification \nor object detection) and organize your dataset and training process. \n2. Upload and tag images. \nAfter creating the project, you must upload images of the components and tag them appropriately (for \nexample, faulty vs non-faulty). Tagging is critical because it provides labeled data for supervised learning. \n3. Train the classifier model. \nOnce the images are uploaded and tagged, you train the model so it can learn patterns and detect faults \nbased on the labeled dataset. \n \nIncorrect answers: \nInitialize the training dataset. \nThis is not an explicit step in Azure Custom Vision; dataset preparation happens during image upload and \ntagging. \nTrain the object detection model. \nObject detection is used when identifying locations of objects in images, not just classifying faults. The \nscenario focuses on detecting faulty components, which aligns with classification.",
       "images": [
@@ -5633,7 +5613,7 @@
       "type": "matching_hot_area",
       "question": "You need to create a new resource that will be used to perform sentiment analysis and optical \ncharacter recognition (OCR).  \nThe solution must meet the following requirements: \n• Use a single key and endpoint to access multiple services. \n• Consolidate billing for future services that you might use. \n• Support the use of Azure Vision in Foundry Tools in the future. \nHow should you complete the HTTP request to create the new resource?",
       "options": [],
-      "answer": "HTTP method: PUT\n\"kind\": CognitiveServices\nExplanation:\nCorrect Answer:\nHTTP method: PUT",
+      "answer": "HTTP method: PUT | Resource kind: CognitiveServices",
       "answer_keys": [],
       "explanation": "Correct Answer: \n \nHTTP method: PUT \n\"kind\": CognitiveServices \n \nExplanation: \nCorrect Answer: \nHTTP method: PUT \nPUT is the standard Azure Resource Manager verb for creating or fully defining a resource at a known, \nspecific URI (such as \n/subscriptions/{subId}/resourceGroups/{rg}/providers/Microsoft.CognitiveServices/accounts/{accountName} ). \nIt is idempotent, meaning sending the same request multiple times results in the same resource state - the \nstandard convention ARM uses when you already know the exact resource name/path you want to create. \n\"kind\": CognitiveServices \nSetting \"kind\" to CognitiveServices creates a multi-service resource, which provides a single key and \nendpoint to access multiple AI capabilities (sentiment analysis via Language, OCR via Vision) under one \nresource. This consolidates billing into a single line item and allows additional services, such as Azure Vision \nin Foundry Tools, to be accessed later without provisioning a new resource. \n \nIncorrect answers: \nPATCH \nPATCH performs a partial update to an existing resource, changing only the specified properties while leaving \nthe rest intact. Since this scenario creates a brand-new resource (CS1 doesn't exist yet), there is nothing to \npartially modify, making PATCH incorrect here. \n\n \nPOST \nIn Azure Resource Manager, POST is typically used to trigger actions or operations on an existing resource \n(for example, restart, listKeys, or regenerateKey) rather than to declaratively create a resource at a specific \nURI with a full desired-state body. ARM's resource-creation pattern is consistently PUT-based, not POST-\nbased. \nComputerVision \nSetting \"kind\" to ComputerVision creates a single-service resource scoped only to the Computer Vision API \n(image analysis, OCR, etc.). It would satisfy the OCR requirement but provides no access to sentiment \nanalysis under the same key and endpoint, requiring a second separate resource — which violates the \nrequirement for a single key/endpoint and consolidated billing. \nTextAnalytics \nSetting \"kind\" to TextAnalytics creates a single-service resource scoped only to Text Analytics (sentiment \nanalysis, language detection, etc.). It would satisfy the sentiment analysis requirement but provides no \nOCR/vision capability, again requiring a second resource and failing the single key/endpoint and consolidated \nbilling requirements. It would also not support adding Azure Vision in Foundry Tools later without \nprovisioning another resource.",
       "images": [
@@ -5657,10 +5637,9 @@
             "label": "HTTP method",
             "answer": "PUT",
             "options": [
-              "PUT",
-              "POST",
               "PATCH",
-              "GET"
+              "POST",
+              "PUT"
             ]
           },
           {
@@ -5670,8 +5649,7 @@
             "options": [
               "CognitiveServices",
               "ComputerVision",
-              "TextAnalytics",
-              "OpenAI"
+              "TextAnalytics"
             ]
           }
         ]
@@ -5726,7 +5704,7 @@
       "type": "matching_hot_area",
       "question": "You are creating an enrichment pipeline that will use Azure AI Search. The knowledge store contains \nunstructured JSON data and the text from scanned PDF documents. \nWhich projection type should you use for each data type?",
       "options": [],
-      "answer": "JSON data: Object projection",
+      "answer": "JSON data projection: Object projection | Extracted text data projection: Table projection",
       "answer_keys": [],
       "explanation": "Correct Answer: \nJSON data: Object projection \nObject projection is used for structured or semi-structured data like JSON. It preserves the hierarchical \nstructure of the JSON documents, making it suitable for storing and querying complex objects in the \nknowledge store. \nExtracted text data: Table projection \nTable projection is ideal for flattened, structured representations of data such as extracted text from \n\n \ndocuments. It organizes the data into rows and columns, making it efficient for querying and analysis, \nespecially for OCR-extracted text from scanned PDFs. \n \nIncorrect answers: \nFile projection \nFile projection is used to store enriched documents as files (for example, images or PDFs), not for structured \nJSON or extracted text intended for querying.",
       "images": [
@@ -5749,10 +5727,9 @@
             "label": "JSON data projection",
             "answer": "Object projection",
             "options": [
-              "Object projection",
               "File projection",
-              "Table projection",
-              "String projection"
+              "Object projection",
+              "Table projection"
             ]
           },
           {
@@ -5760,10 +5737,9 @@
             "label": "Extracted text data projection",
             "answer": "Table projection",
             "options": [
-              "Table projection",
-              "Object projection",
               "File projection",
-              "String projection"
+              "Object projection",
+              "Table projection"
             ]
           }
         ]
@@ -5818,7 +5794,7 @@
       "type": "matching_hot_area",
       "question": "You are building a model to detect objects in images. \n \nThe performance of the model based on training data is shown in the following exhibit. \n \nUse the drop-down menus to select the answer choice that completes each statement based on the \ninformation presented in the graphic.",
       "options": [],
-      "answer": "0",
+      "answer": "The percentage of false positives is: 0 | The value for the number of true positives divided by the total number of true positives and false negatives is: 25",
       "answer_keys": [],
       "explanation": "Correct Answer: \n0 \nPrecision is given as 100%. \nPrecision = True Positives / (True Positives + False Positives). \nIf precision is 100%, it means False Positives = 0. \nSo, the percentage of false positives is 0%. \n25 \nRecall is given as 25%. \nRecall = True Positives / (True Positives + False Negatives). \nSo the required value is directly the recall value, which is 25%.",
       "images": [
@@ -5839,7 +5815,7 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "The percentage of false positives is",
+            "label": "The percentage of false positives is:",
             "answer": "0",
             "options": [
               "0",
@@ -5851,14 +5827,14 @@
           },
           {
             "id": "b2",
-            "label": "The value for TP / (TP + FN) is",
-            "answer": "100",
+            "label": "The value for the number of true positives divided by the total number of true positives and false negatives is:",
+            "answer": "25",
             "options": [
-              "100",
               "0",
               "25",
               "30",
-              "50"
+              "50",
+              "100"
             ]
           }
         ]
@@ -5923,7 +5899,7 @@
       "type": "matching_hot_area",
       "question": "You have a web app that uses Azure AI Search. \nWhen reviewing activity you see greater than expected search query volumes. You suspect that the query \nkey is compromised. \nYou need to prevent unauthorized access to the search endpoint and ensure that users only have read only \naccess to the documents collection. The solution must minimize app downtime. \nWhich three actions should you perform in sequence?",
       "options": [],
-      "answer": "Add a new query key",
+      "answer": "First action: Add a new query key | Second action: Change the app to use the new key | Third action: Delete the compromised key",
       "answer_keys": [],
       "explanation": "Correct Answer: \nAdd a new query key \nTo maintain availability and minimize downtime, you should first create a new query key. Query keys provide \nread-only access, which meets the requirement that users should only have read access to the documents. \nChange the app to use the new key \nNext, update the application to use the newly created query key. This ensures uninterrupted service while \ntransitioning away from the compromised key. \nDelete the compromised key \nFinally, remove the compromised key to prevent any further unauthorized access to the search endpoint. \n \nIncorrect answers: \nRegenerate the primary admin key \nAdmin keys provide full control and are not intended for query operations; regenerating them does not \naddress compromised query keys. \nRegenerate the secondary admin key \nSame as above, admin keys are not used for query-only access. \nChange the app to use the secondary admin key \nUsing admin keys violates the requirement of read-only access and increases security risk.",
       "images": [
@@ -6066,7 +6042,7 @@
       "type": "matching_hot_area",
       "question": "You are building a custom vision model that will be deployed as part of an iOS app. You have images \nof cats and dogs. Each image contains either a cat or a dog. \nYou need to use the Azure Custom Vision service to detect whether the image is of a cat or a dog. \nHow should you configure the project in the Azure Custom Vision portal?",
       "options": [],
-      "answer": "Project Type → Classification",
+      "answer": "Project Type: Classification | Classification Type: Multiclass (Single tag per image) | Domain: General (compact)",
       "answer_keys": [],
       "explanation": "Correct Answer: \nProject Type → Classification \nThis is correct because the requirement is to determine whether each image contains a cat or a dog. The \nmodel only needs to assign a category to the entire image, rather than locate the animals within the image, \nso classification is appropriate. \nClassification Type → Multiclass (Single tag per image) \nThis is correct because each image contains either a cat or a dog, meaning only one label is applicable to \neach image. Multiclass classification is designed for mutually exclusive categories where each image receives \na single tag. \nDomain → General (compact) \nThis is correct because the model will be deployed as part of an iOS app. Compact domains are optimized \nfor export and deployment to devices such as mobile applications, while still supporting image classification. \n \nIncorrect Answers: \nObject Detection \nObject detection is used when you need to identify and locate objects within an image by using bounding \nboxes. Here, only the overall image category is required. \n\n \nMultilabel (Multiple tags per image) \nMultilabel is used when an image can belong to multiple categories simultaneously. Here, each image \ncontains either a cat or a dog, so a single tag is sufficient. \nGeneral / Retail / Food / Landmarks domains \nThese domains are not the appropriate choice for an iOS-deployed cat-versus-dog classifier. General \n(compact) is the appropriate compact domain for this scenario.",
       "images": [
@@ -6109,13 +6085,14 @@
             "label": "Domain",
             "answer": "General (compact)",
             "options": [
-              "General (compact)",
               "Adult",
               "Food",
               "General",
+              "General (compact)",
               "Landmarks",
               "Landmarks (compact)",
-              "Retail"
+              "Retail",
+              "Retail (compact)"
             ]
           }
         ]
@@ -6220,7 +6197,7 @@
       "type": "yes_no",
       "question": "You are building a solution that students will use to find references for essays. You use the following \ncode to start building the solution. \n \n \nFor each of the following statements, select Yes is the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: No | Statement 2: No | Statement 3: Yes",
+      "answer": "The code will detect the language of documents.: No | The url attribute returned for each linked entity will be a Bing search link.: No | The matches attribute returned for each linked entity will provide the location in a document where the entity is referenced.: Yes",
       "answer_keys": [],
       "explanation": "Statement 1 --> No \nThis is correct because the recognize_linked_entities() method is used to identify and link entities to a \nknowledge base. Although each linked entity has a language property, this represents the language \nassociated with the linked entity's data source, not language detection of the input document. A separate \nlanguage detection operation is required to detect the language of the documents.  \nStatement 2 --> No \nThis is correct because the url property contains a link to the entity's page in the associated knowledge base, \nsuch as Wikipedia. It is not necessarily a Bing search link. Microsoft documentation specifically describes the \nURL as pointing to the entity's page from the data source, with Wikipedia being a common source.  \nStatement 3 --> Yes \nThis is correct because the matches collection contains the occurrences of each linked entity in the \ndocument. Each match includes information such as the matched text, confidence score, offset, and length, \nallowing the location of the entity within the document to be determined.",
       "images": [
@@ -6271,7 +6248,7 @@
       "type": "matching_hot_area",
       "question": "You have a Microsoft Foundry project for a support ticket triage app that reads ticket text from a \ndatabase.  \nYou need to ensure that the app meets the following requirements: \n• Compares candidate models by quality, cost, and throughput \n• Prevents hosting model weights in the Azure subscription \nWhat should you configure?",
       "options": [],
-      "answer": "Configure private endpoint access.",
+      "answer": "Model evaluation: Use model catalog leaderboards and model cards. | Deployment option: Use a serverless deployment.",
       "answer_keys": [],
       "explanation": "Model evaluation → Use model catalog leaderboards and model cards. \nModel catalog leaderboards and model cards provide information that helps compare candidate models \nbased on factors such as quality, cost, and throughput. This allows you to select an appropriate model \nbefore deploying it. \nDeployment option → Use a serverless deployment. \nA serverless deployment provides access to the model through an API without hosting the model weights \ndirectly in your Azure subscription. The model is hosted and managed by the model provider, helping satisfy \nthe requirement to prevent model weights from being hosted in your Azure environment. \n \n\n \nIncorrect Answers: \nConfigure private endpoint access. \nThis controls network access to resources; it does not provide model comparison information or determine \nwhere model weights are hosted. \nUse deployment lists and license tabs. \nThese provide deployment and licensing information but are not the primary mechanism for comparing \nmodel quality, cost, and throughput. \nUse tool catalog connections and run traces. \nThese relate to tools and application observability, not model evaluation or serverless model hosting. \nBring your own model. \nThis involves supplying and hosting your own model, which does not meet the requirement to avoid hosting \nmodel weights in the Azure subscription. \nBuild a vector index. \nA vector index is used for semantic/vector search and retrieval, not model evaluation or model deployment. \nUse a managed compute deployment. \nManaged compute deploys the model to compute resources in your Azure environment, so it does not meet \nthe requirement to prevent model weights from being hosted in the Azure subscription.",
       "images": [
@@ -6364,7 +6341,7 @@
       "type": "yes_no",
       "question": "You are building an app that will provide users with definitions of common AI terms. You create the \nfollowing Python code. \n \n \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: No | Statement 2: No | Statement 3: Yes",
+      "answer": "The response will contain an explanation of large language models (LLMs) that has a high degree of certainty.: No | Changing 'What is an LLM?' to 'What is an LLM in the context of AI models?' will produce the intended response.: No | Changing 'You are a helpful assistant.' to 'You must answer only within the context of AI language models.' will give a higher likelihood of producing the intended response.: Yes",
       "answer_keys": [],
       "explanation": "Statement 1 --> No \nThe prompt “What is an LLM?” is ambiguous because the abbreviation “LLM” can have different meanings. \nThe code does not provide enough contextual instruction to guarantee that the response will explain Large \nLanguage Models with a high degree of certainty. \n \nStatement 2 --> No \nChanging the prompt to “What is an LLM in the context of AI models?” adds context and may make the \nintended meaning clearer. However, the wording “will produce the intended response” implies a guarantee. \nPrompt changes can increase the likelihood of a desired response but cannot guarantee a specific output. \n \nStatement 3 --> Yes \nChanging the system message to “You must answer only within the context of AI language models.” \nprovides a stronger and more specific instruction about the intended domain. System-level instructions have \na higher priority than user messages, so this change increases the likelihood that the model will interpret \nLLM as Large Language Model and provide the intended response.",
       "images": [
@@ -6522,7 +6499,7 @@
       "type": "matching_hot_area",
       "question": "You have a collection of press releases stored as PDF files. \nYou need to extract text from the files and perform sentiment analysis. \nWhich service should you use for each task?",
       "options": [],
-      "answer": "Extract text → Azure Document Intelligence in Foundry Tools",
+      "answer": "Extract text: Azure Document Intelligence in Foundry Tools | Perform sentiment analysis: Azure Language in Foundry Tools",
       "answer_keys": [],
       "explanation": "Correct Answer: \nExtract text → Azure Document Intelligence in Foundry Tools \n\n \nAzure Document Intelligence is designed to extract text and structured information from documents, \nincluding PDF files. It can process the contents of the press releases and make the extracted text available \nfor further analysis. \nPerform sentiment analysis → Azure Language in Foundry Tools \nAzure Language provides sentiment analysis capabilities that determine whether text expresses positive, \nnegative, neutral, or mixed sentiment. Therefore, once the text has been extracted from the PDFs, Azure \nLanguage is the appropriate service for analyzing its sentiment. \n \nIncorrect Answers: \nAzure AI Search \nAzure AI Search is primarily used to index and search content, including extracted document text. It is not \nthe appropriate service for performing sentiment analysis. \nAzure Vision in Foundry Tools / Azure AI Computer Vision \nVision services are intended for analyzing images and visual content, such as detecting objects, describing \nimages, or extracting text from images. They are not the appropriate choice for sentiment analysis of press-\nrelease text.",
       "images": [
@@ -6614,7 +6591,7 @@
       "type": "yes_no",
       "question": "You run the following command. \n \n \n \nFor each of the following statements, select Yes if the statement is true. Otherwise, select No.",
       "options": [],
-      "answer": "Statement 1: No | Statement 2: No | Statement 3: Yes",
+      "answer": "Going to http://localhost:5000/status will query the Azure endpoint to verify whether the API key used to start the container is valid.: No | The container logging provider will write log data.: No | Going to http://localhost:5000/swagger will provide the details to access the documentation for the available endpoints.: Yes",
       "answer_keys": [],
       "explanation": "Statement 1 --> No \nThe /status endpoint is used to verify whether the API key used to start the container is valid. However, it \nperforms this verification without causing an endpoint query to Azure. Therefore, the statement is incorrect \nbecause it specifically says that /status will query the Azure endpoint. \nStatement 2 --> No \nThe container logging provider does not automatically write persistent log data simply because the container \nis started. Logging providers such as Disk or Fluentd must be explicitly configured. The command shown \nonly provides the EULA, billing endpoint, and API key, so no additional logging provider has been configured. \n \nStatement 3 --> Yes \nThe /swagger endpoint provides the Swagger/OpenAPI documentation for the endpoints exposed by the \ncontainer. It can be used to view the available APIs and the information required to interact with them.",
       "images": [
@@ -6733,7 +6710,7 @@
       "type": "matching_hot_area",
       "question": "You are building an app that will scan confidential documents and use the Azure Language in Foundry \nTools service to analyze the contents. \nYou provision a Microsoft Foundry Service resource. \nYou need to ensure that the app can make requests to the Azure Language in Foundry Tools service \nendpoint. The solution must ensure that confidential documents remain on-premises. \nWhich three actions should you perform in sequence?",
       "options": [],
-      "answer": "Pull an image from Docker Hub.",
+      "answer": "First action: Provision an on-premises Kubernetes cluster that has internet connectivity. | Second action: Pull an image from the Microsoft Container Registry (MCR). | Third action: Run the container and specify an API key and the Endpoint URL of the Azure AI resource.",
       "answer_keys": [],
       "explanation": "1. Provision an on-premises Kubernetes cluster that has internet connectivity. \nThe confidential documents must remain on-premises, so the Azure AI Language container should run in an \non-premises environment rather than in Azure. The Kubernetes cluster needs internet connectivity because \nthe container must communicate with Azure for required billing, authorization, and metering operations. The \ndocument processing itself can occur within the local container. \n2. Pull an image from the Microsoft Container Registry (MCR). \nAzure AI Language container images are distributed through the Microsoft Container Registry (MCR). After \nprovisioning the on-premises Kubernetes environment, pull the required Language container image from \nMCR. \n3. Run the container and specify an API key and the Endpoint URL of the Azure AI resource. \nThe container is configured with the API key and Endpoint URL of the provisioned Microsoft Foundry Service \nresource. The application can then send requests to the locally deployed container, allowing the confidential \ndocuments to be processed on-premises rather than sending the document contents directly to the Azure \nLanguage service. \n \nIncorrect Answers: \nPull an image from Docker Hub. \nAzure AI Language container images are provided through MCR, not Docker Hub. \nProvision an on-premises Kubernetes cluster that is isolated from the internet. \nThe container requires outbound connectivity to Azure for required service operations, so completely \nisolating the cluster from the internet would prevent the required communication. \nProvision an Azure Kubernetes Service (AKS) resource. \nAKS runs the container workload in Azure. The requirement specifically states that the confidential \ndocuments must remain on-premises. \nRun the container and specify an App ID and Client Secret. \nThe required container configuration uses the API key and Endpoint URL of the Azure AI resource.",
       "images": [
@@ -6812,7 +6789,7 @@
       "type": "matching_hot_area",
       "question": "You are developing an app that will use the Azure Vision in Foundry Tools API to analyze an image. \nYou need configure the request that will be used by the app to identify whether an image is clipart or a line \ndrawing. \nHow should you complete the request?",
       "options": [],
-      "answer": "HTTP method → POST",
+      "answer": "HTTP method: POST | visualFeatures parameter: imageType",
       "answer_keys": [],
       "explanation": "Correct Answer: \nHTTP method → POST \nThe Azure Vision Analyze Image v3.2 API uses the POST method because the image to be analyzed is \nprovided in the request body, either as binary image data or as a JSON payload containing an image URL. \nTherefore, POST is required for the /vision/v3.2/analyze operation. \nvisualFeatures → imageType \nThe imageType visual feature is specifically used to determine the type of image. Its results include \ninformation about whether the image is clip art and whether it is a line drawing, which directly satisfies the \nrequirement. \n\n \nThe completed request is: \nPOST \nhttps://*.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=imageType&details={string}&languag\ne=en \n \nIncorrect Answers: \nGET \nGET is used to retrieve resources without supplying an image for analysis in the request body. The Analyze \nImage v3.2 operation requires POST. \nPATCH \nPATCH is used to partially modify an existing resource. It is not the HTTP method used for image analysis. \ndescription \nThe description feature generates a natural-language description of the image. It does not specifically identify \nwhether the image is clip art or a line drawing. \nobjects \nThe objects feature detects objects within an image and their locations. It does not provide the required clip-\nart or line-drawing classification. \ntags \nThe tags feature generates keywords describing image content. It does not specifically determine the image \ntype.",
       "images": [
@@ -6835,10 +6812,9 @@
             "label": "HTTP method",
             "answer": "POST",
             "options": [
-              "POST",
               "GET",
               "PATCH",
-              "PUT"
+              "POST"
             ]
           },
           {
@@ -6846,8 +6822,8 @@
             "label": "visualFeatures parameter",
             "answer": "imageType",
             "options": [
-              "imageType",
               "description",
+              "imageType",
               "objects",
               "tags"
             ]
@@ -6912,7 +6888,7 @@
       "type": "matching_hot_area",
       "question": "You need to configure the model deployment for Agent1 to meet the technical requirements. What \nshould you configure?",
       "options": [],
-      "answer": "Deployment type: Standard",
+      "answer": "Deployment type: Standard | Version update policy: Opt out of automatic model version upgrades",
       "answer_keys": [],
       "explanation": "Correct Answers: \nDeployment type: Standard \nThe technical requirements specify Scalable, high-throughput generative AI workloads, Dynamic scaling for \nvariable customer support traffic. No reserved throughput capacity and Data must remain within the EU.  \nA Standard deployment is the correct choice because it provides serverless, pay-as-you-go inference, \nautomatically scales with demand, and is deployed within the selected Azure region (EU in this case). It does \nnot require provisioning throughput in advance. \nGlobal Standard and Global Provisioned can route requests outside the deployment region, which conflicts \nwith the requirement that data processed by the model must remain within the EU. \nVersion update policy: Opt out of automatic model version upgrades \nThe requirements state that the model version must be standardized, the model version must remain \nconsistent and responses must be stable and predictable.  \nOpting out of automatic model version upgrades ensures that Microsoft does not automatically switch the \ndeployment to a newer model version, preserving consistent behavior until Contoso explicitly chooses to \nupgrade. \n \nIncorrect Answers: \nGlobal Standard \nAlthough it provides dynamic scaling, it may process requests outside the EU, violating the data residency \nrequirement. \nGlobal Provisioned \nRequires reserved throughput capacity and may process requests globally, violating both the scalability and \nEU data residency requirements. \nOnce the current version expires \nThis allows automatic version changes when the deployed version reaches end of life, which does not \nguarantee long-term consistency. \nUpgrade once a new default version becomes available \n\n \nThis automatically upgrades the deployment whenever Microsoft publishes a new default version, potentially \nchanging model behavior and violating the requirement for consistent responses.",
       "images": [
@@ -7182,7 +7158,7 @@
       "type": "matching_hot_area",
       "question": "You need to ensure that the marketing department can generate videos by using the model \ndeployed to Project2.  \nHow should you complete the Python code?",
       "options": [],
-      "answer": "create",
+      "answer": "video = client.videos.[ ? ](model=deployment_name, ...): create | while video.status not in [\"completed\", \"failed\", \"cancelled\"]: video = client.videos.[ ? ](video.id): retrieve",
       "answer_keys": [],
       "explanation": "Correct Answer: \ncreate \nTo generate a new video using the deployed model, you must call the create method. This initializes the video \ngeneration job using the provided prompt and model deployment. \nRetrieve \nVideo generation is an asynchronous operation. The retrieve method is used to check the status of the video \ngeneration job until it is completed, failed, or canceled. \n \nIncorrect answers: \ndownload_content \nUsed to download generated video content after completion, not to create or monitor the job. \nlist \nUsed to list existing video jobs, not to create or track a specific one. \nretrieve (first dropdown) \nRetrieve cannot be used to initiate video generation. \ncreate (second dropdown) \nCreate is only used to start the job, not to poll or check status.",
       "images": [
@@ -7203,8 +7179,19 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Method to generate video",
+            "label": "video = client.videos.[ ? ](model=deployment_name, ...)",
             "answer": "create",
+            "options": [
+              "create",
+              "download_content",
+              "list",
+              "retrieve"
+            ]
+          },
+          {
+            "id": "b2",
+            "label": "while video.status not in [\"completed\", \"failed\", \"cancelled\"]: video = client.videos.[ ? ](video.id)",
+            "answer": "retrieve",
             "options": [
               "create",
               "download_content",
@@ -7264,7 +7251,7 @@
       "type": "matching_hot_area",
       "question": "You need to ensure that Agent1Dev Team can access Agent1. The solution must meet the security and \ncompliance requirements. \nHow should you complete the Python code?",
       "options": [],
-      "answer": "credential = DefaultAzureCredential()",
+      "answer": "credential = [ ? ]: DefaultAzureCredential() | agent = project_client.agents.[ ? ](agent_name=myAgent): get",
       "answer_keys": [],
       "explanation": "Correct Answer: \ncredential = DefaultAzureCredential() \nThe security requirement explicitly states that API keys must NOT be used and authentication must be done \nusing Microsoft Entra ID. DefaultAzureCredential() enables secure, identity-based authentication using Entra \nID and follows best practices like managed identities, thereby meeting compliance requirements. \nagent = project_client.agents.get(agent_name=myAgent) \nTo allow Agent1Dev Team to access Agent1, the code must retrieve the existing agent. The get method is \nused to fetch the agent by name, ensuring proper access without modifying or creating new versions. \n \nIncorrect answers: \nAzureKeyCredential() \nUses API keys, which violates the requirement that API keys must NOT be used. \nNone \nNo authentication mechanism is provided, which is insecure and does not meet requirements. \ncreate_version \nCreates a new version of the agent, which is not required for accessing an existing agent. \nget_version \nRetrieves a specific version, not the agent itself, and is unnecessary for basic access.",
       "images": [
@@ -7286,23 +7273,22 @@
         "blanks": [
           {
             "id": "b1",
-            "label": "Authentication credential",
+            "label": "credential = [ ? ]",
             "answer": "DefaultAzureCredential()",
             "options": [
-              "DefaultAzureCredential()",
               "AzureKeyCredential()",
+              "DefaultAzureCredential()",
               "None"
             ]
           },
           {
             "id": "b2",
-            "label": "Retrieve agent object",
-            "answer": "project_client.agents.get(agent_name=myAgent)",
+            "label": "agent = project_client.agents.[ ? ](agent_name=myAgent)",
+            "answer": "get",
             "options": [
-              "project_client.agents.get(agent_name=myAgent)",
-              "project_client.agents.create(name=myAgent)",
-              "project_client.get_agent()",
-              "myAgent"
+              "create_version",
+              "get",
+              "get_version"
             ]
           }
         ]

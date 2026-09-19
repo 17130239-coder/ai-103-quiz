@@ -157,8 +157,9 @@
     loadSavedTheme();
     loadSavedState();
 
-    if (window.QUIZ_DATA && window.QUIZ_DATA.questions) {
-      questions = window.QUIZ_DATA.questions;
+    const inlineData = window.QUIZ_DATA || window.__QUESTIONS_DATA__;
+    if (inlineData && inlineData.questions) {
+      questions = inlineData.questions;
       onDataReady();
     } else {
       try {
@@ -997,7 +998,13 @@
 
     if (isRevealed && mode === 'study') {
       elExplanationBox.style.display = 'block';
-      elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
+      if (q.answer && q.answer.includes(' | ')) {
+        elExplCorrectAnswer.innerHTML = '<span class="font-bold">Đáp án chính xác:</span><ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-emerald-800 dark:text-emerald-300 font-medium leading-relaxed">' +
+          q.answer.split(' | ').map(part => `<li>${escapeHtml(part)}</li>`).join('') +
+          '</ul>';
+      } else {
+        elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
+      }
       elExplBody.textContent = q.explanation;
 
       const elExplImages = document.getElementById('explImages');
