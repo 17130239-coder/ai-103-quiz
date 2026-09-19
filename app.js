@@ -119,7 +119,7 @@
     en: {
       mode_study: "Study",
       mode_exam: "Exam",
-      mode_tips: "Tips & Tricks",
+      mode_tips: "Tips",
       layout_single: "Single",
       layout_all: "All",
       layout_title: "Layout: Single Question / Continuous Scroll",
@@ -190,7 +190,7 @@
     vi: {
       mode_study: "Ôn tập",
       mode_exam: "Thi thử",
-      mode_tips: "Tips & Mẹo",
+      mode_tips: "Tips",
       layout_single: "Từng câu",
       layout_all: "Cuộn tất cả",
       layout_title: "Kiểu xem: Từng câu / Cuộn tất cả câu hỏi",

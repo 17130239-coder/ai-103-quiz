@@ -919,3 +919,16 @@ html.dark .all-q-filter-pill:hover:not(.active) {
   pointer-events: auto;
   transform: translateY(0);
 }
+
+/* Jump Input and Spin Stepper Reset */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+#allQJumpInput {
+  min-width: 3.5rem;
+}
