@@ -1,12 +1,13 @@
 // ==========================================================================
-// AI-103 Quiz Application Logic (Enhanced UI/UX via Stitch)
+// AI-103 Quiz Application Logic
+// Optimized for Apple iOS 18 Human Interface Guidelines Minimalist Design
 // ==========================================================================
 
 (function () {
   'use strict';
 
   // --- App State ---
-  const STORAGE_KEY = 'ai103_quiz_state_v3';
+  const STORAGE_KEY = 'ai103_quiz_state_v4';
   
   let questions = [];
   let currentIndex = 0;
@@ -30,7 +31,7 @@
   const elThemeIconSun = document.getElementById('themeIconSun');
   const elThemeIconMoon = document.getElementById('themeIconMoon');
 
-  const elFilterPills = document.querySelectorAll('.filter-pill');
+  const elFilterPills = document.querySelectorAll('.ios-filter-pill, .filter-pill');
   const elCountAll = document.getElementById('countAll');
   const elCountUnanswered = document.getElementById('countUnanswered');
   const elCountWrong = document.getElementById('countWrong');
@@ -102,7 +103,7 @@
         onDataReady();
       } catch (err) {
         console.error('Failed to load questions:', err);
-        elQuestionText.textContent = 'Không thể nạp file dữ liệu ai-103-questions.json.';
+        elQuestionText.textContent = 'Không thể nạp file dữ liệu câu hỏi.';
       }
     }
 
@@ -119,7 +120,7 @@
   // --- Persistence ---
   function loadSavedState() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v3');
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed.userAnswers) userAnswers = parsed.userAnswers;
@@ -149,7 +150,8 @@
     if (saved !== null) {
       isDarkMode = saved === 'true';
     } else {
-      isDarkMode = true; // Default modern dark slate theme
+      // Respect system preference if no manual setting
+      isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     applyTheme(isDarkMode);
   }
@@ -228,7 +230,7 @@
     const q = questions[currentIndex];
     if (!q) return;
 
-    // 1. Meta
+    // 1. Meta Badges
     const filterPos = filteredIndices.indexOf(currentIndex);
     const posText = filterPos !== -1 
       ? `Câu ${q.id} (${filterPos + 1}/${filteredIndices.length})`
@@ -236,7 +238,6 @@
     elQNumber.textContent = posText;
     elNavStatus.textContent = `${currentIndex + 1} / ${questions.length}`;
 
-    // Badge Type
     const typeNames = {
       multiple_choice_single: 'Trắc nghiệm đơn',
       multiple_choice_multi: 'Chọn nhiều đáp án',
@@ -246,13 +247,16 @@
     };
     elQTypeBadge.textContent = typeNames[q.type] || 'Trắc nghiệm';
 
-    // Bookmark
+    // Bookmark state
+    const icon = elBtnBookmark.querySelector('.material-symbols-outlined');
     if (bookmarks.has(q.id)) {
       elBtnBookmark.classList.add('bookmarked');
       elBookmarkText.textContent = 'Đã lưu [B]';
+      if (icon) icon.textContent = 'bookmark';
     } else {
       elBtnBookmark.classList.remove('bookmarked');
       elBookmarkText.textContent = 'Đánh dấu [B]';
+      if (icon) icon.textContent = 'bookmark_border';
     }
 
     // 2. Question Prompt
@@ -281,16 +285,16 @@
       q.images.forEach((imgObj, i) => {
         const wrap = document.createElement('div');
         wrap.className = 'q-img-wrap';
-        wrap.title = 'Click để xem kích thước chuẩn';
+        wrap.title = 'Bấm để phóng to';
         
         const img = document.createElement('img');
         img.src = imgObj.path;
-        img.alt = `Sơ đồ / Bảng câu hỏi Q${q.id}`;
+        img.alt = `Sơ đồ câu hỏi Q${q.id}`;
         img.loading = 'lazy';
 
-        const hint = document.createElement('span');
-        hint.className = 'block text-xs text-on-surface-variant/80 mt-2 font-mono';
-        hint.textContent = `🔍 Hình ${i + 1} (Trang ${imgObj.page}) - Click để phóng to`;
+        const hint = document.createElement('div');
+        hint.className = 'flex items-center justify-center space-x-1.5 text-xs text-ios-gray mt-2.5 font-medium';
+        hint.innerHTML = `<span class="material-symbols-outlined text-[15px]">zoom_in</span><span>Hình ${i + 1} (Trang ${imgObj.page}) • Bấm để xem kích thước lớn</span>`;
 
         wrap.appendChild(img);
         wrap.appendChild(hint);
@@ -325,10 +329,10 @@
           const isKeyCorrect = q.answer_keys.includes(opt.key);
           if (isKeyCorrect) {
             item.classList.add('correct');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded bg-secondary/20 text-secondary text-[11px] font-mono font-semibold ml-2">Chính xác</span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded-full bg-ios-green/15 text-ios-green text-[11px] font-semibold ml-2 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>Chính xác</span></span>`;
           } else if (isSelected && !isKeyCorrect) {
             item.classList.add('wrong');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded bg-tertiary/20 text-tertiary text-[11px] font-mono font-semibold ml-2">Bạn đã chọn</span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded-full bg-ios-red/15 text-ios-red text-[11px] font-semibold ml-2 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>Bạn đã chọn</span></span>`;
           }
         }
 
@@ -344,7 +348,7 @@
         trailing.className = 'shrink-0 flex items-center ml-2';
         trailing.innerHTML = `
           ${statusBadgeHtml}
-          <span class="text-[10px] font-mono text-on-surface-variant border border-outline-variant/40 px-1.5 py-0.5 rounded bg-surface-container ml-2 hidden sm:inline opacity-60 group-hover:opacity-100">${optIndex + 1}</span>
+          <span class="text-[10px] font-mono text-ios-gray px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/5 ml-2 hidden sm:inline opacity-50 group-hover:opacity-100">${optIndex + 1}</span>
         `;
 
         item.appendChild(keyBadge);
@@ -372,8 +376,14 @@
     } else {
       // Non-MC question guide
       const helper = document.createElement('div');
-      helper.className = 'interactive-guide';
-      helper.innerHTML = `<strong>Dạng câu hỏi tương tác:</strong> Câu hỏi này sử dụng sơ đồ / đoạn mã / bảng đối chiếu kéo thả ở trên. Bạn hãy đọc đề, suy nghĩ phương án rồi bấm <strong>"Xem đáp án & giải thích"</strong> bên dưới để đối chiếu.`;
+      helper.className = 'interactive-guide flex items-start space-x-3';
+      helper.innerHTML = `
+        <span class="material-symbols-outlined text-ios-blue text-[20px] shrink-0 mt-0.5">info</span>
+        <div>
+          <strong class="font-semibold text-ios-blue block mb-1">Dạng câu hỏi tương tác / Đối chiếu</strong>
+          <span>Câu hỏi này sử dụng sơ đồ, khối mã hoặc bảng tương tác ở trên. Hãy suy nghĩ phương án giải quyết rồi bấm <strong>"Xem giải thích"</strong> bên dưới để đối chiếu đáp án chi tiết từ Microsoft.</span>
+        </div>
+      `;
       elOptionsContainer.appendChild(helper);
     }
   }
@@ -451,12 +461,12 @@
 
     if (isRevealed && mode === 'study') {
       elExplanationBox.style.display = 'block';
-      elExplCorrectAnswer.textContent = q.answer;
+      elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
       elExplBody.textContent = q.explanation;
       elToggleExplText.textContent = 'Ẩn giải thích';
     } else {
       elExplanationBox.style.display = 'none';
-      elToggleExplText.textContent = 'Xem đáp án & giải thích';
+      elToggleExplText.textContent = 'Xem giải thích';
     }
   }
 
@@ -511,7 +521,7 @@
 
     const percent = Math.round((answered / (questions.length || 1)) * 100);
     elProgressBarFill.style.width = `${percent}%`;
-    elProgressLabel.innerHTML = `<strong class="text-on-surface font-medium">${answered}</strong> / ${questions.length} hoàn thành (${percent}%)`;
+    elProgressLabel.textContent = `${answered} / ${questions.length} câu (${percent}%)`;
   }
 
   // --- Slide-over Drawer ---
@@ -577,14 +587,18 @@
   function setMode(newMode) {
     mode = newMode;
     if (mode === 'study') {
-      elBtnStudyMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all bg-primary-container text-on-primary-container shadow-sm';
-      elBtnExamMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all text-on-surface-variant hover:text-on-surface';
+      elBtnStudyMode.classList.add('active');
+      elBtnStudyMode.classList.remove('text-ios-gray');
+      elBtnExamMode.classList.remove('active');
+      elBtnExamMode.classList.add('text-ios-gray');
       elExamTimer.classList.add('hidden');
       elExamTimer.classList.remove('flex');
       stopExamTimer();
     } else {
-      elBtnExamMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all bg-primary-container text-on-primary-container shadow-sm';
-      elBtnStudyMode.className = 'px-3.5 py-1 rounded-md text-xs sm:text-sm font-medium transition-all text-on-surface-variant hover:text-on-surface';
+      elBtnExamMode.classList.add('active');
+      elBtnExamMode.classList.remove('text-ios-gray');
+      elBtnStudyMode.classList.remove('active');
+      elBtnStudyMode.classList.add('text-ios-gray');
       elExamTimer.classList.remove('hidden');
       elExamTimer.classList.add('flex');
       startExamTimer();
@@ -718,7 +732,8 @@
     elBtnReviewWrong.addEventListener('click', () => {
       elExamResultModal.style.display = 'none';
       setMode('study');
-      document.querySelector('.filter-pill[data-filter="wrong"]').click();
+      const wrongPill = document.querySelector('.ios-filter-pill[data-filter="wrong"], .filter-pill[data-filter="wrong"]');
+      if (wrongPill) wrongPill.click();
     });
 
     // Filter Pills
