@@ -498,7 +498,7 @@
         const confirmWrap = document.createElement('div');
         confirmWrap.className = 'pt-2 flex justify-end';
         const btnConfirm = document.createElement('button');
-        btnConfirm.className = 'w-full sm:w-auto px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95';
+        btnConfirm.className = 'w-full sm:w-auto px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95';
         btnConfirm.textContent = 'Kiểm tra kết quả lựa chọn';
         btnConfirm.addEventListener('click', () => {
           submitMultiChoice(q);
@@ -512,9 +512,9 @@
       const helper = document.createElement('div');
       helper.className = 'interactive-guide flex items-start space-x-3';
       helper.innerHTML = `
-        <span class="material-symbols-outlined text-sky-500 text-[18px] shrink-0 mt-0.5">info</span>
+        <span class="material-symbols-outlined text-orange-500 text-[18px] shrink-0 mt-0.5">info</span>
         <div>
-          <strong class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
+          <strong class="font-semibold text-orange-600 dark:text-orange-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
           <span>Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm <strong>icon bóng đèn</strong> bên dưới để xem đáp án và phân tích chi tiết.</span>
         </div>
       `;
@@ -530,7 +530,7 @@
     const header = document.createElement('div');
     header.className = 'flex items-center justify-between pb-1 text-xs text-slate-500 dark:text-slate-400 font-medium';
     header.innerHTML = `
-      <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-sky-500">checklist</span><span>Nhận định (Statements)</span></span>
+      <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-orange-500">checklist</span><span>Nhận định (Statements)</span></span>
       <span>Đúng / Sai</span>
     `;
     container.appendChild(header);
@@ -601,7 +601,7 @@
       const confirmWrap = document.createElement('div');
       confirmWrap.className = 'pt-2 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
@@ -617,7 +617,7 @@
 
     const header = document.createElement('div');
     header.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium pb-1 flex items-center space-x-1.5';
-    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-sky-500">tune</span><span>Chọn giá trị phù hợp cho từng mục:</span>`;
+    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-orange-500">tune</span><span>Chọn giá trị phù hợp cho từng mục:</span>`;
     container.appendChild(header);
 
     const card = document.createElement('div');
@@ -690,7 +690,7 @@
       const confirmWrap = document.createElement('div');
       confirmWrap.className = 'pt-2 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
@@ -790,7 +790,7 @@
       const confirmWrap = document.createElement('div');
       confirmWrap.className = 'pt-2 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
