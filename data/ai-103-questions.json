@@ -1534,7 +1534,7 @@
       "answer_keys": [
         "B"
       ],
-      "explanation": "Prompt Shields for user prompts protect against direct prompt injection attacks where malicious instructions \nare entered directly by the user in the prompt. In this scenario, the threat comes from uploaded images \ncontaining hidden or embedded text that is extracted and supplied to the multimodal model. This is an \nindirect prompt injection (document attack). To mitigate this risk, you should configure Prompt Shields for \ndocument attacks. If the content comes from third-party sources, enabling Spotlighting provides additional \nprotection by treating that content as lower trust.",
+      "explanation": "Correct Answer: \nB. No\n\nPrompt Shields for user prompts protect against direct prompt injection attacks where malicious instructions \nare entered directly by the user in the prompt. In this scenario, the threat comes from uploaded images \ncontaining hidden or embedded text that is extracted and supplied to the multimodal model. This is an \nindirect prompt injection (document attack). To mitigate this risk, you should configure Prompt Shields for \ndocument attacks. If the content comes from third-party sources, enabling Spotlighting provides additional \nprotection by treating that content as lower trust.",
       "images": [],
       "pages": [
         41
@@ -1560,7 +1560,7 @@
       "answer_keys": [
         "B"
       ],
-      "explanation": "Image moderation is designed to detect and block unsafe visual content, such as violence, sexual content, \nor other harmful imagery based on configured severity levels. However, it does not protect against hidden \nprompt injection instructions embedded as text within images. In this scenario, the risk is an indirect \nprompt injection attack, which should be mitigated by using Prompt Shields for document attacks. If the \nimages originate from external or third-party sources, Spotlighting should also be enabled to treat the \nextracted content as lower trust.",
+      "explanation": "Correct Answer: \nB. No\n\nImage moderation is designed to detect and block unsafe visual content, such as violence, sexual content, \nor other harmful imagery based on configured severity levels. However, it does not protect against hidden \nprompt injection instructions embedded as text within images. In this scenario, the risk is an indirect \nprompt injection attack, which should be mitigated by using Prompt Shields for document attacks. If the \nimages originate from external or third-party sources, Spotlighting should also be enabled to treat the \nextracted content as lower trust.",
       "images": [],
       "pages": [
         42
@@ -1586,7 +1586,7 @@
       "answer_keys": [
         "A"
       ],
-      "explanation": "Prompt Shields for documents are specifically designed to protect against indirect prompt injection attacks \noriginating from documents, images, and other external content. In this scenario, users upload images \ncontaining hidden embedded text that is extracted and passed to the multimodal model. By enabling Prompt \nShields for documents, the service analyzes the extracted content and detects attempts to manipulate the \nmodel through embedded instructions. This directly mitigates the identified risk. For third-party or untrusted \ncontent, enabling Spotlighting provides additional protection by treating the extracted content as lower trust.",
+      "explanation": "Correct Answer: \nA. Yes\n\nPrompt Shields for documents are specifically designed to protect against indirect prompt injection attacks \noriginating from documents, images, and other external content. In this scenario, users upload images \ncontaining hidden embedded text that is extracted and passed to the multimodal model. By enabling Prompt \nShields for documents, the service analyzes the extracted content and detects attempts to manipulate the \nmodel through embedded instructions. This directly mitigates the identified risk. For third-party or untrusted \ncontent, enabling Spotlighting provides additional protection by treating the extracted content as lower trust.",
       "images": [],
       "pages": [
         42
@@ -1612,7 +1612,7 @@
       "answer_keys": [
         "B"
       ],
-      "explanation": "Protected material detection is designed to identify copyrighted or protected content, such as copyrighted \ntext, code, lyrics, or other protected material. Its purpose is to help prevent the generation or reproduction of \ncopyrighted content. It does not detect or prevent indirect prompt injection attacks where hidden \ninstructions are embedded in uploaded images. To mitigate this scenario, the appropriate control is Prompt \nShields for document attacks, which analyze extracted content from documents and images for malicious \ninstructions.",
+      "explanation": "Correct Answer: \nB. No\n\nProtected material detection is designed to identify copyrighted or protected content, such as copyrighted \ntext, code, lyrics, or other protected material. Its purpose is to help prevent the generation or reproduction of \ncopyrighted content. It does not detect or prevent indirect prompt injection attacks where hidden \ninstructions are embedded in uploaded images. To mitigate this scenario, the appropriate control is Prompt \nShields for document attacks, which analyze extracted content from documents and images for malicious \ninstructions.",
       "images": [],
       "pages": [
         43
@@ -2828,7 +2828,7 @@
         "A",
         "B"
       ],
-      "explanation": "Correct Answers \nA. Microsoft Sentinel \n \nMicrosoft Sentinel is Microsoft's cloud-native SIEM (Security Information and Event Management) and \nSOAR (Security Orchestration, Automation, and Response) platform. \nIt enables security teams to detect suspicious sign-in activity, investigate security incidents, correlate alerts \nacross multiple services and automate incident response  \nSince the requirement is for a centralized security operations platform, Microsoft Sentinel is the correct \nchoice. \nB. Log Analytics workspace \nA Log Analytics workspace serves as the data repository for Sentinel. \nIt collects logs from Microsoft Foundry, Microsoft Defender, Microsoft Entra ID, Azure resources and other \nconnected data sources  \nSentinel uses the Log Analytics workspace to query, correlate, and investigate security events. \n \nIncorrect Answers \nC. Azure Monitor Agent \nAzure Monitor Agent collects telemetry from Azure VMs and servers, but it is not the centralized security \nplatform or incident correlation engine required in this scenario. \nD. Application Insights \nApplication Insights monitors application performance, availability, requests, dependencies, and exceptions. It \nis intended for application observability, not security operations. \nE. OpenTelemetry \nOpenTelemetry provides a vendor-neutral framework for collecting traces, metrics, and logs for application \nobservability. It does not provide SIEM capabilities or security incident correlation.",
+      "explanation": "Correct Answers: \nA. Microsoft Sentinel \n \nMicrosoft Sentinel is Microsoft's cloud-native SIEM (Security Information and Event Management) and \nSOAR (Security Orchestration, Automation, and Response) platform. \nIt enables security teams to detect suspicious sign-in activity, investigate security incidents, correlate alerts \nacross multiple services and automate incident response  \nSince the requirement is for a centralized security operations platform, Microsoft Sentinel is the correct \nchoice. \nB. Log Analytics workspace \nA Log Analytics workspace serves as the data repository for Sentinel. \nIt collects logs from Microsoft Foundry, Microsoft Defender, Microsoft Entra ID, Azure resources and other \nconnected data sources  \nSentinel uses the Log Analytics workspace to query, correlate, and investigate security events. \n \nIncorrect Answers \nC. Azure Monitor Agent \nAzure Monitor Agent collects telemetry from Azure VMs and servers, but it is not the centralized security \nplatform or incident correlation engine required in this scenario. \nD. Application Insights \nApplication Insights monitors application performance, availability, requests, dependencies, and exceptions. It \nis intended for application observability, not security operations. \nE. OpenTelemetry \nOpenTelemetry provides a vendor-neutral framework for collecting traces, metrics, and logs for application \nobservability. It does not provide SIEM capabilities or security incident correlation.",
       "images": [],
       "pages": [
         73
@@ -3091,7 +3091,7 @@
       "id": 77,
       "title": "Q77",
       "type": "multiple_choice_single",
-      "question": "You have a Microsoft Foundry project that contains an agent. The agent has a Model Context Protocol \n(MCP) tool that queries a knowledge base stored in Azure AI Search. \nSome agent runs return answers from the base model without invoking the knowledge base, which results in \nresponses without grounded citations. \nYou are provided with the following code snippet that runs the agent. \nrun = project_client.agents.runs.create_and_process( \n    thread_id=thread.id, \n    agent_id=agent.id \n) \nYou need to add the correct tool _choice parameter to the code to deterministically force the agent to invoke \nthe MCP tool on each run. \nWhat should you add?",
+      "question": "You have a Microsoft Foundry project that contains an agent. The agent has a Model Context Protocol \n(MCP) tool that queries a knowledge base stored in Azure AI Search. \nSome agent runs return answers from the base model without invoking the knowledge base, which results in \nresponses without grounded citations. \nYou are provided with the following code snippet that runs the agent. \nrun = project_client.agents.runs.create_and_process( \n    thread_id=thread.id, \n    agent_id=agent.id \n) \nYou need to add the correct tool_choice parameter to the code to deterministically force the agent to invoke \nthe MCP tool on each run. \nWhat should you add?",
       "options": [
         {
           "key": "A",
@@ -3901,7 +3901,7 @@
       "answer_keys": [
         "A"
       ],
-      "explanation": "The issue is that the required regulatory clauses are already present in the retrieved content, but the\n\ngenerated responses omit some of them.\n\nIncreasing the max_tokens parameter allows the model to generate longer responses. If the omissions are\n\ncaused by the response being truncated due to an insufficient completion token limit, increasing max_tokens\n\nimproves response completeness and enables the model to include all the required clauses.\n\nTherefore, this solution meets the goal.",
+      "explanation": "Correct Answer: \nA. Yes\n\nThe issue is that the required regulatory clauses are already present in the retrieved content, but the\n\ngenerated responses omit some of them.\n\nIncreasing the max_tokens parameter allows the model to generate longer responses. If the omissions are\n\ncaused by the response being truncated due to an insufficient completion token limit, increasing max_tokens\n\nimproves response completeness and enables the model to include all the required clauses.\n\nTherefore, this solution meets the goal.",
       "images": [],
       "pages": [
         101
@@ -3927,7 +3927,7 @@
       "answer_keys": [
         "A"
       ],
-      "explanation": "The retrieved policy documents already contain the required regulatory clauses, but the generated\n\nsummaries sometimes omit them. This indicates that the retrieval step is working correctly, while the\n\ngeneration step is not producing a complete response.\n\nAdding a reflection pass allows the application to evaluate the generated response before returning it. If the\n\nrequired clauses are missing, the application can regenerate the response with instructions to include the\n\nomitted information. This improves the completeness of the final answer without changing the retrieval\n\nprocess.\n\nTherefore, this solution meets the goal.",
+      "explanation": "Correct Answer: \nA. Yes\n\nThe retrieved policy documents already contain the required regulatory clauses, but the generated\n\nsummaries sometimes omit them. This indicates that the retrieval step is working correctly, while the\n\ngeneration step is not producing a complete response.\n\nAdding a reflection pass allows the application to evaluate the generated response before returning it. If the\n\nrequired clauses are missing, the application can regenerate the response with instructions to include the\n\nomitted information. This improves the completeness of the final answer without changing the retrieval\n\nprocess.\n\nTherefore, this solution meets the goal.",
       "images": [],
       "pages": [
         101
@@ -3953,7 +3953,7 @@
       "answer_keys": [
         "B"
       ],
-      "explanation": "The problem is that the agent omits required regulatory clauses, even though those clauses are already\n\npresent in the retrieved policy documents. This is a response completeness issue, not a creativity issue.\n\nIncreasing the temperature parameter makes the model's output more random and creative. It does not\n\nimprove completeness or make the model more likely to include all required clauses. In fact, a higher\n\ntemperature can make responses less deterministic and may increase the likelihood of omitting important\n\ninformation or introducing inconsistencies.\n\nTherefore, increasing the temperature does not meet the goal.",
+      "explanation": "Correct Answer: \nB. No\n\nThe problem is that the agent omits required regulatory clauses, even though those clauses are already\n\npresent in the retrieved policy documents. This is a response completeness issue, not a creativity issue.\n\nIncreasing the temperature parameter makes the model's output more random and creative. It does not\n\nimprove completeness or make the model more likely to include all required clauses. In fact, a higher\n\ntemperature can make responses less deterministic and may increase the likelihood of omitting important\n\ninformation or introducing inconsistencies.\n\nTherefore, increasing the temperature does not meet the goal.",
       "images": [],
       "pages": [
         102
@@ -3979,7 +3979,7 @@
       "answer_keys": [
         "B"
       ],
-      "explanation": "The proposed solution runs an evaluation flow that scores responses for completeness and blocks\n\nresponses that do not meet a defined threshold.\n\nWhile this helps detect incomplete responses and prevents low-quality answers from being returned to\n\nusers, it does not improve the completeness of the responses themselves. The agent will simply reject\n\nresponses that score poorly, rather than generating a more complete answer.\n\nTherefore, the solution does not meet the goal of improving response completeness.\n\nTo improve completeness, the application must take corrective action, such as increasing the maximum\n\ncompletion tokens if responses are being truncated, adding a reflection or retry pass that regenerates\n\nincomplete responses and adjusting the retrieval strategy if insufficient context is being provided.\n\nAn evaluation flow alone only measures quality. Unless it is combined with a retry or regeneration\n\nmechanism, it cannot make responses more complete.",
+      "explanation": "Correct Answer: \nB. No\n\nThe proposed solution runs an evaluation flow that scores responses for completeness and blocks\n\nresponses that do not meet a defined threshold.\n\nWhile this helps detect incomplete responses and prevents low-quality answers from being returned to\n\nusers, it does not improve the completeness of the responses themselves. The agent will simply reject\n\nresponses that score poorly, rather than generating a more complete answer.\n\nTherefore, the solution does not meet the goal of improving response completeness.\n\nTo improve completeness, the application must take corrective action, such as increasing the maximum\n\ncompletion tokens if responses are being truncated, adding a reflection or retry pass that regenerates\n\nincomplete responses and adjusting the retrieval strategy if insufficient context is being provided.\n\nAn evaluation flow alone only measures quality. Unless it is combined with a retry or regeneration\n\nmechanism, it cannot make responses more complete.",
       "images": [],
       "pages": [
         102
@@ -4179,7 +4179,7 @@
         107
       ],
       "interactive": {
-        "type": "drag_drop_order",
+        "type": "matching",
         "pool": [
           "classify",
           "generate",
@@ -4600,7 +4600,7 @@
         117
       ],
       "interactive": {
-        "type": "drag_drop_order",
+        "type": "matching",
         "pool": [
           "Hierarchical spans",
           "A KQL query filter",
@@ -5026,7 +5026,7 @@
         129
       ],
       "interactive": {
-        "type": "drag_drop_order",
+        "type": "matching",
         "pool": [
           "Increase tenant-wide quotas.",
           "Move large content to files and use file search.",
@@ -5880,13 +5880,13 @@
           "text": "Supply the groups as a filter for the search requests"
         }
       ],
-      "answer": "A. Add allowed groups to each index entry \nE. Retrieve the group memberships of the user \nF . Supply the groups as a filter for the search requests",
+      "answer": "A. Add allowed groups to each index entry \nE. Retrieve the group memberships of the user \nF. Supply the groups as a filter for the search requests",
       "answer_keys": [
         "A",
         "E",
         "F"
       ],
-      "explanation": "Correct Answer: \nA. Add allowed groups to each index entry \nTo enable document-level security, each document in the index must include metadata indicating which \ngroups are allowed to access it. This allows filtering results based on user permissions. \nE. Retrieve the group memberships of the user \nThe application must determine which groups the current user belongs to. This is typically done using \nMicrosoft Entra ID so that access decisions can be enforced dynamically. \nF . Supply the groups as a filter for the search requests \nWhen performing a search, the user’s group memberships are passed as a filter query. Azure AI Search uses \nthis filter to return only documents that the user is authorized to access. \n \nIncorrect answers: \nB. Create one index per group. \nThis is not scalable and is not how document-level security is implemented in Azure AI Search. \nC. Send access tokens from Microsoft Entra ID, with the search request. \nWhile authentication is required, tokens alone do not enforce document-level filtering within the index. \nD. Retrieve all the groups. \nRetrieving all groups is unnecessary; only the groups relevant to the current user are required.",
+      "explanation": "Correct Answer: \nA. Add allowed groups to each index entry \nTo enable document-level security, each document in the index must include metadata indicating which \ngroups are allowed to access it. This allows filtering results based on user permissions. \nE. Retrieve the group memberships of the user \nThe application must determine which groups the current user belongs to. This is typically done using \nMicrosoft Entra ID so that access decisions can be enforced dynamically. \nF. Supply the groups as a filter for the search requests \nWhen performing a search, the user’s group memberships are passed as a filter query. Azure AI Search uses \nthis filter to return only documents that the user is authorized to access. \n \nIncorrect answers: \nB. Create one index per group. \nThis is not scalable and is not how document-level security is implemented in Azure AI Search. \nC. Send access tokens from Microsoft Entra ID, with the search request. \nWhile authentication is required, tokens alone do not enforce document-level filtering within the index. \nD. Retrieve all the groups. \nRetrieving all groups is unnecessary; only the groups relevant to the current user are required.",
       "images": [],
       "pages": [
         150
@@ -6413,7 +6413,7 @@
       "answer_keys": [
         "C"
       ],
-      "explanation": "C. the deployment name, endpoint, and key\n\nTo connect an application to an Azure OpenAI model, the SDK needs three key pieces of information. The\n\nendpoint identifies the Azure OpenAI resource that the application should connect to, the key authenticates\n\nthe application to that resource, and the deployment name identifies the specific model deployment that the\n\napplication wants to use. In Azure OpenAI, applications generally call a deployment, rather than directly\n\nspecifying the underlying model name in the API request.\n\nIncorrect Answers:\n\nA. the deployment name, key, and model name\n\nThis is missing the endpoint, which tells the SDK where the Azure OpenAI resource is located. The model\n\nname is also not a substitute for the deployment name when making a request.\n\nB. the endpoint, key, and model type\n\nAlthough the endpoint and key are required, the SDK needs the deployment name to identify which\n\ndeployed model should process the request. The model type alone does not identify the specific deployment.\n\nD. the endpoint, key, and model name\n\nThe model name describes the underlying model, such as a particular GPT model, but Azure OpenAI\n\napplications target the deployment name when sending requests. Therefore, the deployment name is\n\nrequired instead of the model name.",
+      "explanation": "Correct Answer: \nC. the deployment name, endpoint, and key\n\nTo connect an application to an Azure OpenAI model, the SDK needs three key pieces of information. The\n\nendpoint identifies the Azure OpenAI resource that the application should connect to, the key authenticates\n\nthe application to that resource, and the deployment name identifies the specific model deployment that the\n\napplication wants to use. In Azure OpenAI, applications generally call a deployment, rather than directly\n\nspecifying the underlying model name in the API request.\n\nIncorrect Answers:\n\nA. the deployment name, key, and model name\n\nThis is missing the endpoint, which tells the SDK where the Azure OpenAI resource is located. The model\n\nname is also not a substitute for the deployment name when making a request.\n\nB. the endpoint, key, and model type\n\nAlthough the endpoint and key are required, the SDK needs the deployment name to identify which\n\ndeployed model should process the request. The model type alone does not identify the specific deployment.\n\nD. the endpoint, key, and model name\n\nThe model name describes the underlying model, such as a particular GPT model, but Azure OpenAI\n\napplications target the deployment name when sending requests. Therefore, the deployment name is\n\nrequired instead of the model name.",
       "images": [],
       "pages": [
         164

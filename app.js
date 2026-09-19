@@ -252,7 +252,7 @@
       const keys = Object.keys(ans.interactiveAnswers);
       if (q.interactive.type === 'yes_no') return keys.length >= q.interactive.statements.length;
       if (q.interactive.type === 'dropdown') return keys.length >= q.interactive.blanks.length;
-      if (q.interactive.type === 'matching') return keys.length >= q.interactive.targets.length;
+      if (q.interactive.type === 'matching' || q.interactive.type === 'drag_drop_order') return keys.length >= q.interactive.targets.length;
       return keys.length > 0;
     }
     return ans.selectedKeys && ans.selectedKeys.length > 0;
@@ -445,7 +445,7 @@
         renderYesNoWidget(q, ansState);
       } else if (q.interactive.type === 'dropdown') {
         renderDropdownWidget(q, ansState);
-      } else if (q.interactive.type === 'matching') {
+      } else if (q.interactive.type === 'matching' || q.interactive.type === 'drag_drop_order') {
         renderMatchingWidget(q, ansState);
       }
       return;
@@ -907,7 +907,7 @@
       q.interactive.blanks.forEach(b => {
         if (ansMap[b.id] !== b.answer) isAllCorrect = false;
       });
-    } else if (q.interactive.type === 'matching') {
+    } else if (q.interactive.type === 'matching' || q.interactive.type === 'drag_drop_order') {
       q.interactive.targets.forEach(t => {
         if (ansMap[t.id] !== t.answer) isAllCorrect = false;
       });
@@ -1235,7 +1235,7 @@
             q.interactive.blanks.forEach(b => {
               if (ansMap[b.id] !== b.answer) isAllCorrect = false;
             });
-          } else if (q.interactive.type === 'matching') {
+          } else if (q.interactive.type === 'matching' || q.interactive.type === 'drag_drop_order') {
             q.interactive.targets.forEach(t => {
               if (ansMap[t.id] !== t.answer) isAllCorrect = false;
             });
