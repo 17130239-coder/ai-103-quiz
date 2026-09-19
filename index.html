@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-103 Quiz - Ôn luyện trắc nghiệm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Top Minimalist Header -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="exam-tag">AI-103</span>
+        <h1 class="exam-title">Azure AI Apps and Agents Developer</h1>
+      </div>
+
+      <div class="header-center">
+        <div class="mode-tabs">
+          <button class="mode-btn active" id="btnStudyMode" title="Xem kết quả và giải thích ngay khi chọn">Ôn luyện</button>
+          <button class="mode-btn" id="btnExamMode" title="Làm bài thi tính giờ, chấm điểm khi nộp bài">Thi thử</button>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="exam-timer" id="examTimer" style="display: none;">
+          <span class="timer-icon">⏱</span>
+          <span id="timerText">00:00</span>
+        </div>
+        <button class="icon-btn" id="btnOpenGrid" title="Danh sách câu hỏi (G)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="btn-text">Danh sách</span>
+        </button>
+        <button class="icon-btn" id="btnThemeToggle" title="Chuyển chế độ Sáng / Tối">
+          <svg id="themeIconSun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg id="themeIconMoon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub-bar: Filters & Progress -->
+    <section class="toolbar">
+      <div class="filters-scroll">
+        <button class="filter-pill active" data-filter="all">Tất cả <span class="count-badge" id="countAll">175</span></button>
+        <button class="filter-pill" data-filter="unanswered">Chưa làm <span class="count-badge" id="countUnanswered">175</span></button>
+        <button class="filter-pill" data-filter="wrong">Làm sai <span class="count-badge" id="countWrong">0</span></button>
+        <button class="filter-pill" data-filter="correct">Làm đúng <span class="count-badge" id="countCorrect">0</span></button>
+        <button class="filter-pill" data-filter="bookmarked">Đã lưu ★ <span class="count-badge" id="countBookmarked">0</span></button>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+        </div>
+        <span class="progress-label" id="progressLabel">0 / 175 đã làm</span>
+      </div>
+    </section>
+
+    <!-- Main Content: Focused Question Reader -->
+    <main class="main-container">
+      <div class="question-card" id="questionCard">
+        <!-- Question Meta -->
+        <div class="question-meta">
+          <div class="meta-left">
+            <span class="q-number" id="qNumber">Câu 1 / 175</span>
+            <span class="q-type-badge" id="qTypeBadge">Trắc nghiệm</span>
+          </div>
+          <div class="meta-right">
+            <button class="btn-bookmark" id="btnBookmark" title="Lưu câu hỏi (B)">
+              <svg class="star-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>Đánh dấu</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Question Prompt Text -->
+        <div class="question-text" id="questionText">
+          Đang tải dữ liệu câu hỏi...
+        </div>
+
+        <!-- Attached Images / Diagrams -->
+        <div class="question-images" id="questionImages" style="display: none;">
+          <!-- Dynamically populated images -->
+        </div>
+
+        <!-- Options Container -->
+        <div class="options-container" id="optionsContainer">
+          <!-- Dynamic options rendered here -->
+        </div>
+
+        <!-- Action / Explanation Reveal Area -->
+        <div class="question-action-bar" id="questionActionBar">
+          <button class="btn-primary" id="btnToggleExplanation">
+            <span id="toggleExplText">Xem đáp án & giải thích</span>
+            <span class="key-hint">(Space)</span>
+          </button>
+          <button class="btn-outline" id="btnResetAnswer" style="display: none;">Làm lại câu này</button>
+          <button class="btn-primary" id="btnExamSubmit" style="display: none;">Nộp bài thi</button>
+        </div>
+
+        <!-- Explanation Section -->
+        <div class="explanation-box" id="explanationBox" style="display: none;">
+          <div class="expl-header">
+            <span class="expl-badge">Đáp án chuẩn</span>
+            <div class="expl-correct-answer" id="explCorrectAnswer"></div>
+          </div>
+          <div class="expl-body" id="explBody"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <button class="nav-btn" id="btnPrev">
+          <span class="arrow">←</span>
+          <span class="text">Câu trước</span>
+          <span class="key-hint">([)</span>
+        </button>
+      </div>
+
+      <div class="footer-center">
+        <span class="nav-status" id="navStatus">1 / 175</span>
+      </div>
+
+      <div class="footer-right">
+        <button class="nav-btn" id="btnNext">
+          <span class="text">Câu tiếp theo</span>
+          <span class="arrow">→</span>
+          <span class="key-hint">(])</span>
+        </button>
+      </div>
+    </footer>
+
+    <!-- Question Grid Drawer Modal -->
+    <div class="modal-overlay" id="gridModal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2>Danh sách 175 câu hỏi</h2>
+          <button class="close-btn" id="btnCloseGrid">&times;</button>
+        </div>
+        
+        <div class="grid-search-bar">
+          <input type="text" id="gridSearchInput" placeholder="Tìm kiếm từ khóa (Foundry, Search, Content Safety...)" />
+          <div class="grid-stats">
+            <span class="stat-dot dot-correct"></span> Đúng
+            <span class="stat-dot dot-wrong"></span> Sai
+            <span class="stat-dot dot-unanswered"></span> Chưa làm
+            <span class="stat-dot dot-bookmarked"></span> Đã lưu
+          </div>
+        </div>
+
+        <div class="grid-container" id="gridContainer">
+          <!-- 175 grid item buttons rendered dynamically -->
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-danger-outline" id="btnResetAllProgress">Đặt lại toàn bộ tiến độ</button>
+          <button class="btn-primary" id="btnCloseGridBtn">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div class="lightbox-overlay" id="lightboxModal" style="display: none;">
+      <div class="lightbox-content">
+        <button class="lightbox-close" id="btnCloseLightbox">&times;</button>
+        <img id="lightboxImg" src="" alt="Hình ảnh phóng to" />
+      </div>
+    </div>
+
+    <!-- Exam Result Modal -->
+    <div class="modal-overlay" id="examResultModal" style="display: none;">
+      <div class="modal-card result-card">
+        <div class="modal-header">
+          <h2>Kết quả bài thi thử</h2>
+          <button class="close-btn" id="btnCloseExamResult">&times;</button>
+        </div>
+        <div class="result-content">
+          <div class="score-circle">
+            <span class="score-num" id="resultScorePercent">0%</span>
+            <span class="score-label" id="resultPassStatus">Chưa đạt</span>
+          </div>
+          <div class="result-breakdown">
+            <div class="res-item">
+              <span class="res-label">Tổng số câu:</span>
+              <span class="res-val" id="resTotal">175</span>
+            </div>
+            <div class="res-item text-green">
+              <span class="res-label">Số câu đúng:</span>
+              <span class="res-val" id="resCorrect">0</span>
+            </div>
+            <div class="res-item text-red">
+              <span class="res-label">Số câu sai:</span>
+              <span class="res-val" id="resWrong">0</span>
+            </div>
+            <div class="res-item text-muted">
+              <span class="res-label">Chưa trả lời:</span>
+              <span class="res-val" id="resSkipped">0</span>
+            </div>
+            <div class="res-item">
+              <span class="res-label">Thời gian làm bài:</span>
+              <span class="res-val" id="resTime">00:00</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-outline" id="btnReviewWrong">Xem lại các câu sai</button>
+          <button class="btn-primary" id="btnRestartExam">Làm lại bài thi</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Fallback standalone data script (ensures zero CORS issue when running file://) -->
+  <script src="data/questions-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
