@@ -46,6 +46,9 @@
         if (q && q.images && q.images.length > 0) {
           q.images.forEach(img => preloadImageUrl(img.path));
         }
+        if (q && q.answer_images && q.answer_images.length > 0) {
+          q.answer_images.forEach(img => preloadImageUrl(img.path));
+        }
       }
     });
   }
@@ -55,6 +58,9 @@
     questions.forEach(q => {
       if (q.images && q.images.length > 0) {
         q.images.forEach(img => allImages.push(img.path));
+      }
+      if (q.answer_images && q.answer_images.length > 0) {
+        q.answer_images.forEach(img => allImages.push(img.path));
       }
     });
 
@@ -993,6 +999,48 @@
       elExplanationBox.style.display = 'block';
       elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
       elExplBody.textContent = q.explanation;
+
+      const elExplImages = document.getElementById('explImages');
+      if (elExplImages) {
+        elExplImages.innerHTML = '';
+        if (q.answer_images && q.answer_images.length > 0) {
+          elExplImages.style.display = 'flex';
+
+          const header = document.createElement('div');
+          header.className = 'flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-2.5 border-t border-emerald-500/20';
+          header.innerHTML = `<span class="material-symbols-outlined text-[15px]">verified</span><span>Sơ đồ đáp án chính thức từ Microsoft:</span>`;
+          elExplImages.appendChild(header);
+
+          q.answer_images.forEach((imgObj) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'q-img-wrap';
+
+            const frame = document.createElement('div');
+            frame.className = 'q-img-frame';
+            if (imgObj.width && imgObj.height) {
+              frame.style.aspectRatio = `${imgObj.width} / ${imgObj.height}`;
+            }
+
+            const img = document.createElement('img');
+            img.src = imgObj.path;
+            img.alt = `Sơ đồ đáp án chuẩn Q${q.id}`;
+            img.loading = 'lazy';
+            img.className = 'w-full h-full object-contain rounded-lg';
+            frame.appendChild(img);
+
+            const hint = document.createElement('div');
+            hint.className = 'flex items-center justify-center space-x-1.5 text-[11px] text-slate-400 mt-2 font-mono';
+            hint.innerHTML = `<span class="material-symbols-outlined text-[13px]">zoom_in</span><span>Chạm để phóng to xem chi tiết</span>`;
+
+            wrap.appendChild(frame);
+            wrap.appendChild(hint);
+            wrap.addEventListener('click', () => openLightbox(imgObj.path));
+            elExplImages.appendChild(wrap);
+          });
+        } else {
+          elExplImages.style.display = 'none';
+        }
+      }
     } else {
       elExplanationBox.style.display = 'none';
     }

@@ -35,7 +35,8 @@
       "images": [],
       "pages": [
         2
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 2,
@@ -68,7 +69,8 @@
       "images": [],
       "pages": [
         2
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 3,
@@ -86,13 +88,6 @@
           "page": 4,
           "width": 1814,
           "height": 619
-        },
-        {
-          "filename": "q3_p4_2.png",
-          "path": "data/images/q3_p4_2.png",
-          "page": 4,
-          "width": 1825,
-          "height": 651
         }
       ],
       "pages": [
@@ -125,7 +120,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q3_p4_2.png",
+          "path": "data/images/q3_p4_2.png",
+          "page": 4,
+          "width": 1825,
+          "height": 651
+        }
+      ]
     },
     {
       "id": 4,
@@ -158,7 +162,8 @@
       "images": [],
       "pages": [
         5
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 5,
@@ -191,7 +196,8 @@
       "images": [],
       "pages": [
         6
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 6,
@@ -209,13 +215,6 @@
           "page": 7,
           "width": 1345,
           "height": 348
-        },
-        {
-          "filename": "q6_p7_2.png",
-          "path": "data/images/q6_p7_2.png",
-          "page": 7,
-          "width": 1841,
-          "height": 495
         }
       ],
       "pages": [
@@ -247,7 +246,16 @@
           "Grounding with Bing Search",
           "Microsoft Fabric"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q6_p7_2.png",
+          "path": "data/images/q6_p7_2.png",
+          "page": 7,
+          "width": 1841,
+          "height": 495
+        }
+      ]
     },
     {
       "id": 7,
@@ -280,7 +288,8 @@
       "images": [],
       "pages": [
         8
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 8,
@@ -321,7 +330,8 @@
       ],
       "pages": [
         9
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 9,
@@ -339,13 +349,6 @@
           "page": 10,
           "width": 1832,
           "height": 920
-        },
-        {
-          "filename": "q9_p11_1.png",
-          "path": "data/images/q9_p11_1.png",
-          "page": 11,
-          "width": 1855,
-          "height": 925
         }
       ],
       "pages": [
@@ -378,7 +381,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q9_p11_1.png",
+          "path": "data/images/q9_p11_1.png",
+          "page": 11,
+          "width": 1855,
+          "height": 925
+        }
+      ]
     },
     {
       "id": 10,
@@ -396,13 +408,6 @@
           "page": 12,
           "width": 1723,
           "height": 458
-        },
-        {
-          "filename": "q10_p12_2.png",
-          "path": "data/images/q10_p12_2.png",
-          "page": 12,
-          "width": 1727,
-          "height": 519
         }
       ],
       "pages": [
@@ -427,7 +432,16 @@
             "answer": "No"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q10_p12_2.png",
+          "path": "data/images/q10_p12_2.png",
+          "page": 12,
+          "width": 1727,
+          "height": 519
+        }
+      ]
     },
     {
       "id": 11,
@@ -460,7 +474,8 @@
       "images": [],
       "pages": [
         13
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 12,
@@ -493,7 +508,8 @@
       "images": [],
       "pages": [
         14
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 13,
@@ -511,13 +527,6 @@
           "page": 15,
           "width": 1746,
           "height": 717
-        },
-        {
-          "filename": "q13_p16_1.png",
-          "path": "data/images/q13_p16_1.png",
-          "page": 16,
-          "width": 1667,
-          "height": 715
         }
       ],
       "pages": [
@@ -550,7 +559,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q13_p16_1.png",
+          "path": "data/images/q13_p16_1.png",
+          "page": 16,
+          "width": 1667,
+          "height": 715
+        }
+      ]
     },
     {
       "id": 14,
@@ -583,7 +601,8 @@
       "images": [],
       "pages": [
         17
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 15,
@@ -616,7 +635,8 @@
       "images": [],
       "pages": [
         18
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 16,
@@ -634,13 +654,6 @@
           "page": 19,
           "width": 1453,
           "height": 518
-        },
-        {
-          "filename": "q16_p19_2.png",
-          "path": "data/images/q16_p19_2.png",
-          "page": 19,
-          "width": 1453,
-          "height": 521
         }
       ],
       "pages": [
@@ -669,7 +682,16 @@
           "tools",
           "type"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q16_p19_2.png",
+          "path": "data/images/q16_p19_2.png",
+          "page": 19,
+          "width": 1453,
+          "height": 521
+        }
+      ]
     },
     {
       "id": 17,
@@ -702,7 +724,8 @@
       "images": [],
       "pages": [
         20
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 18,
@@ -735,7 +758,8 @@
       "images": [],
       "pages": [
         21
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 19,
@@ -753,13 +777,6 @@
           "page": 22,
           "width": 1531,
           "height": 826
-        },
-        {
-          "filename": "q19_p22_2.png",
-          "path": "data/images/q19_p22_2.png",
-          "page": 22,
-          "width": 1487,
-          "height": 815
         }
       ],
       "pages": [
@@ -792,7 +809,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q19_p22_2.png",
+          "path": "data/images/q19_p22_2.png",
+          "page": 22,
+          "width": 1487,
+          "height": 815
+        }
+      ]
     },
     {
       "id": 20,
@@ -825,7 +851,8 @@
       "images": [],
       "pages": [
         23
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 21,
@@ -858,7 +885,8 @@
       "images": [],
       "pages": [
         24
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 22,
@@ -891,7 +919,8 @@
       "images": [],
       "pages": [
         25
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 23,
@@ -909,13 +938,6 @@
           "page": 26,
           "width": 1520,
           "height": 784
-        },
-        {
-          "filename": "q23_p27_1.png",
-          "path": "data/images/q23_p27_1.png",
-          "page": 27,
-          "width": 1435,
-          "height": 799
         }
       ],
       "pages": [
@@ -948,7 +970,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q23_p27_1.png",
+          "path": "data/images/q23_p27_1.png",
+          "page": 27,
+          "width": 1435,
+          "height": 799
+        }
+      ]
     },
     {
       "id": 24,
@@ -986,7 +1017,8 @@
       "images": [],
       "pages": [
         28
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 25,
@@ -1019,7 +1051,8 @@
       "images": [],
       "pages": [
         29
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 26,
@@ -1037,13 +1070,6 @@
           "page": 30,
           "width": 1660,
           "height": 535
-        },
-        {
-          "filename": "q26_p30_2.png",
-          "path": "data/images/q26_p30_2.png",
-          "page": 30,
-          "width": 1692,
-          "height": 547
         }
       ],
       "pages": [
@@ -1070,7 +1096,16 @@
           "Risk and safety metrics",
           "Token usage analytics"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q26_p30_2.png",
+          "path": "data/images/q26_p30_2.png",
+          "page": 30,
+          "width": 1692,
+          "height": 547
+        }
+      ]
     },
     {
       "id": 27,
@@ -1103,7 +1138,8 @@
       "images": [],
       "pages": [
         31
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 28,
@@ -1136,7 +1172,8 @@
       "images": [],
       "pages": [
         32
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 29,
@@ -1154,13 +1191,6 @@
           "page": 33,
           "width": 1597,
           "height": 614
-        },
-        {
-          "filename": "q29_p33_2.png",
-          "path": "data/images/q29_p33_2.png",
-          "page": 33,
-          "width": 1687,
-          "height": 630
         }
       ],
       "pages": [
@@ -1193,7 +1223,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q29_p33_2.png",
+          "path": "data/images/q29_p33_2.png",
+          "page": 33,
+          "width": 1687,
+          "height": 630
+        }
+      ]
     },
     {
       "id": 30,
@@ -1226,7 +1265,8 @@
       "images": [],
       "pages": [
         34
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 31,
@@ -1259,7 +1299,8 @@
       "images": [],
       "pages": [
         35
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 32,
@@ -1292,7 +1333,8 @@
       "images": [],
       "pages": [
         36
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 33,
@@ -1310,13 +1352,6 @@
           "page": 37,
           "width": 1036,
           "height": 946
-        },
-        {
-          "filename": "q33_p37_2.png",
-          "path": "data/images/q33_p37_2.png",
-          "page": 37,
-          "width": 1058,
-          "height": 950
         }
       ],
       "pages": [
@@ -1349,7 +1384,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q33_p37_2.png",
+          "path": "data/images/q33_p37_2.png",
+          "page": 37,
+          "width": 1058,
+          "height": 950
+        }
+      ]
     },
     {
       "id": 34,
@@ -1382,7 +1426,8 @@
       "images": [],
       "pages": [
         38
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 35,
@@ -1415,7 +1460,8 @@
       "images": [],
       "pages": [
         39
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 36,
@@ -1433,13 +1479,6 @@
           "page": 40,
           "width": 1599,
           "height": 451
-        },
-        {
-          "filename": "q36_p40_2.png",
-          "path": "data/images/q36_p40_2.png",
-          "page": 40,
-          "width": 1583,
-          "height": 420
         }
       ],
       "pages": [
@@ -1465,7 +1504,16 @@
           "Single-file task in pro mode",
           "Single-file task in standard mode"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q36_p40_2.png",
+          "path": "data/images/q36_p40_2.png",
+          "page": 40,
+          "width": 1583,
+          "height": 420
+        }
+      ]
     },
     {
       "id": 37,
@@ -1490,7 +1538,8 @@
       "images": [],
       "pages": [
         41
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 38,
@@ -1515,7 +1564,8 @@
       "images": [],
       "pages": [
         42
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 39,
@@ -1540,7 +1590,8 @@
       "images": [],
       "pages": [
         42
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 40,
@@ -1565,7 +1616,8 @@
       "images": [],
       "pages": [
         43
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 41,
@@ -1598,7 +1650,8 @@
       "images": [],
       "pages": [
         43
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 42,
@@ -1631,7 +1684,8 @@
       "images": [],
       "pages": [
         44
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 43,
@@ -1680,7 +1734,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q44_p46_1.png",
+          "path": "data/images/q44_p46_1.png",
+          "page": 46,
+          "width": 1214,
+          "height": 602
+        }
+      ]
     },
     {
       "id": 44,
@@ -1706,18 +1769,11 @@
         "A"
       ],
       "explanation": "Correct Answer: \nA. Create and reuse a conversation by storing the conversation’s ID and supplying the ID on subsequent \nrequests. \nMicrosoft Foundry Agent Service maintains the complete conversation history within a conversation \n(thread). By storing the conversation ID and supplying it on subsequent requests, the agent automatically \nreloads the entire interaction history, including user messages, agent responses, tool calls, and tool \noutputs. This provides both multi-turn continuity and cross-session continuity, allowing users to resume a \nsupport case days later without manually rebuilding the context. \n \nIncorrect Answers: \nB. Persist only the final model response stored in the client application and prepend the response to \nfuture prompts. \nStoring only the final response loses the complete conversation history, including earlier messages, tool \ncalls, and tool outputs. \nC. Enable memory summarization on the agent definition to persist the context automatically. \nMemory summarization stores condensed information rather than the complete interaction history. It does \nnot guarantee that every user message, agent message, tool call, and tool output will be available when the \nconversation resumes.",
-      "images": [
-        {
-          "filename": "q44_p46_1.png",
-          "path": "data/images/q44_p46_1.png",
-          "page": 46,
-          "width": 1214,
-          "height": 602
-        }
-      ],
+      "images": [],
       "pages": [
         46
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 45,
@@ -1750,7 +1806,8 @@
       "images": [],
       "pages": [
         47
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 46,
@@ -1793,7 +1850,16 @@
           "Single-file task in pro mode",
           "Single-file task in standard mode"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q47_p49_1.png",
+          "path": "data/images/q47_p49_1.png",
+          "page": 49,
+          "width": 1583,
+          "height": 420
+        }
+      ]
     },
     {
       "id": 47,
@@ -1823,18 +1889,11 @@
         "D"
       ],
       "explanation": "Correct Answer: \nD. token usage \nToken usage provides detailed insights into the number of input tokens, output tokens, and tokens consumed \nduring tool calls. Since user traffic has remained unchanged but operational costs have increased, the most \nlikely cause is that requests or responses have become larger or that the agent is using more tools. Token \nusage metrics allow you to determine whether the increase in cost is driven by larger prompts, longer model \nresponses, or expanded tool usage, making it the correct observability capability for this scenario. \n \nIncorrect Answers: \nA. latency \nLatency measures how long requests take to complete. It does not explain increases in token consumption or \noperational costs. \nB. evaluation metrics \nEvaluation metrics assess response quality, such as groundedness, fluency, or similarity. They do not \nmeasure the factors that drive model costs. \nC. run success rate \nRun success rate indicates whether agent runs complete successfully. It does not provide information about \ntoken consumption or cost increases.",
-      "images": [
-        {
-          "filename": "q47_p49_1.png",
-          "path": "data/images/q47_p49_1.png",
-          "page": 49,
-          "width": 1583,
-          "height": 420
-        }
-      ],
+      "images": [],
       "pages": [
         49
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 48,
@@ -1867,7 +1926,8 @@
       "images": [],
       "pages": [
         50
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 49,
@@ -1885,13 +1945,6 @@
           "page": 51,
           "width": 1769,
           "height": 656
-        },
-        {
-          "filename": "q49_p51_2.png",
-          "path": "data/images/q49_p51_2.png",
-          "page": 51,
-          "width": 1739,
-          "height": 647
         }
       ],
       "pages": [
@@ -1923,7 +1976,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q49_p51_2.png",
+          "path": "data/images/q49_p51_2.png",
+          "page": 51,
+          "width": 1739,
+          "height": 647
+        }
+      ]
     },
     {
       "id": 50,
@@ -1956,7 +2018,8 @@
       "images": [],
       "pages": [
         52
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 51,
@@ -1989,7 +2052,8 @@
       "images": [],
       "pages": [
         53
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 52,
@@ -2022,7 +2086,8 @@
       "images": [],
       "pages": [
         54
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 53,
@@ -2039,13 +2104,6 @@
           "path": "data/images/q53_p55_1.png",
           "page": 55,
           "width": 1734,
-          "height": 990
-        },
-        {
-          "filename": "q53_p55_2.png",
-          "path": "data/images/q53_p55_2.png",
-          "page": 55,
-          "width": 1713,
           "height": 990
         }
       ],
@@ -2078,7 +2136,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q53_p55_2.png",
+          "path": "data/images/q53_p55_2.png",
+          "page": 55,
+          "width": 1713,
+          "height": 990
+        }
+      ]
     },
     {
       "id": 54,
@@ -2111,7 +2178,8 @@
       "images": [],
       "pages": [
         56
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 55,
@@ -2144,7 +2212,8 @@
       "images": [],
       "pages": [
         57
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 56,
@@ -2162,13 +2231,6 @@
           "page": 58,
           "width": 1701,
           "height": 448
-        },
-        {
-          "filename": "q56_p58_2.png",
-          "path": "data/images/q56_p58_2.png",
-          "page": 58,
-          "width": 1746,
-          "height": 453
         }
       ],
       "pages": [
@@ -2194,7 +2256,16 @@
           "Risk and safety metrics",
           "Token usage analytics"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q56_p58_2.png",
+          "path": "data/images/q56_p58_2.png",
+          "page": 58,
+          "width": 1746,
+          "height": 453
+        }
+      ]
     },
     {
       "id": 57,
@@ -2227,7 +2298,8 @@
       "images": [],
       "pages": [
         59
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 58,
@@ -2260,7 +2332,8 @@
       "images": [],
       "pages": [
         60
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 59,
@@ -2278,13 +2351,6 @@
           "page": 61,
           "width": 1422,
           "height": 899
-        },
-        {
-          "filename": "q59_p61_2.png",
-          "path": "data/images/q59_p61_2.png",
-          "page": 61,
-          "width": 1120,
-          "height": 799
         }
       ],
       "pages": [
@@ -2316,7 +2382,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q59_p61_2.png",
+          "path": "data/images/q59_p61_2.png",
+          "page": 61,
+          "width": 1120,
+          "height": 799
+        }
+      ]
     },
     {
       "id": 60,
@@ -2349,7 +2424,8 @@
       "images": [],
       "pages": [
         62
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 61,
@@ -2382,7 +2458,8 @@
       "images": [],
       "pages": [
         63
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 62,
@@ -2415,7 +2492,8 @@
       "images": [],
       "pages": [
         64
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 63,
@@ -2433,13 +2511,6 @@
           "page": 65,
           "width": 1807,
           "height": 939
-        },
-        {
-          "filename": "q63_p66_1.png",
-          "path": "data/images/q63_p66_1.png",
-          "page": 66,
-          "width": 1795,
-          "height": 934
         }
       ],
       "pages": [
@@ -2472,7 +2543,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q63_p66_1.png",
+          "path": "data/images/q63_p66_1.png",
+          "page": 66,
+          "width": 1795,
+          "height": 934
+        }
+      ]
     },
     {
       "id": 64,
@@ -2505,7 +2585,8 @@
       "images": [],
       "pages": [
         67
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 65,
@@ -2538,7 +2619,8 @@
       "images": [],
       "pages": [
         68
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 66,
@@ -2556,13 +2638,6 @@
           "page": 69,
           "width": 1771,
           "height": 451
-        },
-        {
-          "filename": "q66_p69_2.png",
-          "path": "data/images/q66_p69_2.png",
-          "page": 69,
-          "width": 1823,
-          "height": 444
         }
       ],
       "pages": [
@@ -2590,7 +2665,16 @@
           "Prompt traces",
           "Relevance Evaluation"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q66_p69_2.png",
+          "path": "data/images/q66_p69_2.png",
+          "page": 69,
+          "width": 1823,
+          "height": 444
+        }
+      ]
     },
     {
       "id": 67,
@@ -2623,7 +2707,8 @@
       "images": [],
       "pages": [
         70
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 68,
@@ -2656,7 +2741,8 @@
       "images": [],
       "pages": [
         71
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 69,
@@ -2674,13 +2760,6 @@
           "page": 72,
           "width": 1625,
           "height": 908
-        },
-        {
-          "filename": "q69_p72_2.png",
-          "path": "data/images/q69_p72_2.png",
-          "page": 72,
-          "width": 1690,
-          "height": 817
         }
       ],
       "pages": [
@@ -2712,7 +2791,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q69_p72_2.png",
+          "path": "data/images/q69_p72_2.png",
+          "page": 72,
+          "width": 1690,
+          "height": 817
+        }
+      ]
     },
     {
       "id": 70,
@@ -2750,7 +2838,8 @@
       "images": [],
       "pages": [
         73
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 71,
@@ -2783,7 +2872,8 @@
       "images": [],
       "pages": [
         74
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 72,
@@ -2816,7 +2906,8 @@
       "images": [],
       "pages": [
         75
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 73,
@@ -2833,13 +2924,6 @@
           "path": "data/images/q73_p76_1.png",
           "page": 76,
           "width": 1790,
-          "height": 652
-        },
-        {
-          "filename": "q73_p76_2.png",
-          "path": "data/images/q73_p76_2.png",
-          "page": 76,
-          "width": 1723,
           "height": 652
         }
       ],
@@ -2872,7 +2956,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q73_p76_2.png",
+          "path": "data/images/q73_p76_2.png",
+          "page": 76,
+          "width": 1723,
+          "height": 652
+        }
+      ]
     },
     {
       "id": 74,
@@ -2905,7 +2998,8 @@
       "images": [],
       "pages": [
         77
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 75,
@@ -2938,7 +3032,8 @@
       "images": [],
       "pages": [
         78
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 76,
@@ -2956,13 +3051,6 @@
           "page": 79,
           "width": 1851,
           "height": 458
-        },
-        {
-          "filename": "q76_p79_2.png",
-          "path": "data/images/q76_p79_2.png",
-          "page": 79,
-          "width": 1842,
-          "height": 455
         }
       ],
       "pages": [
@@ -2994,7 +3082,16 @@
           "Grounding with Bing Search",
           "Microsoft Fabric"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q76_p79_2.png",
+          "path": "data/images/q76_p79_2.png",
+          "page": 79,
+          "width": 1842,
+          "height": 455
+        }
+      ]
     },
     {
       "id": 77,
@@ -3027,7 +3124,8 @@
       "images": [],
       "pages": [
         80
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 78,
@@ -3060,7 +3158,8 @@
       "images": [],
       "pages": [
         81
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 79,
@@ -3078,13 +3177,6 @@
           "page": 82,
           "width": 1461,
           "height": 628
-        },
-        {
-          "filename": "q79_p82_2.png",
-          "path": "data/images/q79_p82_2.png",
-          "page": 82,
-          "width": 1382,
-          "height": 654
         }
       ],
       "pages": [
@@ -3116,7 +3208,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q79_p82_2.png",
+          "path": "data/images/q79_p82_2.png",
+          "page": 82,
+          "width": 1382,
+          "height": 654
+        }
+      ]
     },
     {
       "id": 80,
@@ -3149,7 +3250,8 @@
       "images": [],
       "pages": [
         83
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 81,
@@ -3182,7 +3284,8 @@
       "images": [],
       "pages": [
         84
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 82,
@@ -3215,7 +3318,8 @@
       "images": [],
       "pages": [
         85
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 83,
@@ -3233,13 +3337,6 @@
           "page": 86,
           "width": 1391,
           "height": 654
-        },
-        {
-          "filename": "q83_p86_2.png",
-          "path": "data/images/q83_p86_2.png",
-          "page": 86,
-          "width": 1361,
-          "height": 652
         }
       ],
       "pages": [
@@ -3271,7 +3368,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q83_p86_2.png",
+          "path": "data/images/q83_p86_2.png",
+          "page": 86,
+          "width": 1361,
+          "height": 652
+        }
+      ]
     },
     {
       "id": 84,
@@ -3304,7 +3410,8 @@
       "images": [],
       "pages": [
         87
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 85,
@@ -3337,7 +3444,8 @@
       "images": [],
       "pages": [
         88
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 86,
@@ -3355,13 +3463,6 @@
           "page": 89,
           "width": 1785,
           "height": 483
-        },
-        {
-          "filename": "q86_p89_2.png",
-          "path": "data/images/q86_p89_2.png",
-          "page": 89,
-          "width": 1795,
-          "height": 453
         }
       ],
       "pages": [
@@ -3393,7 +3494,16 @@
           "Grounding with Bing Search",
           "Microsoft Fabric"
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q86_p89_2.png",
+          "path": "data/images/q86_p89_2.png",
+          "page": 89,
+          "width": 1795,
+          "height": 453
+        }
+      ]
     },
     {
       "id": 87,
@@ -3426,7 +3536,8 @@
       "images": [],
       "pages": [
         90
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 88,
@@ -3459,7 +3570,8 @@
       "images": [],
       "pages": [
         91
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 89,
@@ -3477,13 +3589,6 @@
           "page": 92,
           "width": 1475,
           "height": 773
-        },
-        {
-          "filename": "q89_p92_2.png",
-          "path": "data/images/q89_p92_2.png",
-          "page": 92,
-          "width": 1435,
-          "height": 780
         }
       ],
       "pages": [
@@ -3515,7 +3620,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q89_p92_2.png",
+          "path": "data/images/q89_p92_2.png",
+          "page": 92,
+          "width": 1435,
+          "height": 780
+        }
+      ]
     },
     {
       "id": 90,
@@ -3544,7 +3658,8 @@
       "images": [],
       "pages": [
         93
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 91,
@@ -3577,7 +3692,8 @@
       "images": [],
       "pages": [
         94
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 92,
@@ -3610,7 +3726,8 @@
       "images": [],
       "pages": [
         95
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 93,
@@ -3628,13 +3745,6 @@
           "page": 96,
           "width": 1711,
           "height": 985
-        },
-        {
-          "filename": "q93_p97_1.png",
-          "path": "data/images/q93_p97_1.png",
-          "page": 97,
-          "width": 1158,
-          "height": 683
         }
       ],
       "pages": [
@@ -3667,7 +3777,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q93_p97_1.png",
+          "path": "data/images/q93_p97_1.png",
+          "page": 97,
+          "width": 1158,
+          "height": 683
+        }
+      ]
     },
     {
       "id": 94,
@@ -3700,7 +3819,8 @@
       "images": [],
       "pages": [
         98
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 95,
@@ -3733,7 +3853,8 @@
       "images": [],
       "pages": [
         99
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 96,
@@ -3766,7 +3887,8 @@
       "images": [],
       "pages": [
         100
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 97,
@@ -3791,7 +3913,8 @@
       "images": [],
       "pages": [
         101
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 98,
@@ -3816,7 +3939,8 @@
       "images": [],
       "pages": [
         101
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 99,
@@ -3841,7 +3965,8 @@
       "images": [],
       "pages": [
         102
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 100,
@@ -3866,7 +3991,8 @@
       "images": [],
       "pages": [
         102
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 101,
@@ -3904,7 +4030,8 @@
       "images": [],
       "pages": [
         103
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 102,
@@ -3937,7 +4064,8 @@
       "images": [],
       "pages": [
         104
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 103,
@@ -3955,13 +4083,6 @@
           "page": 105,
           "width": 1150,
           "height": 534
-        },
-        {
-          "filename": "q103_p105_2.jpg",
-          "path": "data/images/q103_p105_2.jpg",
-          "page": 105,
-          "width": 1122,
-          "height": 554
         }
       ],
       "pages": [
@@ -3983,7 +4104,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q103_p105_2.jpg",
+          "path": "data/images/q103_p105_2.jpg",
+          "page": 105,
+          "width": 1122,
+          "height": 554
+        }
+      ]
     },
     {
       "id": 104,
@@ -4021,7 +4151,8 @@
       "images": [],
       "pages": [
         106
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 105,
@@ -4039,13 +4170,6 @@
           "page": 107,
           "width": 693,
           "height": 421
-        },
-        {
-          "filename": "q105_p107_2.jpg",
-          "path": "data/images/q105_p107_2.jpg",
-          "page": 107,
-          "width": 681,
-          "height": 396
         }
       ],
       "pages": [
@@ -4077,7 +4201,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q105_p107_2.jpg",
+          "path": "data/images/q105_p107_2.jpg",
+          "page": 107,
+          "width": 681,
+          "height": 396
+        }
+      ]
     },
     {
       "id": 106,
@@ -4110,7 +4243,8 @@
       "images": [],
       "pages": [
         108
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 107,
@@ -4152,7 +4286,16 @@
             "answer": "Yes"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q108_p110_1.jpg",
+          "path": "data/images/q108_p110_1.jpg",
+          "page": 110,
+          "width": 1829,
+          "height": 537
+        }
+      ]
     },
     {
       "id": 108,
@@ -4182,19 +4325,12 @@
         "C"
       ],
       "explanation": "Correct Answer: \nC. Decrease the temperature parameter \nThis is correct because temperature controls randomness in model output. Lowering the temperature makes \nresponses more deterministic and consistent for identical prompts, which is essential for automated testing \nscenarios without impacting factual accuracy. \n \nIncorrect Answers: \nA. Increase the max_tokens parameter \nThis only affects response length, not variability or consistency. \nB. Remove stop sequences from the requests \nStop sequences control where responses end, not how deterministic they are. \nD. Increase the temperature parameter \nHigher temperature increases randomness, leading to more variability and inconsistent outputs.",
-      "images": [
-        {
-          "filename": "q108_p110_1.jpg",
-          "path": "data/images/q108_p110_1.jpg",
-          "page": 110,
-          "width": 1829,
-          "height": 537
-        }
-      ],
+      "images": [],
       "pages": [
         110,
         111
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 109,
@@ -4212,13 +4348,6 @@
           "page": 112,
           "width": 1764,
           "height": 576
-        },
-        {
-          "filename": "q109_p112_2.jpg",
-          "path": "data/images/q109_p112_2.jpg",
-          "page": 112,
-          "width": 1723,
-          "height": 913
         }
       ],
       "pages": [
@@ -4250,7 +4379,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q109_p112_2.jpg",
+          "path": "data/images/q109_p112_2.jpg",
+          "page": 112,
+          "width": 1723,
+          "height": 913
+        }
+      ]
     },
     {
       "id": 110,
@@ -4283,7 +4421,8 @@
       "images": [],
       "pages": [
         113
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 111,
@@ -4316,7 +4455,8 @@
       "images": [],
       "pages": [
         114
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 112,
@@ -4349,7 +4489,8 @@
       "images": [],
       "pages": [
         114
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 113,
@@ -4398,7 +4539,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q114_p116_1.jpg",
+          "path": "data/images/q114_p116_1.jpg",
+          "page": 116,
+          "width": 1758,
+          "height": 523
+        }
+      ]
     },
     {
       "id": 114,
@@ -4428,18 +4578,11 @@
         "B"
       ],
       "explanation": "Correct Answer: \nB. prebuilt-documentSearch \nThis is correct because prebuilt-documentSearch is optimized for RAG scenarios, producing structured \nMarkdown output with semantic organization suitable for indexing and retrieval. It preserves layout elements \nlike tables and links while formatting content for efficient downstream search and grounding. \n \nIncorrect Answers: \nA. prebuilt-documentFieldSchema \nUsed for structured field extraction, not for generating RAG-optimized Markdown output. \nC. prebuilt-read \nExtracts raw text without preserving layout or semantic structure needed for RAG. \nD. prebuilt-layout \nCaptures layout elements but does not produce semantically optimized Markdown for retrieval workflows.",
-      "images": [
-        {
-          "filename": "q114_p116_1.jpg",
-          "path": "data/images/q114_p116_1.jpg",
-          "page": 116,
-          "width": 1758,
-          "height": 523
-        }
-      ],
+      "images": [],
       "pages": [
         116
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 115,
@@ -4488,7 +4631,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q116_p118_1.jpg",
+          "path": "data/images/q116_p118_1.jpg",
+          "page": 118,
+          "width": 1141,
+          "height": 438
+        }
+      ]
     },
     {
       "id": 116,
@@ -4518,18 +4670,11 @@
         "A"
       ],
       "explanation": "Correct Answer: \nA. vector search \nThis is correct because vector search enables semantic similarity matching by converting text into \nembeddings and retrieving content based on meaning rather than exact keywords. This ensures that user \nqueries with different wording still match relevant content from product manuals. \n \nIncorrect Answers: \nB. semantic ranking \nThis improves ranking of already retrieved results but does not perform semantic retrieval itself. \nC. suggesters \nUsed for autocomplete and search suggestions, not for semantic matching. \nD. analyzers \nUsed for text processing like tokenization, not for semantic similarity search.",
-      "images": [
-        {
-          "filename": "q116_p118_1.jpg",
-          "path": "data/images/q116_p118_1.jpg",
-          "page": 118,
-          "width": 1141,
-          "height": 438
-        }
-      ],
+      "images": [],
       "pages": [
         118
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 117,
@@ -4547,13 +4692,6 @@
           "page": 119,
           "width": 1452,
           "height": 306
-        },
-        {
-          "filename": "q117_p119_2.jpg",
-          "path": "data/images/q117_p119_2.jpg",
-          "page": 119,
-          "width": 1181,
-          "height": 526
         }
       ],
       "pages": [
@@ -4578,7 +4716,16 @@
             "answer": "No"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q118_p120_1.jpg",
+          "path": "data/images/q118_p120_1.jpg",
+          "page": 120,
+          "width": 1204,
+          "height": 555
+        }
+      ]
     },
     {
       "id": 118,
@@ -4608,18 +4755,11 @@
         "B"
       ],
       "explanation": "Correct Answer: \nB. hybrid search \nThis is correct because hybrid search combines keyword search for exact matches on product names and \ncodes with vector search for semantic similarity on product descriptions. This ensures both precise lookups \nand natural language queries are handled effectively in a single query. \n \nIncorrect Answers: \nA. vector search only \nThis supports semantic queries but does not handle exact keyword matches efficiently. \nC. keyword search only \nThis works for exact matches but cannot handle natural language or semantic similarity. \nD. semantic search only \nSemantic ranking enhances results but does not combine keyword and vector retrieval like hybrid search.",
-      "images": [
-        {
-          "filename": "q118_p120_1.jpg",
-          "path": "data/images/q118_p120_1.jpg",
-          "page": 120,
-          "width": 1204,
-          "height": 555
-        }
-      ],
+      "images": [],
       "pages": [
         120
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 119,
@@ -4637,13 +4777,6 @@
           "page": 122,
           "width": 1177,
           "height": 1336
-        },
-        {
-          "filename": "q119_p123_1.jpg",
-          "path": "data/images/q119_p123_1.jpg",
-          "page": 123,
-          "width": 1160,
-          "height": 1355
         }
       ],
       "pages": [
@@ -4677,7 +4810,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q119_p123_1.jpg",
+          "path": "data/images/q119_p123_1.jpg",
+          "page": 123,
+          "width": 1160,
+          "height": 1355
+        }
+      ]
     },
     {
       "id": 120,
@@ -4710,7 +4852,8 @@
       "images": [],
       "pages": [
         124
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 121,
@@ -4743,7 +4886,8 @@
       "images": [],
       "pages": [
         125
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 122,
@@ -4776,7 +4920,8 @@
       "images": [],
       "pages": [
         125
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 123,
@@ -4794,13 +4939,6 @@
           "page": 127,
           "width": 1179,
           "height": 479
-        },
-        {
-          "filename": "q123_p127_2.jpg",
-          "path": "data/images/q123_p127_2.jpg",
-          "page": 127,
-          "width": 1625,
-          "height": 566
         }
       ],
       "pages": [
@@ -4833,7 +4971,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q123_p127_2.jpg",
+          "path": "data/images/q123_p127_2.jpg",
+          "page": 127,
+          "width": 1625,
+          "height": 566
+        }
+      ]
     },
     {
       "id": 124,
@@ -4866,7 +5013,8 @@
       "images": [],
       "pages": [
         128
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 125,
@@ -4883,13 +5031,6 @@
           "path": "data/images/q125_p129_1.jpg",
           "page": 129,
           "width": 945,
-          "height": 472
-        },
-        {
-          "filename": "q125_p129_2.jpg",
-          "path": "data/images/q125_p129_2.jpg",
-          "page": 129,
-          "width": 968,
           "height": 472
         }
       ],
@@ -4923,7 +5064,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q125_p129_2.jpg",
+          "path": "data/images/q125_p129_2.jpg",
+          "page": 129,
+          "width": 968,
+          "height": 472
+        }
+      ]
     },
     {
       "id": 126,
@@ -4956,7 +5106,8 @@
       "images": [],
       "pages": [
         130
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 127,
@@ -4974,20 +5125,6 @@
           "page": 131,
           "width": 1201,
           "height": 1310
-        },
-        {
-          "filename": "q127_p132_1.jpg",
-          "path": "data/images/q127_p132_1.jpg",
-          "page": 132,
-          "width": 986,
-          "height": 475
-        },
-        {
-          "filename": "q127_p132_2.jpg",
-          "path": "data/images/q127_p132_2.jpg",
-          "page": 132,
-          "width": 1004,
-          "height": 516
         }
       ],
       "pages": [
@@ -5013,7 +5150,16 @@
             "answer": "Yes"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q127_p132_2.jpg",
+          "path": "data/images/q127_p132_2.jpg",
+          "page": 132,
+          "width": 1004,
+          "height": 516
+        }
+      ]
     },
     {
       "id": 128,
@@ -5046,7 +5192,8 @@
       "images": [],
       "pages": [
         133
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 129,
@@ -5064,13 +5211,6 @@
           "page": 134,
           "width": 1566,
           "height": 1005
-        },
-        {
-          "filename": "q129_p134_2.jpg",
-          "path": "data/images/q129_p134_2.jpg",
-          "page": 134,
-          "width": 1558,
-          "height": 1009
         }
       ],
       "pages": [
@@ -5103,7 +5243,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q129_p134_2.jpg",
+          "path": "data/images/q129_p134_2.jpg",
+          "page": 134,
+          "width": 1558,
+          "height": 1009
+        }
+      ]
     },
     {
       "id": 130,
@@ -5136,7 +5285,8 @@
       "images": [],
       "pages": [
         135
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 131,
@@ -5169,7 +5319,8 @@
       "images": [],
       "pages": [
         136
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 132,
@@ -5202,7 +5353,8 @@
       "images": [],
       "pages": [
         137
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 133,
@@ -5220,13 +5372,6 @@
           "page": 138,
           "width": 1387,
           "height": 1134
-        },
-        {
-          "filename": "q133_p138_2.jpg",
-          "path": "data/images/q133_p138_2.jpg",
-          "page": 138,
-          "width": 1383,
-          "height": 1137
         }
       ],
       "pages": [
@@ -5259,7 +5404,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q133_p138_2.jpg",
+          "path": "data/images/q133_p138_2.jpg",
+          "page": 138,
+          "width": 1383,
+          "height": 1137
+        }
+      ]
     },
     {
       "id": 134,
@@ -5292,7 +5446,8 @@
       "images": [],
       "pages": [
         139
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 135,
@@ -5310,13 +5465,6 @@
           "page": 140,
           "width": 991,
           "height": 457
-        },
-        {
-          "filename": "q135_p140_2.jpg",
-          "path": "data/images/q135_p140_2.jpg",
-          "page": 140,
-          "width": 1014,
-          "height": 446
         }
       ],
       "pages": [
@@ -5362,7 +5510,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q135_p140_2.jpg",
+          "path": "data/images/q135_p140_2.jpg",
+          "page": 140,
+          "width": 1014,
+          "height": 446
+        }
+      ]
     },
     {
       "id": 136,
@@ -5395,7 +5552,8 @@
       "images": [],
       "pages": [
         141
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 137,
@@ -5428,7 +5586,8 @@
       "images": [],
       "pages": [
         142
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 138,
@@ -5465,7 +5624,8 @@
       "images": [],
       "pages": [
         143
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 139,
@@ -5483,13 +5643,6 @@
           "page": 144,
           "width": 1375,
           "height": 831
-        },
-        {
-          "filename": "q139_p145_1.jpg",
-          "path": "data/images/q139_p145_1.jpg",
-          "page": 145,
-          "width": 1403,
-          "height": 755
         }
       ],
       "pages": [
@@ -5522,7 +5675,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q139_p145_1.jpg",
+          "path": "data/images/q139_p145_1.jpg",
+          "page": 145,
+          "width": 1403,
+          "height": 755
+        }
+      ]
     },
     {
       "id": 140,
@@ -5555,7 +5717,8 @@
       "images": [],
       "pages": [
         146
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 141,
@@ -5573,13 +5736,6 @@
           "page": 147,
           "width": 668,
           "height": 449
-        },
-        {
-          "filename": "q141_p147_2.jpg",
-          "path": "data/images/q141_p147_2.jpg",
-          "page": 147,
-          "width": 719,
-          "height": 478
         }
       ],
       "pages": [
@@ -5611,7 +5767,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q141_p147_2.jpg",
+          "path": "data/images/q141_p147_2.jpg",
+          "page": 147,
+          "width": 719,
+          "height": 478
+        }
+      ]
     },
     {
       "id": 142,
@@ -5644,7 +5809,8 @@
       "images": [],
       "pages": [
         148
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 143,
@@ -5662,13 +5828,6 @@
           "page": 149,
           "width": 1749,
           "height": 899
-        },
-        {
-          "filename": "q143_p149_2.jpg",
-          "path": "data/images/q143_p149_2.jpg",
-          "page": 149,
-          "width": 1018,
-          "height": 515
         }
       ],
       "pages": [
@@ -5703,7 +5862,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q144_p150_1.jpg",
+          "path": "data/images/q144_p150_1.jpg",
+          "page": 150,
+          "width": 1013,
+          "height": 513
+        }
+      ]
     },
     {
       "id": 144,
@@ -5743,18 +5911,11 @@
         "F"
       ],
       "explanation": "Correct Answer: \nA. Add allowed groups to each index entry \nTo enable document-level security, each document in the index must include metadata indicating which \ngroups are allowed to access it. This allows filtering results based on user permissions. \nE. Retrieve the group memberships of the user \nThe application must determine which groups the current user belongs to. This is typically done using \nMicrosoft Entra ID so that access decisions can be enforced dynamically. \nF . Supply the groups as a filter for the search requests \nWhen performing a search, the user’s group memberships are passed as a filter query. Azure AI Search uses \nthis filter to return only documents that the user is authorized to access. \n \nIncorrect answers: \nB. Create one index per group. \nThis is not scalable and is not how document-level security is implemented in Azure AI Search. \nC. Send access tokens from Microsoft Entra ID, with the search request. \nWhile authentication is required, tokens alone do not enforce document-level filtering within the index. \nD. Retrieve all the groups. \nRetrieving all groups is unnecessary; only the groups relevant to the current user are required.",
-      "images": [
-        {
-          "filename": "q144_p150_1.jpg",
-          "path": "data/images/q144_p150_1.jpg",
-          "page": 150,
-          "width": 1013,
-          "height": 513
-        }
-      ],
+      "images": [],
       "pages": [
         150
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 145,
@@ -5820,7 +5981,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q146_p152_1.jpg",
+          "path": "data/images/q146_p152_1.jpg",
+          "page": 152,
+          "width": 848,
+          "height": 480
+        }
+      ]
     },
     {
       "id": 146,
@@ -5850,18 +6020,11 @@
         "C"
       ],
       "explanation": "Correct Answer: \nC. Azure Content Understanding \nAzure Content Understanding is the only built-in multimodal skill that fully satisfies all the requirements in the \nscenario. It provides bounding polygon metadata for both text and images, enabling precise page-level \ncitations. Additionally, it supports cross-page table extraction, reconstructing tables that span multiple pages \ninto a single coherent structure. This makes it ideal for processing complex PDF documents such as policy \nmanuals while preserving layout and semantic structure. \n \nIncorrect answers: \nA. Document Layout \nProvides text layout and bounding polygons for text, but does not provide bounding polygons for images and \ndoes not correctly handle tables that span multiple pages. \nB. Document Extraction \nPerforms basic extraction of content but does not provide detailed layout metadata such as bounding \npolygons or advanced table reconstruction. \nD. GenAI Prompt \nUsed for generative AI tasks like summarization or transformation, not for extracting structured layout or \npositional metadata from documents.",
-      "images": [
-        {
-          "filename": "q146_p152_1.jpg",
-          "path": "data/images/q146_p152_1.jpg",
-          "page": 152,
-          "width": 848,
-          "height": 480
-        }
-      ],
+      "images": [],
       "pages": [
         152
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 147,
@@ -5894,7 +6057,8 @@
       "images": [],
       "pages": [
         153
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 148,
@@ -5910,13 +6074,6 @@
           "filename": "q148_p155_1.jpg",
           "path": "data/images/q148_p155_1.jpg",
           "page": 155,
-          "width": 1345,
-          "height": 1170
-        },
-        {
-          "filename": "q148_p156_1.jpg",
-          "path": "data/images/q148_p156_1.jpg",
-          "page": 156,
           "width": 1345,
           "height": 1170
         }
@@ -5962,7 +6119,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q148_p156_1.jpg",
+          "path": "data/images/q148_p156_1.jpg",
+          "page": 156,
+          "width": 1345,
+          "height": 1170
+        }
+      ]
     },
     {
       "id": 149,
@@ -6003,7 +6169,8 @@
       ],
       "pages": [
         157
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 150,
@@ -6044,7 +6211,8 @@
       ],
       "pages": [
         158
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 151,
@@ -6062,13 +6230,6 @@
           "page": 159,
           "width": 1928,
           "height": 705
-        },
-        {
-          "filename": "q151_p159_2.jpg",
-          "path": "data/images/q151_p159_2.jpg",
-          "page": 159,
-          "width": 1952,
-          "height": 686
         }
       ],
       "pages": [
@@ -6093,7 +6254,16 @@
             "answer": "Yes"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q152_p160_1.jpg",
+          "path": "data/images/q152_p160_1.jpg",
+          "page": 160,
+          "width": 1948,
+          "height": 669
+        }
+      ]
     },
     {
       "id": 152,
@@ -6106,22 +6276,8 @@
       "explanation": "Model evaluation → Use model catalog leaderboards and model cards. \nModel catalog leaderboards and model cards provide information that helps compare candidate models \nbased on factors such as quality, cost, and throughput. This allows you to select an appropriate model \nbefore deploying it. \nDeployment option → Use a serverless deployment. \nA serverless deployment provides access to the model through an API without hosting the model weights \ndirectly in your Azure subscription. The model is hosted and managed by the model provider, helping satisfy \nthe requirement to prevent model weights from being hosted in your Azure environment. \n \n\n \nIncorrect Answers: \nConfigure private endpoint access. \nThis controls network access to resources; it does not provide model comparison information or determine \nwhere model weights are hosted. \nUse deployment lists and license tabs. \nThese provide deployment and licensing information but are not the primary mechanism for comparing \nmodel quality, cost, and throughput. \nUse tool catalog connections and run traces. \nThese relate to tools and application observability, not model evaluation or serverless model hosting. \nBring your own model. \nThis involves supplying and hosting your own model, which does not meet the requirement to avoid hosting \nmodel weights in the Azure subscription. \nBuild a vector index. \nA vector index is used for semantic/vector search and retrieval, not model evaluation or model deployment. \nUse a managed compute deployment. \nManaged compute deploys the model to compute resources in your Azure environment, so it does not meet \nthe requirement to prevent model weights from being hosted in the Azure subscription.",
       "images": [
         {
-          "filename": "q152_p160_1.jpg",
-          "path": "data/images/q152_p160_1.jpg",
-          "page": 160,
-          "width": 1948,
-          "height": 669
-        },
-        {
           "filename": "q152_p161_1.jpg",
           "path": "data/images/q152_p161_1.jpg",
-          "page": 161,
-          "width": 1854,
-          "height": 848
-        },
-        {
-          "filename": "q152_p161_2.jpg",
-          "path": "data/images/q152_p161_2.jpg",
           "page": 161,
           "width": 1854,
           "height": 848
@@ -6157,7 +6313,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q152_p161_2.jpg",
+          "path": "data/images/q152_p161_2.jpg",
+          "page": 161,
+          "width": 1854,
+          "height": 848
+        }
+      ]
     },
     {
       "id": 153,
@@ -6190,7 +6355,8 @@
       "images": [],
       "pages": [
         162
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 154,
@@ -6208,13 +6374,6 @@
           "page": 163,
           "width": 1692,
           "height": 665
-        },
-        {
-          "filename": "q154_p163_2.jpg",
-          "path": "data/images/q154_p163_2.jpg",
-          "page": 163,
-          "width": 1453,
-          "height": 526
         }
       ],
       "pages": [
@@ -6239,7 +6398,16 @@
             "answer": "Yes"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q155_p164_1.jpg",
+          "path": "data/images/q155_p164_1.jpg",
+          "page": 164,
+          "width": 1453,
+          "height": 506
+        }
+      ]
     },
     {
       "id": 155,
@@ -6269,18 +6437,11 @@
         "C"
       ],
       "explanation": "C. the deployment name, endpoint, and key\n\nTo connect an application to an Azure OpenAI model, the SDK needs three key pieces of information. The\n\nendpoint identifies the Azure OpenAI resource that the application should connect to, the key authenticates\n\nthe application to that resource, and the deployment name identifies the specific model deployment that the\n\napplication wants to use. In Azure OpenAI, applications generally call a deployment, rather than directly\n\nspecifying the underlying model name in the API request.\n\nIncorrect Answers:\n\nA. the deployment name, key, and model name\n\nThis is missing the endpoint, which tells the SDK where the Azure OpenAI resource is located. The model\n\nname is also not a substitute for the deployment name when making a request.\n\nB. the endpoint, key, and model type\n\nAlthough the endpoint and key are required, the SDK needs the deployment name to identify which\n\ndeployed model should process the request. The model type alone does not identify the specific deployment.\n\nD. the endpoint, key, and model name\n\nThe model name describes the underlying model, such as a particular GPT model, but Azure OpenAI\n\napplications target the deployment name when sending requests. Therefore, the deployment name is\n\nrequired instead of the model name.",
-      "images": [
-        {
-          "filename": "q155_p164_1.jpg",
-          "path": "data/images/q155_p164_1.jpg",
-          "page": 164,
-          "width": 1453,
-          "height": 506
-        }
-      ],
+      "images": [],
       "pages": [
         164
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 156,
@@ -6313,7 +6474,8 @@
       "images": [],
       "pages": [
         165
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 157,
@@ -6351,7 +6513,8 @@
       "images": [],
       "pages": [
         166
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 158,
@@ -6366,13 +6529,6 @@
         {
           "filename": "q158_p168_1.jpg",
           "path": "data/images/q158_p168_1.jpg",
-          "page": 168,
-          "width": 1560,
-          "height": 1008
-        },
-        {
-          "filename": "q158_p168_2.jpg",
-          "path": "data/images/q158_p168_2.jpg",
           "page": 168,
           "width": 1560,
           "height": 1008
@@ -6407,7 +6563,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q158_p168_2.jpg",
+          "path": "data/images/q158_p168_2.jpg",
+          "page": 168,
+          "width": 1560,
+          "height": 1008
+        }
+      ]
     },
     {
       "id": 159,
@@ -6440,7 +6605,8 @@
       "images": [],
       "pages": [
         169
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 160,
@@ -6458,13 +6624,6 @@
           "page": 170,
           "width": 1453,
           "height": 280
-        },
-        {
-          "filename": "q160_p170_2.jpg",
-          "path": "data/images/q160_p170_2.jpg",
-          "page": 170,
-          "width": 1453,
-          "height": 526
         }
       ],
       "pages": [
@@ -6489,7 +6648,16 @@
             "answer": "Yes"
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q161_p171_1.jpg",
+          "path": "data/images/q161_p171_1.jpg",
+          "page": 171,
+          "width": 1453,
+          "height": 526
+        }
+      ]
     },
     {
       "id": 161,
@@ -6519,18 +6687,11 @@
         "B"
       ],
       "explanation": "Correct Answer: \nB. Microsoft Foundry service \nA Microsoft Foundry service is the appropriate choice when an application needs to use multiple Foundry \nTools, such as Azure Speech and Azure Language, through a shared resource. A multi-service resource \nprovides a single endpoint and credential that can be used to access multiple supported AI services, \nreducing the need to provision and manage separate resources and credentials. Microsoft documentation \nconfirms that Azure AI multi-service resources support access to multiple Foundry Tools through a single \nendpoint and API key.  \n \nIncorrect Answers: \nA. Azure Language in Foundry Tools \nThis is a single-service resource intended for Language capabilities. It would not provide the required \nshared resource for both Speech and Language. \nC. Azure Speech in Foundry Tools \nSimilarly, an Azure Speech resource is focused on Speech capabilities. It does not provide the single shared \nendpoint and credential for both Speech and Language that the question requires. \nD. Content Safety in Foundry Control Plane \nContent Safety is used to detect and mitigate potentially harmful content. It is unrelated to provisioning a \nshared resource for the Speech and Language APIs.",
-      "images": [
-        {
-          "filename": "q161_p171_1.jpg",
-          "path": "data/images/q161_p171_1.jpg",
-          "page": 171,
-          "width": 1453,
-          "height": 526
-        }
-      ],
+      "images": [],
       "pages": [
         171
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 162,
@@ -6563,7 +6724,8 @@
       "images": [],
       "pages": [
         172
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 163,
@@ -6580,13 +6742,6 @@
           "path": "data/images/q163_p173_1.jpg",
           "page": 173,
           "width": 1807,
-          "height": 870
-        },
-        {
-          "filename": "q163_p174_1.jpg",
-          "path": "data/images/q163_p174_1.jpg",
-          "page": 174,
-          "width": 1808,
           "height": 870
         }
       ],
@@ -6640,7 +6795,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q163_p174_1.jpg",
+          "path": "data/images/q163_p174_1.jpg",
+          "page": 174,
+          "width": 1808,
+          "height": 870
+        }
+      ]
     },
     {
       "id": 164,
@@ -6655,13 +6819,6 @@
         {
           "filename": "q164_p175_1.jpg",
           "path": "data/images/q164_p175_1.jpg",
-          "page": 175,
-          "width": 1453,
-          "height": 486
-        },
-        {
-          "filename": "q164_p175_2.jpg",
-          "path": "data/images/q164_p175_2.jpg",
           "page": 175,
           "width": 1453,
           "height": 486
@@ -6696,7 +6853,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q164_p175_2.jpg",
+          "path": "data/images/q164_p175_2.jpg",
+          "page": 175,
+          "width": 1453,
+          "height": 486
+        }
+      ]
     },
     {
       "id": 165,
@@ -6737,7 +6903,8 @@
         177,
         178,
         179
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 166,
@@ -6755,13 +6922,6 @@
           "page": 180,
           "width": 1501,
           "height": 771
-        },
-        {
-          "filename": "q166_p181_1.png",
-          "path": "data/images/q166_p181_1.png",
-          "page": 181,
-          "width": 1452,
-          "height": 742
         }
       ],
       "pages": [
@@ -6792,7 +6952,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q166_p181_1.png",
+          "path": "data/images/q166_p181_1.png",
+          "page": 181,
+          "width": 1452,
+          "height": 742
+        }
+      ]
     },
     {
       "id": 167,
@@ -6825,7 +6994,8 @@
       "images": [],
       "pages": [
         182
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 168,
@@ -6858,7 +7028,8 @@
       "images": [],
       "pages": [
         182
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 169,
@@ -6891,7 +7062,8 @@
       "images": [],
       "pages": [
         183
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 170,
@@ -6924,7 +7096,8 @@
       "images": [],
       "pages": [
         184
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 171,
@@ -6966,7 +7139,8 @@
       "images": [],
       "pages": [
         185
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 172,
@@ -6999,7 +7173,8 @@
       "images": [],
       "pages": [
         186
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 173,
@@ -7017,13 +7192,6 @@
           "page": 187,
           "width": 1510,
           "height": 1042
-        },
-        {
-          "filename": "q173_p188_1.jpg",
-          "path": "data/images/q173_p188_1.jpg",
-          "page": 188,
-          "width": 1537,
-          "height": 1023
         }
       ],
       "pages": [
@@ -7045,7 +7213,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q173_p188_1.jpg",
+          "path": "data/images/q173_p188_1.jpg",
+          "page": 188,
+          "width": 1537,
+          "height": 1023
+        }
+      ]
     },
     {
       "id": 174,
@@ -7078,7 +7255,8 @@
       "images": [],
       "pages": [
         189
-      ]
+      ],
+      "answer_images": []
     },
     {
       "id": 175,
@@ -7093,13 +7271,6 @@
         {
           "filename": "q175_p190_1.jpg",
           "path": "data/images/q175_p190_1.jpg",
-          "page": 190,
-          "width": 1587,
-          "height": 991
-        },
-        {
-          "filename": "q175_p190_2.jpg",
-          "path": "data/images/q175_p190_2.jpg",
           "page": 190,
           "width": 1587,
           "height": 991
@@ -7135,7 +7306,16 @@
             ]
           }
         ]
-      }
+      },
+      "answer_images": [
+        {
+          "filename": "q175_p190_2.jpg",
+          "path": "data/images/q175_p190_2.jpg",
+          "page": 190,
+          "width": 1587,
+          "height": 991
+        }
+      ]
     }
   ]
 }
