@@ -19,6 +19,11 @@
   let bookmarks = new Set();
   let isDarkMode = true;
   
+  // --- Internationalization & Multi-Layout State ---
+  let currentLanguage = localStorage.getItem('ai103_language') || 'en'; // Default: 'en'
+  let currentLayout = localStorage.getItem('ai103_layout') || 'single'; // 'single' | 'all'
+  let allQFilter = 'all'; // 'all' | 'unanswered' | 'wrong' | 'correct' | 'bookmarked'
+  
   let examTimerId = null;
   let examSeconds = 0;
 
@@ -107,6 +112,200 @@
   let tipSearchKeyword = '';
   let toastTimeoutId = null;
 
+  // ==========================================================================
+  // Internationalization (i18n) Dictionary & Engine
+  // ==========================================================================
+  const I18N = {
+    en: {
+      mode_study: "Study",
+      mode_exam: "Exam",
+      mode_tips: "Tips & Tricks",
+      layout_single: "Single",
+      layout_all: "All",
+      layout_title: "Layout: Single Question / Continuous Scroll",
+      lang_toggle_title: "Switch Language (EN / VI)",
+      drawer_count: "{n} questions",
+      theme_title: "Light / Dark Mode",
+      q_pos: "Question {pos} / {total}",
+      q_pos_filtered: "Question {id} ({pos}/{total})",
+      type_multiple_choice_single: "Single Choice",
+      type_multiple_choice_multi: "Multiple Choice",
+      type_yes_no: "Yes / No Statements",
+      type_drag_drop: "Matching / Sequence",
+      type_matching_hot_area: "Dropdown / Selection",
+      bookmark: "Bookmark [B]",
+      bookmarked: "Bookmarked [B]",
+      show_answer: "Show Answer",
+      hide_answer: "Hide Answer",
+      check_selection: "Check Selection",
+      badge_correct: "Correct",
+      badge_wrong: "Your Choice",
+      badge_unanswered: "Unanswered",
+      official_explanation: "Official Answer & Detailed Explanation",
+      correct_answer_label: "Correct Answer:",
+      explanation_label: "Detailed Explanation:",
+      official_diagram: "Official Microsoft Answer Diagram",
+      click_to_enlarge: "Click to enlarge image",
+      nav_prev: "Previous [←]",
+      nav_next: "Next [→]",
+      nav_open_grid: "Open Matrix [G]",
+      btn_submit_exam: "Submit Exam & Grade",
+      exam_ready_submit: "Finished reviewing all questions?",
+      jump_label: "Q:",
+      jump_go: "Go",
+      done_count: "{n} / {total} answered",
+      filter_all: "All",
+      filter_unanswered: "Unanswered",
+      filter_wrong: "Incorrect",
+      filter_correct: "Correct",
+      filter_bookmarked: "Bookmarked",
+      drawer_title: "Question Matrix (175)",
+      drawer_search_placeholder: "Search question text, keyword, ID...",
+      drawer_reset_progress: "Reset All Progress",
+      drawer_confirm_reset: "Are you sure you want to reset all quiz progress?",
+      tips_hero_title: "AI-103 Exam Hacks & Strategy Guide",
+      tips_hero_desc: "16 essential rules, Microsoft keyword traps, precision/recall formulas, and interactive question techniques.",
+      tips_search_placeholder: "Search tips (Prompt Shield, Precision, Video, OpenTelemetry, Managed Identity...)",
+      tips_no_results: "No matching tips found",
+      tips_no_results_desc: "Try searching with keywords like 'Foundry', 'SDK', 'Precision', or 'VNet'",
+      tips_back_to_top: "Back to top",
+      exam_result_title: "Exam Results",
+      exam_passed: "🎉 PASSED (>=70%)",
+      exam_failed: "NEEDS PRACTICE (<70%)",
+      res_total: "Total Questions:",
+      res_correct: "Correct:",
+      res_wrong: "Incorrect:",
+      res_skipped: "Unanswered:",
+      res_time: "Time Taken:",
+      res_review_wrong: "Review Mistakes",
+      res_retake: "Retake Exam",
+      toast_saved: "Progress saved",
+      toast_reset: "Progress reset successfully",
+      toast_bookmarked: "Question bookmarked",
+      toast_unbookmarked: "Bookmark removed",
+      toast_exam_submitted: "Exam submitted! Score: {score}%",
+      interactive_guide_title: "Interactive Question / Diagram / Code",
+      interactive_guide_desc: "Study the diagram or code above, then click the lightbulb icon below to see the answer and analysis."
+    },
+    vi: {
+      mode_study: "Ôn tập",
+      mode_exam: "Thi thử",
+      mode_tips: "Tips & Mẹo",
+      layout_single: "Từng câu",
+      layout_all: "Cuộn tất cả",
+      layout_title: "Kiểu xem: Từng câu / Cuộn tất cả câu hỏi",
+      lang_toggle_title: "Đổi ngôn ngữ: Tiếng Anh / Tiếng Việt",
+      drawer_count: "{n} câu",
+      theme_title: "Chế độ Sáng / Tối",
+      q_pos: "Câu {pos} / {total}",
+      q_pos_filtered: "Câu {id} ({pos}/{total})",
+      type_multiple_choice_single: "Trắc nghiệm đơn",
+      type_multiple_choice_multi: "Chọn nhiều đáp án",
+      type_yes_no: "Nhận định Đúng / Sai",
+      type_drag_drop: "Kéo thả / Ghép cặp",
+      type_matching_hot_area: "Hot Area / Lựa chọn",
+      bookmark: "Lưu [B]",
+      bookmarked: "Đã lưu [B]",
+      show_answer: "Xem đáp án",
+      hide_answer: "Ẩn đáp án",
+      check_selection: "Kiểm tra kết quả lựa chọn",
+      badge_correct: "Chính xác",
+      badge_wrong: "Bạn đã chọn",
+      badge_unanswered: "Chưa làm",
+      official_explanation: "Giải thích & Đáp án chính thức",
+      correct_answer_label: "Đáp án chính xác:",
+      explanation_label: "Giải thích chi tiết:",
+      official_diagram: "Sơ đồ đáp án gốc (Microsoft)",
+      click_to_enlarge: "Bấm để xem ảnh lớn",
+      nav_prev: "Câu trước [←]",
+      nav_next: "Câu tiếp theo [→]",
+      nav_open_grid: "Mở danh sách câu hỏi [G]",
+      btn_submit_exam: "Nộp bài thi & Chấm điểm",
+      exam_ready_submit: "Bạn đã hoàn thành xong các câu hỏi?",
+      jump_label: "Câu:",
+      jump_go: "Đến",
+      done_count: "Đã làm: {n} / {total}",
+      filter_all: "Tất cả",
+      filter_unanswered: "Chưa làm",
+      filter_wrong: "Sai",
+      filter_correct: "Đúng",
+      filter_bookmarked: "Đã lưu",
+      drawer_title: "Danh sách 175 câu hỏi",
+      drawer_search_placeholder: "Tìm kiếm từ khóa (Foundry, Search, Code...)",
+      drawer_reset_progress: "Đặt lại toàn bộ tiến độ",
+      drawer_confirm_reset: "Bạn có chắc chắn muốn xóa toàn bộ tiến độ làm bài?",
+      tips_hero_title: "Cẩm nang Bí kíp & Mẹo thi AI-103",
+      tips_hero_desc: "Tổng hợp 16 quy tắc cốt lõi, bẫy từ khóa của Microsoft, công thức phân biệt độ đo và phương pháp xử lý câu hỏi tương tác kéo thả.",
+      tips_search_placeholder: "Tìm kiếm mẹo (Prompt Shield, Precision, Video, OpenTelemetry, Managed Identity...)",
+      tips_no_results: "Không tìm thấy mẹo nào phù hợp",
+      tips_no_results_desc: "Thử tìm kiếm với từ khóa khác như 'Foundry', 'SDK', 'Precision', hoặc 'VNet'",
+      tips_back_to_top: "Lên đầu trang",
+      exam_result_title: "Kết quả bài thi thử",
+      exam_passed: "🎉 ĐẠT CHỈ TIÊU (PASS)",
+      exam_failed: "CẦN ÔN TẬP THÊM",
+      res_total: "Tổng số câu:",
+      res_correct: "Số câu đúng:",
+      res_wrong: "Số câu sai:",
+      res_skipped: "Chưa trả lời:",
+      res_time: "Thời gian hoàn thành:",
+      res_review_wrong: "Xem lại câu sai",
+      res_retake: "Làm lại bài thi",
+      toast_saved: "Đã lưu tiến độ",
+      toast_reset: "Đã đặt lại tiến độ làm bài",
+      toast_bookmarked: "Đã lưu câu hỏi",
+      toast_unbookmarked: "Đã bỏ lưu câu hỏi",
+      toast_exam_submitted: "Đã nộp bài! Điểm số: {score}%",
+      interactive_guide_title: "Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn",
+      interactive_guide_desc: "Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm icon bóng đèn bên dưới để xem đáp án và phân tích chi tiết."
+    }
+  };
+
+  function t(key, params = {}) {
+    const dict = I18N[currentLanguage] || I18N.en;
+    let str = dict[key] || (I18N.en && I18N.en[key]) || key;
+    Object.keys(params).forEach(k => {
+      str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), params[k]);
+    });
+    return str;
+  }
+
+  function applyLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('ai103_language', lang);
+    if (elLangText) elLangText.textContent = lang.toUpperCase();
+
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (key) {
+        const text = t(key);
+        if (text) el.textContent = text;
+      }
+    });
+
+    if (elBtnLayoutToggle) elBtnLayoutToggle.title = t('layout_title');
+    if (elBtnLangToggle) elBtnLangToggle.title = t('lang_toggle_title');
+    if (elLayoutText) elLayoutText.textContent = currentLayout === 'all' ? t('layout_all') : t('layout_single');
+    if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${questions.length} ${currentLanguage === 'en' ? 'questions' : 'câu'}`;
+
+    updateStats();
+    if (currentLayout === 'single') {
+      renderCurrentQuestion();
+    } else {
+      renderAllQuestionsView();
+    }
+    if (mode === 'tips') {
+      renderTipsList();
+    }
+  }
+
+  function toggleLanguage() {
+    const nextLang = currentLanguage === 'en' ? 'vi' : 'en';
+    applyLanguage(nextLang);
+    showToast(nextLang === 'en' ? 'Switched language to English' : 'Đã đổi ngôn ngữ sang Tiếng Việt', 'translate');
+  }
+
+
   function escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -134,6 +333,29 @@
   const elThemeIconSun = document.getElementById('themeIconSun');
   const elThemeIconMoon = document.getElementById('themeIconMoon');
   const elDrawerTriggerCount = document.getElementById('drawerTriggerCount');
+  
+  // Layout & Language Switcher Elements
+  const elBtnLayoutToggle = document.getElementById('btnLayoutToggle');
+  const elLayoutIcon = document.getElementById('layoutIcon');
+  const elLayoutText = document.getElementById('layoutText');
+  const elBtnLangToggle = document.getElementById('btnLangToggle');
+  const elLangText = document.getElementById('langText');
+
+  // Continuous Vertical Scroll (All Questions) Elements
+  const elViewAllQuestions = document.getElementById('viewAllQuestions');
+  const elAllQuestionsList = document.getElementById('allQuestionsList');
+  const elAllQFilterPills = document.querySelectorAll('#allQFilterPills .all-q-filter-pill');
+  const elAllQFilterCountAll = document.getElementById('allQFilterCountAll');
+  const elAllQFilterCountUnanswered = document.getElementById('allQFilterCountUnanswered');
+  const elAllQFilterCountWrong = document.getElementById('allQFilterCountWrong');
+  const elAllQFilterCountCorrect = document.getElementById('allQFilterCountCorrect');
+  const elAllQFilterCountBookmarked = document.getElementById('allQFilterCountBookmarked');
+  const elAllQCounterText = document.getElementById('allQCounterText');
+  const elAllQJumpInput = document.getElementById('allQJumpInput');
+  const elBtnAllQJump = document.getElementById('btnAllQJump');
+  const elAllQExamSubmitWrap = document.getElementById('allQExamSubmitWrap');
+  const elBtnAllQExamSubmit = document.getElementById('btnAllQExamSubmit');
+  const elBtnScrollToTop = document.getElementById('btnScrollToTop');
 
   const elFilterPills = document.querySelectorAll('.zen-filter-pill, .ios-filter-pill, .filter-pill');
   const elCountAll = document.getElementById('countAll');
@@ -218,7 +440,12 @@
   function onDataReady() {
     updateFilteredIndices();
     updateStats();
-    renderCurrentQuestion();
+    applyLanguage(currentLanguage);
+    if (currentLayout === 'all') {
+      setLayout('all');
+    } else {
+      renderCurrentQuestion();
+    }
     renderGridItems();
     startIdlePreloadAllImages();
   }
@@ -357,6 +584,411 @@
     }
   }
 
+
+  // ==========================================================================
+  // Layout Management (Single Question vs All Questions Continuous Scroll)
+  // ==========================================================================
+  function setLayout(targetLayout, targetQuestionIndex = null) {
+    currentLayout = targetLayout;
+    localStorage.setItem('ai103_layout', targetLayout);
+
+    if (elLayoutIcon) {
+      elLayoutIcon.textContent = currentLayout === 'all' ? 'view_stream' : 'view_agenda';
+    }
+    if (elLayoutText) {
+      elLayoutText.textContent = currentLayout === 'all' ? t('layout_all') : t('layout_single');
+    }
+
+    if (mode === 'tips') {
+      setMode('study');
+    }
+
+    if (currentLayout === 'all') {
+      if (elViewQuiz) elViewQuiz.style.display = 'none';
+      if (elFloatingNavContainer) elFloatingNavContainer.style.display = 'none';
+      if (elViewAllQuestions) elViewAllQuestions.style.display = 'block';
+
+      renderAllQuestionsView();
+
+      const qIndexToScroll = targetQuestionIndex !== null ? targetQuestionIndex : currentIndex;
+      if (questions[qIndexToScroll]) {
+        setTimeout(() => {
+          const card = document.getElementById(`all-q-card-${questions[qIndexToScroll].id}`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('ring-2', 'ring-orange-500/50');
+            setTimeout(() => card.classList.remove('ring-2', 'ring-orange-500/50'), 1500);
+          }
+        }, 120);
+      }
+    } else {
+      if (elViewAllQuestions) elViewAllQuestions.style.display = 'none';
+      if (elViewQuiz) elViewQuiz.style.display = 'block';
+      if (elFloatingNavContainer) elFloatingNavContainer.style.display = 'flex';
+
+      if (targetQuestionIndex !== null) {
+        currentIndex = targetQuestionIndex;
+      }
+      renderCurrentQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function toggleLayout() {
+    const nextLayout = currentLayout === 'single' ? 'all' : 'single';
+    setLayout(nextLayout);
+    const msg = nextLayout === 'all'
+      ? (currentLanguage === 'en' ? 'Switched to All Questions (Continuous Scroll)' : 'Đã chuyển sang Cuộn tất cả câu hỏi')
+      : (currentLanguage === 'en' ? 'Switched to Single Question layout' : 'Đã chuyển sang Từng câu hỏi');
+    showToast(msg, nextLayout === 'all' ? 'view_stream' : 'view_agenda');
+  }
+
+  // ==========================================================================
+  // Continuous Vertical Scroll (All Questions) Implementation
+  // ==========================================================================
+  function updateAllQFilterCounts() {
+    let unans = 0, wrong = 0, correct = 0, bkmk = 0;
+    questions.forEach(q => {
+      const ans = userAnswers[q.id];
+      if (bookmarks.has(q.id)) bkmk++;
+      if (!isQuestionPartiallyAnswered(q, ans)) {
+        unans++;
+      } else if (ans.isCorrect === true) {
+        correct++;
+      } else if (ans.isCorrect === false) {
+        wrong++;
+      }
+    });
+
+    if (elAllQFilterCountAll) elAllQFilterCountAll.textContent = `(${questions.length})`;
+    if (elAllQFilterCountUnanswered) elAllQFilterCountUnanswered.textContent = `(${unans})`;
+    if (elAllQFilterCountWrong) elAllQFilterCountWrong.textContent = `(${wrong})`;
+    if (elAllQFilterCountCorrect) elAllQFilterCountCorrect.textContent = `(${correct})`;
+    if (elAllQFilterCountBookmarked) elAllQFilterCountBookmarked.textContent = `(${bkmk})`;
+
+    const answeredCount = questions.length - unans;
+    if (elAllQCounterText) {
+      elAllQCounterText.textContent = t('done_count', { n: answeredCount, total: questions.length });
+    }
+  }
+
+  function renderAllQuestionsView() {
+    const list = elAllQuestionsList || document.getElementById('allQuestionsList');
+    if (!list) return;
+
+    updateAllQFilterCounts();
+
+    const filtered = questions.filter(q => {
+      const ansState = userAnswers[q.id];
+      if (allQFilter === 'all') return true;
+      if (allQFilter === 'bookmarked') return bookmarks.has(q.id);
+      if (allQFilter === 'unanswered') return !isQuestionPartiallyAnswered(q, ansState);
+      if (allQFilter === 'wrong') return ansState && ansState.isCorrect === false;
+      if (allQFilter === 'correct') return ansState && ansState.isCorrect === true;
+      return true;
+    });
+
+    list.innerHTML = '';
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div class="text-center py-16 space-y-2">
+          <span class="material-symbols-outlined text-[36px] text-slate-400">filter_alt_off</span>
+          <p class="text-sm font-medium text-slate-600 dark:text-slate-300">${currentLanguage === 'en' ? 'No questions in this filter' : 'Không có câu hỏi nào trong bộ lọc này'}</p>
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach(q => {
+      const card = createQuestionCardElement(q);
+      list.appendChild(card);
+    });
+
+    if (elAllQExamSubmitWrap) {
+      elAllQExamSubmitWrap.style.display = mode === 'exam' ? 'flex' : 'none';
+    }
+  }
+
+  function createQuestionCardElement(q) {
+    const card = document.createElement('article');
+    card.id = `all-q-card-${q.id}`;
+    card.className = 'all-q-card space-y-4';
+    if (bookmarks.has(q.id)) card.classList.add('is-bookmarked');
+
+    const ansState = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+    if (ansState.isCorrect === true) card.classList.add('is-correct');
+    else if (ansState.isCorrect === false) card.classList.add('is-wrong');
+
+    // 1. Header: Q-number + Type + Bookmark + Status badge
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08]';
+
+    const leftGroup = document.createElement('div');
+    leftGroup.className = 'flex items-center space-x-2';
+    leftGroup.innerHTML = `
+      <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
+        Q${q.id}
+      </span>
+      <span class="text-[11px] text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06]">
+        ${t('type_' + q.type) || t('type_multiple_choice_single')}
+      </span>
+    `;
+
+    const rightGroup = document.createElement('div');
+    rightGroup.className = 'flex items-center space-x-2';
+
+    // Status badge
+    const statusBadge = document.createElement('span');
+    statusBadge.id = `all-q-status-${q.id}`;
+    updateCardStatusBadge(q, statusBadge, ansState);
+
+    // Bookmark button
+    const btnBkmk = document.createElement('button');
+    btnBkmk.className = 'flex items-center space-x-1 text-xs text-slate-400 hover:text-amber-500 transition-colors active:scale-95';
+    btnBkmk.title = t('bookmark');
+    btnBkmk.innerHTML = `<span class="material-symbols-outlined text-[17px] ${bookmarks.has(q.id) ? 'text-amber-500' : ''}">${bookmarks.has(q.id) ? 'bookmark' : 'bookmark_border'}</span>`;
+    btnBkmk.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (bookmarks.has(q.id)) {
+        bookmarks.delete(q.id);
+        card.classList.remove('is-bookmarked');
+        btnBkmk.querySelector('.material-symbols-outlined').textContent = 'bookmark_border';
+        btnBkmk.querySelector('.material-symbols-outlined').classList.remove('text-amber-500');
+        showToast(t('toast_unbookmarked'));
+      } else {
+        bookmarks.add(q.id);
+        card.classList.add('is-bookmarked');
+        btnBkmk.querySelector('.material-symbols-outlined').textContent = 'bookmark';
+        btnBkmk.querySelector('.material-symbols-outlined').classList.add('text-amber-500');
+        showToast(t('toast_bookmarked'), 'bookmark');
+      }
+      saveState();
+      updateStats();
+      updateAllQFilterCounts();
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    });
+
+    rightGroup.appendChild(statusBadge);
+    rightGroup.appendChild(btnBkmk);
+
+    header.appendChild(leftGroup);
+    header.appendChild(rightGroup);
+    card.appendChild(header);
+
+    // 2. Question Prompt
+    const prompt = document.createElement('div');
+    prompt.className = 'text-[14.5px] sm:text-[15.5px] font-medium leading-[1.65] text-slate-800 dark:text-slate-100 whitespace-pre-line tracking-[-0.01em]';
+    prompt.textContent = q.question;
+    card.appendChild(prompt);
+
+    // 3. Question Images (Zero CLS aspect ratio + lazy loading)
+    if (q.images && q.images.length > 0) {
+      const imgsWrap = document.createElement('div');
+      imgsWrap.className = 'flex flex-col gap-3 my-3';
+      q.images.forEach(imgObj => {
+        const wrap = document.createElement('div');
+        wrap.className = 'q-img-wrap';
+        wrap.title = t('click_to_enlarge');
+
+        const frame = document.createElement('div');
+        frame.className = 'q-img-frame';
+        if (imgObj.width && imgObj.height) {
+          frame.style.aspectRatio = `${imgObj.width} / ${imgObj.height}`;
+        } else {
+          frame.style.aspectRatio = '16 / 9';
+        }
+
+        const img = document.createElement('img');
+        img.src = imgObj.path;
+        img.alt = `Diagram Q${q.id}`;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.className = 'w-full h-full object-contain rounded-lg';
+        frame.appendChild(img);
+
+        wrap.appendChild(frame);
+        wrap.addEventListener('click', () => openLightbox(imgObj.path));
+        imgsWrap.appendChild(wrap);
+      });
+      card.appendChild(imgsWrap);
+    }
+
+    // 4. Options Container
+    const optsContainer = document.createElement('div');
+    optsContainer.id = `all-q-opts-${q.id}`;
+    optsContainer.className = 'space-y-2.5 my-3';
+    renderOptions(q, optsContainer);
+    card.appendChild(optsContainer);
+
+    // 5. Card Footer: Explanation & Action in Study mode
+    const explSection = document.createElement('div');
+    explSection.id = `all-q-expl-wrap-${q.id}`;
+    explSection.className = 'pt-2 border-t border-black/[0.04] dark:border-white/[0.06] space-y-3';
+
+    if (mode === 'study') {
+      const explToggleBtn = document.createElement('button');
+      explToggleBtn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-xs font-semibold transition-all active:scale-95';
+      const isRev = ansState && ansState.revealed;
+      explToggleBtn.innerHTML = `
+        <span class="material-symbols-outlined text-[15px]">lightbulb</span>
+        <span>${isRev ? t('hide_answer') : t('show_answer')}</span>
+      `;
+
+      const explBox = document.createElement('div');
+      explBox.id = `all-q-expl-box-${q.id}`;
+      explBox.className = 'rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 space-y-3 transition-all';
+      explBox.style.display = isRev ? 'block' : 'none';
+      renderCardExplanationContent(q, explBox);
+
+      explToggleBtn.addEventListener('click', () => {
+        const curRev = ansState.revealed;
+        ansState.revealed = !curRev;
+        userAnswers[q.id] = ansState;
+        saveState();
+        explBox.style.display = ansState.revealed ? 'block' : 'none';
+        explToggleBtn.querySelector('span:last-child').textContent = ansState.revealed ? t('hide_answer') : t('show_answer');
+        renderOptions(q, optsContainer);
+      });
+
+      explSection.appendChild(explToggleBtn);
+      explSection.appendChild(explBox);
+    } else {
+      if (ansState && ansState.revealed) {
+        const explBox = document.createElement('div');
+        explBox.id = `all-q-expl-box-${q.id}`;
+        explBox.className = 'rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 space-y-3 transition-all';
+        renderCardExplanationContent(q, explBox);
+        explSection.appendChild(explBox);
+      } else {
+        explSection.style.display = 'none';
+      }
+    }
+
+    card.appendChild(explSection);
+    return card;
+  }
+
+  function updateCardStatusBadge(q, badgeEl, ansState) {
+    if (!badgeEl) return;
+    if (!isQuestionPartiallyAnswered(q, ansState)) {
+      badgeEl.className = 'text-[11px] font-medium font-mono px-2 py-0.5 rounded-md bg-slate-500/10 text-slate-500 dark:text-slate-400';
+      badgeEl.textContent = t('badge_unanswered');
+    } else if (ansState.isCorrect === true) {
+      badgeEl.className = 'text-[11px] font-semibold font-mono px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
+      badgeEl.textContent = t('badge_correct');
+    } else if (ansState.isCorrect === false) {
+      badgeEl.className = 'text-[11px] font-semibold font-mono px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20';
+      badgeEl.textContent = t('filter_wrong');
+    } else {
+      badgeEl.className = 'text-[11px] font-medium font-mono px-2 py-0.5 rounded-md bg-orange-500/10 text-orange-600 dark:text-orange-400';
+      badgeEl.textContent = currentLanguage === 'en' ? 'In progress' : 'Đã chọn';
+    }
+  }
+
+  function renderCardExplanationContent(q, container) {
+    container.innerHTML = '';
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between pb-2 border-b border-emerald-500/20';
+    header.innerHTML = `
+      <div class="flex items-center space-x-2">
+        <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[14px]">check</span>
+        </span>
+        <span class="font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
+          ${t('official_explanation')}
+        </span>
+      </div>
+      <span class="text-[10px] font-mono text-slate-400">Microsoft Learn</span>
+    `;
+    container.appendChild(header);
+
+    const answerP = document.createElement('div');
+    answerP.className = 'text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-400';
+    if (q.answer && q.answer.includes(' | ')) {
+      answerP.innerHTML = `<span class="font-bold">${t('correct_answer_label')}</span><ul class="mt-1 list-disc list-inside space-y-0.5 text-xs text-emerald-800 dark:text-emerald-300 font-medium">` +
+        q.answer.split(' | ').map(part => `<li>${escapeHtml(part)}</li>`).join('') +
+        '</ul>';
+    } else {
+      answerP.textContent = `${t('correct_answer_label')} ` + q.answer;
+    }
+    container.appendChild(answerP);
+
+    const bodyP = document.createElement('div');
+    bodyP.className = 'text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans';
+    bodyP.textContent = q.explanation;
+    container.appendChild(bodyP);
+
+    if (q.answer_images && q.answer_images.length > 0) {
+      const imgsWrap = document.createElement('div');
+      imgsWrap.className = 'pt-2 flex flex-col gap-3';
+      const label = document.createElement('div');
+      label.className = 'flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-2 border-t border-emerald-500/20';
+      label.innerHTML = `<span class="material-symbols-outlined text-[15px]">verified</span><span>${t('official_diagram')}</span>`;
+      imgsWrap.appendChild(label);
+
+      q.answer_images.forEach(imgObj => {
+        const wrap = document.createElement('div');
+        wrap.className = 'q-img-wrap';
+        const frame = document.createElement('div');
+        frame.className = 'q-img-frame';
+        if (imgObj.width && imgObj.height) {
+          frame.style.aspectRatio = `${imgObj.width} / ${imgObj.height}`;
+        }
+        const img = document.createElement('img');
+        img.src = imgObj.path;
+        img.alt = `Answer Diagram Q${q.id}`;
+        img.loading = 'lazy';
+        img.className = 'w-full h-full object-contain rounded-lg';
+        frame.appendChild(img);
+
+        const hint = document.createElement('div');
+        hint.className = 'flex items-center justify-center space-x-1.5 text-[11px] text-slate-400 mt-2 font-mono';
+        hint.innerHTML = `<span class="material-symbols-outlined text-[13px]">zoom_in</span><span>${t('click_to_enlarge')}</span>`;
+
+        wrap.appendChild(frame);
+        wrap.appendChild(hint);
+        wrap.addEventListener('click', () => openLightbox(imgObj.path));
+        imgsWrap.appendChild(wrap);
+      });
+      container.appendChild(imgsWrap);
+    }
+  }
+
+  function updateSingleCardInAllView(q, card = null) {
+    const targetCard = card || document.getElementById(`all-q-card-${q.id}`);
+    if (!targetCard) return;
+
+    const ansState = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+
+    targetCard.classList.remove('is-correct', 'is-wrong');
+    if (ansState.isCorrect === true) targetCard.classList.add('is-correct');
+    else if (ansState.isCorrect === false) targetCard.classList.add('is-wrong');
+
+    const badgeEl = document.getElementById(`all-q-status-${q.id}`);
+    if (badgeEl) updateCardStatusBadge(q, badgeEl, ansState);
+
+    const optContainer = document.getElementById(`all-q-opts-${q.id}`);
+    if (optContainer) renderOptions(q, optContainer);
+
+    if (mode === 'study') {
+      const explBox = document.getElementById(`all-q-expl-box-${q.id}`);
+      if (explBox && ansState.revealed) {
+        explBox.style.display = 'block';
+        renderCardExplanationContent(q, explBox);
+      }
+    }
+
+    updateAllQFilterCounts();
+  }
+
+  function refreshQuestionUI(q) {
+    if (currentLayout === 'single') {
+      renderCurrentQuestion();
+    }
+    updateSingleCardInAllView(q);
+  }
+
   // --- Question Rendering ---
   function renderCurrentQuestion() {
     const q = questions[currentIndex];
@@ -365,29 +997,22 @@
     // 1. Meta Badges
     const filterPos = filteredIndices.indexOf(currentIndex);
     const posText = filterPos !== -1 
-      ? `Câu ${q.id} (${filterPos + 1}/${filteredIndices.length})`
-      : `Câu ${q.id} / ${questions.length}`;
+      ? t('q_pos_filtered', { id: q.id, pos: filterPos + 1, total: filteredIndices.length })
+      : t('q_pos', { pos: q.id, total: questions.length });
     elQNumber.textContent = posText;
     elNavStatus.textContent = `${currentIndex + 1} / ${questions.length}`;
 
-    const typeNames = {
-      multiple_choice_single: 'Trắc nghiệm đơn',
-      multiple_choice_multi: 'Chọn nhiều đáp án',
-      yes_no: 'Nhận định Đúng / Sai',
-      drag_drop: 'Kéo thả / Ghép cặp',
-      matching_hot_area: 'Hot Area / Lựa chọn'
-    };
-    elQTypeBadge.textContent = typeNames[q.type] || 'Trắc nghiệm';
+    elQTypeBadge.textContent = t('type_' + q.type) || t('type_multiple_choice_single');
 
     // Bookmark state
     const icon = elBtnBookmark.querySelector('.material-symbols-outlined');
     if (bookmarks.has(q.id)) {
       elBtnBookmark.classList.add('bookmarked');
-      elBookmarkText.textContent = 'Đã lưu [B]';
+      elBookmarkText.textContent = t('bookmarked');
       if (icon) icon.textContent = 'bookmark';
     } else {
       elBtnBookmark.classList.remove('bookmarked');
-      elBookmarkText.textContent = 'Lưu [B]';
+      elBookmarkText.textContent = t('bookmark');
       if (icon) icon.textContent = 'bookmark_border';
     }
 
@@ -474,18 +1099,19 @@
     }
   }
 
-  function renderOptions(q) {
-    elOptionsContainer.innerHTML = '';
+  function renderOptions(q, targetContainer = elOptionsContainer) {
+    if (!targetContainer) return;
+    targetContainer.innerHTML = '';
     const ansState = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
 
     // 1. Interactive Real Microsoft Exam Widgets
     if (q.interactive) {
       if (q.interactive.type === 'yes_no') {
-        renderYesNoWidget(q, ansState);
+        renderYesNoWidget(q, ansState, targetContainer);
       } else if (q.interactive.type === 'dropdown') {
-        renderDropdownWidget(q, ansState);
+        renderDropdownWidget(q, ansState, targetContainer);
       } else if (q.interactive.type === 'matching' || q.interactive.type === 'drag_drop_order') {
-        renderMatchingWidget(q, ansState);
+        renderMatchingWidget(q, ansState, targetContainer);
       }
       return;
     }
@@ -509,10 +1135,10 @@
           const isKeyCorrect = q.answer_keys.includes(opt.key);
           if (isKeyCorrect) {
             item.classList.add('correct');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>Chính xác</span></span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span></span>`;
           } else if (isSelected && !isKeyCorrect) {
             item.classList.add('wrong');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>Bạn đã chọn</span></span>`;
+            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>${t('badge_wrong')}</span></span>`;
           }
         }
 
@@ -536,7 +1162,7 @@
         item.appendChild(trailing);
 
         item.addEventListener('click', () => handleOptionClick(q, opt.key));
-        elOptionsContainer.appendChild(item);
+        targetContainer.appendChild(item);
       });
 
       // Multi-choice check button
@@ -545,12 +1171,12 @@
         confirmWrap.className = 'pt-2 flex justify-end';
         const btnConfirm = document.createElement('button');
         btnConfirm.className = 'w-full sm:w-auto px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95';
-        btnConfirm.textContent = 'Kiểm tra kết quả lựa chọn';
+        btnConfirm.textContent = t('check_selection');
         btnConfirm.addEventListener('click', () => {
           submitMultiChoice(q);
         });
         confirmWrap.appendChild(btnConfirm);
-        elOptionsContainer.appendChild(confirmWrap);
+        targetContainer.appendChild(confirmWrap);
       }
 
     } else {
@@ -560,16 +1186,16 @@
       helper.innerHTML = `
         <span class="material-symbols-outlined text-orange-500 text-[18px] shrink-0 mt-0.5">info</span>
         <div>
-          <strong class="font-semibold text-orange-600 dark:text-orange-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
-          <span>Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm <strong>icon bóng đèn</strong> bên dưới để xem đáp án và phân tích chi tiết.</span>
+          <strong class="font-semibold text-orange-600 dark:text-orange-400 block mb-1">${t('interactive_guide_title')}</strong>
+          <span>${t('interactive_guide_desc')}</span>
         </div>
       `;
-      elOptionsContainer.appendChild(helper);
+      targetContainer.appendChild(helper);
     }
   }
 
   // --- Interactive Widgets Implementations ---
-  function renderYesNoWidget(q, ansState) {
+  function renderYesNoWidget(q, ansState, targetContainer = elOptionsContainer) {
     const container = document.createElement('div');
     container.className = 'interactive-container';
 
@@ -648,16 +1274,17 @@
       confirmWrap.className = 'pt-2 flex justify-end';
       const btnConfirm = document.createElement('button');
       btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
-      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('check_selection')}</span>`;
+
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
       container.appendChild(confirmWrap);
     }
 
-    elOptionsContainer.appendChild(container);
+    targetContainer.appendChild(container);
   }
 
-  function renderDropdownWidget(q, ansState) {
+  function renderDropdownWidget(q, ansState, targetContainer = elOptionsContainer) {
     const container = document.createElement('div');
     container.className = 'interactive-container';
 
@@ -743,10 +1370,10 @@
       container.appendChild(confirmWrap);
     }
 
-    elOptionsContainer.appendChild(container);
+    targetContainer.appendChild(container);
   }
 
-  function renderMatchingWidget(q, ansState) {
+  function renderMatchingWidget(q, ansState, targetContainer = elOptionsContainer) {
     const container = document.createElement('div');
     container.className = 'interactive-container';
 
@@ -843,7 +1470,7 @@
       container.appendChild(confirmWrap);
     }
 
-    elOptionsContainer.appendChild(container);
+    targetContainer.appendChild(container);
   }
 
   function handleYesNoSelect(q, stmtId, val) {
@@ -872,7 +1499,7 @@
     };
     saveState();
     updateStats();
-    renderOptions(q);
+    refreshQuestionUI(q);
   }
 
   function handleDropdownSelect(q, blankId, val) {
@@ -901,7 +1528,7 @@
     };
     saveState();
     updateStats();
-    renderOptions(q);
+    refreshQuestionUI(q);
   }
 
   function handleMatchingSelect(q, targetId, val) {
@@ -930,7 +1557,7 @@
     };
     saveState();
     updateStats();
-    renderOptions(q);
+    refreshQuestionUI(q);
   }
 
   function submitInteractiveQuestion(q) {
@@ -960,7 +1587,7 @@
 
     saveState();
     updateStats();
-    renderCurrentQuestion();
+    refreshQuestionUI(q);
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
@@ -988,7 +1615,7 @@
         };
         saveState();
         updateStats();
-        renderCurrentQuestion();
+        refreshQuestionUI(q);
         renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
       }
     } else {
@@ -1027,7 +1654,7 @@
 
     saveState();
     updateStats();
-    renderCurrentQuestion();
+    refreshQuestionUI(q);
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
@@ -1042,7 +1669,7 @@
           q.answer.split(' | ').map(part => `<li>${escapeHtml(part)}</li>`).join('') +
           '</ul>';
       } else {
-        elExplCorrectAnswer.textContent = 'Đáp án: ' + q.answer;
+        elExplCorrectAnswer.textContent = `${t('correct_answer_label')} ` + q.answer;
       }
       elExplBody.textContent = q.explanation;
 
@@ -1054,7 +1681,7 @@
 
           const header = document.createElement('div');
           header.className = 'flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 pt-2.5 border-t border-emerald-500/20';
-          header.innerHTML = `<span class="material-symbols-outlined text-[15px]">verified</span><span>Sơ đồ đáp án chính thức từ Microsoft:</span>`;
+          header.innerHTML = `<span class="material-symbols-outlined text-[15px]">verified</span><span>${t('official_diagram')}</span>`;
           elExplImages.appendChild(header);
 
           q.answer_images.forEach((imgObj) => {
@@ -1076,7 +1703,7 @@
 
             const hint = document.createElement('div');
             hint.className = 'flex items-center justify-center space-x-1.5 text-[11px] text-slate-400 mt-2 font-mono';
-            hint.innerHTML = `<span class="material-symbols-outlined text-[13px]">zoom_in</span><span>Chạm để phóng to xem chi tiết</span>`;
+            hint.innerHTML = `<span class="material-symbols-outlined text-[13px]">zoom_in</span><span>${t('click_to_enlarge')}</span>`;
 
             wrap.appendChild(frame);
             wrap.appendChild(hint);
@@ -1189,8 +1816,19 @@
       }
 
       item.addEventListener('click', () => {
-        goToIndex(idx);
         closeDrawer();
+        if (currentLayout === 'all') {
+          setTimeout(() => {
+            const card = document.getElementById(`all-q-card-${q.id}`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              card.classList.add('ring-2', 'ring-orange-500/50');
+              setTimeout(() => card.classList.remove('ring-2', 'ring-orange-500/50'), 1500);
+            }
+          }, 150);
+        } else {
+          goToIndex(idx);
+        }
       });
 
       elGridContainer.appendChild(item);
@@ -1237,6 +1875,10 @@
         viewQuiz.classList.add('hidden');
         viewQuiz.style.setProperty('display', 'none', 'important');
       }
+      if (elViewAllQuestions) {
+        elViewAllQuestions.classList.add('hidden');
+        elViewAllQuestions.style.setProperty('display', 'none', 'important');
+      }
       if (viewTips) {
         viewTips.classList.remove('hidden');
         viewTips.style.setProperty('display', 'block', 'important');
@@ -1261,13 +1903,34 @@
       viewTips.classList.add('hidden');
       viewTips.style.setProperty('display', 'none', 'important');
     }
-    if (viewQuiz) {
-      viewQuiz.classList.remove('hidden');
-      viewQuiz.style.removeProperty('display');
-    }
-    if (navContainer) {
-      navContainer.classList.remove('hidden');
-      navContainer.style.removeProperty('display');
+    if (currentLayout === 'all') {
+      if (viewQuiz) {
+        viewQuiz.classList.add('hidden');
+        viewQuiz.style.setProperty('display', 'none', 'important');
+      }
+      if (elViewAllQuestions) {
+        elViewAllQuestions.classList.remove('hidden');
+        elViewAllQuestions.style.display = 'block';
+      }
+      if (navContainer) {
+        navContainer.classList.add('hidden');
+        navContainer.style.setProperty('display', 'none', 'important');
+      }
+      renderAllQuestionsView();
+    } else {
+      if (elViewAllQuestions) {
+        elViewAllQuestions.classList.add('hidden');
+        elViewAllQuestions.style.setProperty('display', 'none', 'important');
+      }
+      if (viewQuiz) {
+        viewQuiz.classList.remove('hidden');
+        viewQuiz.style.removeProperty('display');
+      }
+      if (navContainer) {
+        navContainer.classList.remove('hidden');
+        navContainer.style.removeProperty('display');
+      }
+      renderCurrentQuestion();
     }
 
     if (mode === 'study') {
@@ -1356,12 +2019,19 @@
         strategy: { badge: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20', icon: 'timer' }
       }[tip.category] || { badge: 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20', icon: 'lightbulb' };
 
+      const isEn = currentLanguage === 'en';
+      const tipTitle = isEn && tip.title_en ? tip.title_en : tip.title;
+      const tipCategoryLabel = isEn && tip.categoryLabel_en ? tip.categoryLabel_en : tip.categoryLabel;
+      const tipHighlight = isEn && tip.highlight_en ? tip.highlight_en : tip.highlight;
+      const tipSummary = isEn && tip.summary_en ? tip.summary_en : tip.summary;
+      const tipRules = isEn && tip.rules_en ? tip.rules_en : (tip.rules || []);
+
       // Header row: Badges + Number
       let html = `
         <div class="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-black/[0.04] dark:border-white/[0.06]">
           <div class="flex items-center space-x-1.5">
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase tracking-wider border ${categoryTheme.badge}">
-              ${escapeHtml(tip.categoryLabel)}
+              ${escapeHtml(tipCategoryLabel)}
             </span>
             <span class="text-[11px] font-mono text-slate-400 dark:text-slate-500">
               #${String(tip.id).padStart(2, '0')}
@@ -1373,24 +2043,24 @@
         </div>
 
         <h3 class="text-sm sm:text-[15px] font-semibold text-slate-900 dark:text-slate-100 tracking-[-0.01em] mb-2.5 leading-snug">
-          ${escapeHtml(tip.title)}
+          ${escapeHtml(tipTitle)}
         </h3>
 
         <!-- Core Highlight Pill Banner -->
         <div class="p-3 rounded-xl bg-orange-500/[0.07] dark:bg-orange-500/[0.12] border-l-[3px] border-orange-500 text-xs sm:text-[13px] text-slate-800 dark:text-orange-100 font-medium mb-3 flex items-start gap-2 leading-relaxed">
           <span class="material-symbols-outlined text-[16px] text-orange-500 shrink-0 mt-0.5">bolt</span>
-          <div>${escapeHtml(tip.highlight)}</div>
+          <div>${escapeHtml(tipHighlight)}</div>
         </div>
 
         <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
-          ${escapeHtml(tip.summary)}
+          ${escapeHtml(tipSummary)}
         </p>
       `;
 
       // Rules / Key Points
-      if (tip.rules && tip.rules.length > 0) {
+      if (tipRules && tipRules.length > 0) {
         html += `<div class="space-y-2 mb-3">`;
-        tip.rules.forEach(rule => {
+        tipRules.forEach(rule => {
           const isPick = rule.type === 'pick';
           const icon = isPick ? 'check_circle' : 'cancel';
           const iconColor = isPick ? 'text-emerald-500' : 'text-rose-500';
@@ -1420,7 +2090,7 @@
               <span>Code / Payload</span>
               <button class="tip-code-copy-btn flex items-center space-x-1 px-2 py-0.5 rounded text-[10px] text-slate-300 active:scale-95" data-copy-target="${snippetId}">
                 <span class="material-symbols-outlined text-[12px]">content_copy</span>
-                <span>Sao chép</span>
+                <span>${isEn ? 'Copy' : 'Sao chép'}</span>
               </button>
             </div>
             <pre id="${snippetId}" class="p-3 text-[11.5px] font-mono leading-relaxed text-slate-200 overflow-x-auto no-scrollbar whitespace-pre"><code>${escapeHtml(tip.codeSnippet)}</code></pre>
@@ -1481,11 +2151,21 @@
     const idx = questions.findIndex(q => q.id === qid);
     if (idx !== -1) {
       setMode('study');
-      goToIndex(idx);
-      showToast(`Đang mở Câu ${qid} để ôn tập ngay!`, 'verified');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (currentLayout === 'all') {
+        setTimeout(() => {
+          const card = document.getElementById(`all-q-card-${qid}`);
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            card.classList.add('ring-2', 'ring-orange-500/50');
+            setTimeout(() => card.classList.remove('ring-2', 'ring-orange-500/50'), 1500);
+          }
+        }, 150);
+      } else {
+        goToIndex(idx);
+      }
+      showToast(currentLanguage === 'en' ? `Opening Question ${qid}!` : `Đang mở Câu ${qid} để ôn tập ngay!`, 'verified');
     } else {
-      showToast(`Không tìm thấy câu ${qid}`, 'error');
+      showToast(currentLanguage === 'en' ? `Question ${qid} not found` : `Không tìm thấy câu ${qid}`, 'error');
     }
   }
 
@@ -1590,7 +2270,10 @@
     const total = questions.length;
     const pct = Math.round((correct / total) * 100);
     elResultScorePercent.textContent = `${pct}%`;
-    elResultPassStatus.textContent = pct >= 70 ? '🎉 ĐẠT CHỈ TIÊU (PASS)' : 'CẦN ÔN TẬP THÊM';
+    elResultPassStatus.textContent = pct >= 70 ? t('exam_passed') : t('exam_failed');
+    if (currentLayout === 'all') {
+      renderAllQuestionsView();
+    }
     elResTotal.textContent = total;
     elResCorrect.textContent = correct;
     elResWrong.textContent = wrong;
@@ -1648,6 +2331,72 @@
 
     if (elBtnTipsScrollTop) {
       elBtnTipsScrollTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+
+    // Layout & Language Toggle
+    if (elBtnLayoutToggle) {
+      elBtnLayoutToggle.addEventListener('click', toggleLayout);
+    }
+    if (elBtnLangToggle) {
+      elBtnLangToggle.addEventListener('click', toggleLanguage);
+    }
+
+    // All Questions Filter Pills
+    if (elAllQFilterPills) {
+      elAllQFilterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          elAllQFilterPills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          allQFilter = pill.getAttribute('data-filter') || 'all';
+          renderAllQuestionsView();
+        });
+      });
+    }
+
+    // All Questions Quick Jump
+    function handleAllQJump() {
+      const val = parseInt(elAllQJumpInput ? elAllQJumpInput.value : 0, 10);
+      if (val >= 1 && val <= questions.length) {
+        const target = document.getElementById(`all-q-card-${val}`);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.classList.add('ring-2', 'ring-orange-500/50');
+          setTimeout(() => target.classList.remove('ring-2', 'ring-orange-500/50'), 1500);
+        }
+      }
+    }
+    if (elBtnAllQJump) elBtnAllQJump.addEventListener('click', handleAllQJump);
+    if (elAllQJumpInput) {
+      elAllQJumpInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleAllQJump();
+      });
+    }
+
+    // All Questions Exam Submit
+    if (elBtnAllQExamSubmit) {
+      elBtnAllQExamSubmit.addEventListener('click', () => {
+        if (confirm(t('exam_ready_submit'))) {
+          submitExam();
+        }
+      });
+    }
+
+    // Scroll to Top Floating Button
+    window.addEventListener('scroll', () => {
+      if (elBtnScrollToTop) {
+        if (window.scrollY > 400 && currentLayout === 'all' && mode !== 'tips') {
+          elBtnScrollToTop.classList.add('visible');
+        } else {
+          elBtnScrollToTop.classList.remove('visible');
+        }
+      }
+    }, { passive: true });
+
+    if (elBtnScrollToTop) {
+      elBtnScrollToTop.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }

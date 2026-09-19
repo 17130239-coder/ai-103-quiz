@@ -51,7 +51,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=20260919_3" />
+  <link rel="stylesheet" href="style.css?v=20260920_1" />
 </head>
 <body class="bg-[#fcfaf8] dark:bg-[#0c0f17] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased min-h-screen flex flex-col selection:bg-orange-500/20 selection:text-orange-400 transition-colors duration-200 pb-28">
 
@@ -66,35 +66,47 @@
           <span class="hidden sm:inline">AI-103</span>
         </span>
         <div class="flex items-center p-0.5 bg-black/[0.04] dark:bg-white/[0.06] rounded-lg text-xs font-medium">
-          <button id="btnStudyMode" onclick="window.setMode && window.setMode('study')" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs whitespace-nowrap">
-            Ôn tập
+          <button id="btnStudyMode" onclick="window.setMode && window.setMode('study')" class="zen-mode-btn active px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md transition-all text-xs whitespace-nowrap" data-i18n="mode_study">
+            Study
           </button>
-          <button id="btnExamMode" onclick="window.setMode && window.setMode('exam')" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap">
-            Thi thử
+          <button id="btnExamMode" onclick="window.setMode && window.setMode('exam')" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap" data-i18n="mode_exam">
+            Exam
           </button>
           <button id="btnTipsMode" onclick="window.setMode && window.setMode('tips')" class="zen-mode-btn px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all text-xs whitespace-nowrap flex items-center space-x-1">
             <span class="material-symbols-outlined text-[13px] text-amber-500">lightbulb</span>
-            <span>Tips & Mẹo</span>
+            <span data-i18n="mode_tips">Tips & Tricks</span>
           </button>
         </div>
       </div>
 
-      <!-- Right: Actions (Timer, Grid drawer [G], Theme) -->
-      <div class="flex items-center space-x-1.5">
+      <!-- Right: Actions (Timer, Layout, Language, Drawer, Theme) -->
+      <div class="flex items-center space-x-1 sm:space-x-1.5">
         <!-- Live Exam Timer -->
         <div id="examTimer" class="hidden items-center space-x-1 px-2 py-0.5 rounded bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20 font-mono text-[11px]">
           <span class="material-symbols-outlined text-[13px]">schedule</span>
           <span id="timerText">00:00</span>
         </div>
 
+        <!-- Layout Toggle (Single / All Questions) -->
+        <button id="btnLayoutToggle" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95 transition-all" title="Toggle Layout (Single Question / All Questions)">
+          <span id="layoutIcon" class="material-symbols-outlined text-[15px] text-orange-500">view_agenda</span>
+          <span id="layoutText" class="font-mono text-[11px] hidden md:inline" data-i18n="layout_single">Single</span>
+        </button>
+
+        <!-- Language Switcher (EN / VI) -->
+        <button id="btnLangToggle" class="flex items-center space-x-1 px-1.5 sm:px-2 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono font-semibold text-slate-700 dark:text-slate-200 active:scale-95 transition-all" title="Switch Language (EN / VI)">
+          <span class="material-symbols-outlined text-[14px] text-orange-500">translate</span>
+          <span id="langText">EN</span>
+        </button>
+
         <!-- Matrix Drawer Button -->
-        <button id="toggleDrawerBtn" class="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95">
+        <button id="toggleDrawerBtn" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95" title="Question Matrix">
           <span class="material-symbols-outlined text-[15px] text-orange-500">grid_view</span>
-          <span id="drawerTriggerCount" class="font-mono text-[11px]">175 câu</span>
+          <span id="drawerTriggerCount" class="font-mono text-[11px] hidden sm:inline">175</span>
         </button>
 
         <!-- Theme Toggle -->
-        <button id="btnThemeToggle" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-all active:scale-95" title="Chế độ Sáng / Tối">
+        <button id="btnThemeToggle" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-all active:scale-95" title="Dark / Light Mode">
           <span id="themeIconSun" class="material-symbols-outlined text-[18px]">light_mode</span>
           <span id="themeIconMoon" class="material-symbols-outlined text-[18px] hidden">dark_mode</span>
         </button>
@@ -178,7 +190,65 @@
       </section>
     </div>
 
-    <!-- VIEW 2: TIPS & TRICKS (Tips & Mẹo) -->
+    <!-- VIEW 2: CONTINUOUS VERTICAL SCROLL (All 175 Questions) -->
+    <div id="viewAllQuestions" class="space-y-4 transition-opacity duration-200" style="display: none;">
+      <!-- Sticky Filter & Jump Bar -->
+      <div class="sticky top-12 z-20 py-2.5 -mx-3.5 px-3.5 sm:-mx-6 sm:px-6 bg-white/95 dark:bg-[#0c0f17]/95 backdrop-blur-xl border-b border-black/[0.05] dark:border-white/[0.06] flex flex-wrap items-center justify-between gap-2">
+        
+        <!-- Filter Pills -->
+        <div id="allQFilterPills" class="flex items-center space-x-1 sm:space-x-1.5 overflow-x-auto no-scrollbar">
+          <button class="all-q-filter-pill active px-2.5 py-1 rounded-lg text-xs font-medium transition-all shrink-0" data-filter="all">
+            <span data-i18n="filter_all">All</span> <span id="allQFilterCountAll" class="opacity-75 font-mono text-[10px]">(175)</span>
+          </button>
+          <button class="all-q-filter-pill px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-filter="unanswered">
+            <span data-i18n="filter_unanswered">Unanswered</span> <span id="allQFilterCountUnanswered" class="opacity-75 font-mono text-[10px]">(175)</span>
+          </button>
+          <button class="all-q-filter-pill px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-filter="wrong">
+            <span data-i18n="filter_wrong">Incorrect</span> <span id="allQFilterCountWrong" class="text-rose-500 font-mono text-[10px]">(0)</span>
+          </button>
+          <button class="all-q-filter-pill px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-filter="correct">
+            <span data-i18n="filter_correct">Correct</span> <span id="allQFilterCountCorrect" class="text-emerald-500 font-mono text-[10px]">(0)</span>
+          </button>
+          <button class="all-q-filter-pill px-2.5 py-1 rounded-lg text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-filter="bookmarked">
+            <span data-i18n="filter_bookmarked">Bookmarked</span> <span id="allQFilterCountBookmarked" class="text-amber-400 font-mono text-[10px]">(0)</span>
+          </button>
+        </div>
+
+        <!-- Jump to Question & Progress count -->
+        <div class="flex items-center space-x-2">
+          <div class="flex items-center space-x-1 bg-black/[0.03] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.08] rounded-lg px-2 py-0.5 text-xs">
+            <span class="text-slate-400 text-[11px]" data-i18n="jump_label">Q:</span>
+            <input id="allQJumpInput" type="number" min="1" max="175" placeholder="1-175" class="w-12 bg-transparent text-center font-mono text-xs focus:outline-none text-slate-900 dark:text-slate-100" />
+            <button id="btnAllQJump" class="text-orange-500 hover:text-orange-600 font-semibold text-xs px-1" data-i18n="jump_go">Go</button>
+          </div>
+          <span id="allQCounterText" class="font-mono text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">
+            0 / 175 answered
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Container for rendered question cards -->
+      <div id="allQuestionsList" class="space-y-6 pt-2">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <!-- Exam Submit Banner at bottom of all questions in Exam Mode -->
+      <div id="allQExamSubmitWrap" class="pt-6 pb-12 flex flex-col items-center justify-center space-y-3" style="display: none;">
+        <p class="text-xs text-slate-500 dark:text-slate-400 font-mono" data-i18n="exam_ready_submit">Finished reviewing all questions?</p>
+        <button id="btnAllQExamSubmit" class="px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-medium text-sm shadow-md transition-all active:scale-95 flex items-center space-x-2">
+          <span class="material-symbols-outlined text-[18px]">verified</span>
+          <span data-i18n="btn_submit_exam">Submit Exam & Grade</span>
+        </button>
+      </div>
+
+      <!-- Floating Scroll to Top button -->
+      <button id="btnScrollToTop" class="fixed bottom-6 right-4 sm:right-8 z-30 w-10 h-10 rounded-full bg-white/90 dark:bg-[#1a202c]/90 text-slate-700 dark:text-slate-200 border border-black/10 dark:border-white/10 shadow-lg backdrop-blur-md flex items-center justify-center hover:bg-orange-500 hover:text-white transition-all active:scale-95 opacity-0 pointer-events-none" title="Scroll to Top">
+        <span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+      </button>
+    </div>
+
+    <!-- VIEW 3: TIPS & TRICKS (Tips & Mẹo) -->
     <div id="viewTips" class="hidden space-y-5 transition-opacity duration-200" style="display: none;">
       
       <!-- Tips Banner Hero (iOS 18 Inset Card) -->
@@ -434,8 +504,8 @@
   </div>
 
   <!-- Data & Scripts -->
-  <script src="data/questions-data.js?v=20260919_3"></script>
-  <script src="data/tips-data.js?v=20260919_3"></script>
-  <script src="app.js?v=20260919_3"></script>
+  <script src="data/questions-data.js?v=20260920_1"></script>
+  <script src="data/tips-data.js?v=20260920_1"></script>
+  <script src="app.js?v=20260920_1"></script>
 </body>
 </html>
