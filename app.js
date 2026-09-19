@@ -229,6 +229,28 @@
     localStorage.setItem('ai103_quiz_dark', isDarkMode);
   }
 
+  // --- Answering State Helpers ---
+  function isQuestionPartiallyAnswered(q, ans) {
+    if (!ans) return false;
+    if (q.interactive) {
+      return ans.interactiveAnswers && Object.keys(ans.interactiveAnswers).length > 0;
+    }
+    return ans.selectedKeys && ans.selectedKeys.length > 0;
+  }
+
+  function isQuestionFullyAnswered(q, ans) {
+    if (!ans) return false;
+    if (q.interactive) {
+      if (!ans.interactiveAnswers) return false;
+      const keys = Object.keys(ans.interactiveAnswers);
+      if (q.interactive.type === 'yes_no') return keys.length >= q.interactive.statements.length;
+      if (q.interactive.type === 'dropdown') return keys.length >= q.interactive.blanks.length;
+      if (q.interactive.type === 'matching') return keys.length >= q.interactive.targets.length;
+      return keys.length > 0;
+    }
+    return ans.selectedKeys && ans.selectedKeys.length > 0;
+  }
+
   // --- Filtering & Navigation ---
   function updateFilteredIndices() {
     const indices = [];
@@ -239,7 +261,7 @@
       if (currentFilter === 'all') {
         indices.push(idx);
       } else if (currentFilter === 'unanswered') {
-        if (!ans || !ans.selectedKeys || ans.selectedKeys.length === 0) indices.push(idx);
+        if (!isQuestionPartiallyAnswered(q, ans)) indices.push(idx);
       } else if (currentFilter === 'correct') {
         if (ans && ans.isCorrect === true) indices.push(idx);
       } else if (currentFilter === 'wrong') {
@@ -408,8 +430,21 @@
 
   function renderOptions(q) {
     elOptionsContainer.innerHTML = '';
-    const ansState = userAnswers[q.id] || { selectedKeys: [], isCorrect: null, revealed: false };
+    const ansState = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
 
+    // 1. Interactive Real Microsoft Exam Widgets
+    if (q.interactive) {
+      if (q.interactive.type === 'yes_no') {
+        renderYesNoWidget(q, ansState);
+      } else if (q.interactive.type === 'dropdown') {
+        renderDropdownWidget(q, ansState);
+      } else if (q.interactive.type === 'matching') {
+        renderMatchingWidget(q, ansState);
+      }
+      return;
+    }
+
+    // 2. Standard Multiple Choice (Single or Multiple)
     if (q.options && q.options.length > 0) {
       const isMulti = q.type === 'multiple_choice_multi';
       
@@ -418,13 +453,13 @@
         item.className = 'option-item group';
         item.dataset.key = opt.key;
 
-        const isSelected = ansState.selectedKeys.includes(opt.key);
+        const isSelected = ansState.selectedKeys && ansState.selectedKeys.includes(opt.key);
         if (isSelected) item.classList.add('selected');
 
         // Status badges for Study mode
         let statusBadgeHtml = '';
 
-        if (mode === 'study' && ansState.selectedKeys.length > 0) {
+        if (mode === 'study' && ansState.selectedKeys && ansState.selectedKeys.length > 0) {
           const isKeyCorrect = q.answer_keys.includes(opt.key);
           if (isKeyCorrect) {
             item.classList.add('correct');
@@ -459,7 +494,7 @@
       });
 
       // Multi-choice check button
-      if (isMulti && mode === 'study' && ansState.selectedKeys.length > 0 && !ansState.revealed) {
+      if (isMulti && mode === 'study' && ansState.selectedKeys && ansState.selectedKeys.length > 0 && !ansState.revealed) {
         const confirmWrap = document.createElement('div');
         confirmWrap.className = 'pt-2 flex justify-end';
         const btnConfirm = document.createElement('button');
@@ -473,18 +508,414 @@
       }
 
     } else {
-      // Non-MC question guide
+      // Non-MC question fallback guide
       const helper = document.createElement('div');
       helper.className = 'interactive-guide flex items-start space-x-3';
       helper.innerHTML = `
         <span class="material-symbols-outlined text-sky-500 text-[18px] shrink-0 mt-0.5">info</span>
         <div>
           <strong class="font-semibold text-sky-600 dark:text-sky-400 block mb-1">Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn</strong>
-          <span>Câu hỏi này sử dụng sơ đồ hoặc khối mã ở trên. Hãy đọc đề, suy nghĩ đáp án rồi bấm <strong>icon bóng đèn</strong> bên dưới để đối chiếu phân tích chính thức từ Microsoft.</span>
+          <span>Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm <strong>icon bóng đèn</strong> bên dưới để xem đáp án và phân tích chi tiết.</span>
         </div>
       `;
       elOptionsContainer.appendChild(helper);
     }
+  }
+
+  // --- Interactive Widgets Implementations ---
+  function renderYesNoWidget(q, ansState) {
+    const container = document.createElement('div');
+    container.className = 'interactive-container';
+
+    const header = document.createElement('div');
+    header.className = 'flex items-center justify-between pb-1 text-xs text-slate-500 dark:text-slate-400 font-medium';
+    header.innerHTML = `
+      <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-sky-500">checklist</span><span>Nhận định (Statements)</span></span>
+      <span>Đúng / Sai</span>
+    `;
+    container.appendChild(header);
+
+    const card = document.createElement('div');
+    card.className = 'interactive-card p-0 overflow-hidden';
+
+    const userMap = ansState.interactiveAnswers || {};
+    const isRevealed = ansState.revealed && mode === 'study';
+
+    q.interactive.statements.forEach((stmt, idx) => {
+      const row = document.createElement('div');
+      row.className = 'yes-no-row';
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'yes-no-text';
+      textDiv.innerHTML = `<span class="font-mono text-slate-400 font-semibold mr-1.5">${idx + 1}.</span>${stmt.text}`;
+
+      const pillsDiv = document.createElement('div');
+      pillsDiv.className = 'yes-no-pills';
+
+      const selectedVal = userMap[stmt.id];
+
+      const btnYes = document.createElement('button');
+      btnYes.className = 'yes-no-btn';
+      btnYes.textContent = 'Yes';
+      if (selectedVal === 'Yes') btnYes.classList.add('selected-yes');
+
+      const btnNo = document.createElement('button');
+      btnNo.className = 'yes-no-btn';
+      btnNo.textContent = 'No';
+      if (selectedVal === 'No') btnNo.classList.add('selected-no');
+
+      if (isRevealed) {
+        const isYesCorrect = stmt.answer === 'Yes';
+        const isNoCorrect = stmt.answer === 'No';
+
+        if (selectedVal === 'Yes') {
+          if (isYesCorrect) btnYes.classList.add('revealed-correct');
+          else btnYes.classList.add('revealed-wrong');
+        } else if (isYesCorrect) {
+          btnYes.classList.add('revealed-key');
+        }
+
+        if (selectedVal === 'No') {
+          if (isNoCorrect) btnNo.classList.add('revealed-correct');
+          else btnNo.classList.add('revealed-wrong');
+        } else if (isNoCorrect) {
+          btnNo.classList.add('revealed-key');
+        }
+      }
+
+      btnYes.addEventListener('click', () => handleYesNoSelect(q, stmt.id, 'Yes'));
+      btnNo.addEventListener('click', () => handleYesNoSelect(q, stmt.id, 'No'));
+
+      pillsDiv.appendChild(btnYes);
+      pillsDiv.appendChild(btnNo);
+
+      row.appendChild(textDiv);
+      row.appendChild(pillsDiv);
+      card.appendChild(row);
+    });
+
+    container.appendChild(card);
+
+    const hasAny = Object.keys(userMap).length > 0;
+    if (mode === 'study' && hasAny && !ansState.revealed) {
+      const confirmWrap = document.createElement('div');
+      confirmWrap.className = 'pt-2 flex justify-end';
+      const btnConfirm = document.createElement('button');
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
+      confirmWrap.appendChild(btnConfirm);
+      container.appendChild(confirmWrap);
+    }
+
+    elOptionsContainer.appendChild(container);
+  }
+
+  function renderDropdownWidget(q, ansState) {
+    const container = document.createElement('div');
+    container.className = 'interactive-container';
+
+    const header = document.createElement('div');
+    header.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium pb-1 flex items-center space-x-1.5';
+    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-sky-500">tune</span><span>Chọn giá trị phù hợp cho từng mục:</span>`;
+    container.appendChild(header);
+
+    const card = document.createElement('div');
+    card.className = 'interactive-card space-y-3';
+
+    const userMap = ansState.interactiveAnswers || {};
+    const isRevealed = ansState.revealed && mode === 'study';
+
+    q.interactive.blanks.forEach((blank, idx) => {
+      const row = document.createElement('div');
+      row.className = 'interactive-select-row';
+
+      const labelWrap = document.createElement('div');
+      labelWrap.className = 'flex items-center justify-between';
+      
+      const label = document.createElement('label');
+      label.className = 'text-xs font-semibold text-slate-700 dark:text-slate-300';
+      label.textContent = `${idx + 1}. ${blank.label}:`;
+      labelWrap.appendChild(label);
+
+      const selectedVal = userMap[blank.id] || '';
+      if (isRevealed) {
+        const isMatch = selectedVal === blank.answer;
+        const badge = document.createElement('div');
+        if (isMatch) {
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">check</span><span>Chính xác</span>`;
+        } else {
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">close</span><span>Đáp án: ${blank.answer}</span>`;
+        }
+        labelWrap.appendChild(badge);
+      }
+      row.appendChild(labelWrap);
+
+      const select = document.createElement('select');
+      select.className = 'interactive-select';
+      if (isRevealed) {
+        if (selectedVal === blank.answer) select.classList.add('select-correct');
+        else select.classList.add('select-wrong');
+      }
+
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '';
+      defaultOpt.disabled = true;
+      defaultOpt.selected = !selectedVal;
+      defaultOpt.textContent = '-- Chọn đáp án phù hợp --';
+      select.appendChild(defaultOpt);
+
+      blank.options.forEach(optText => {
+        const opt = document.createElement('option');
+        opt.value = optText;
+        opt.textContent = optText;
+        if (selectedVal === optText) opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      select.addEventListener('change', (e) => {
+        handleDropdownSelect(q, blank.id, e.target.value);
+      });
+
+      row.appendChild(select);
+      card.appendChild(row);
+    });
+
+    container.appendChild(card);
+
+    const hasAny = Object.keys(userMap).length > 0;
+    if (mode === 'study' && hasAny && !ansState.revealed) {
+      const confirmWrap = document.createElement('div');
+      confirmWrap.className = 'pt-2 flex justify-end';
+      const btnConfirm = document.createElement('button');
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
+      confirmWrap.appendChild(btnConfirm);
+      container.appendChild(confirmWrap);
+    }
+
+    elOptionsContainer.appendChild(container);
+  }
+
+  function renderMatchingWidget(q, ansState) {
+    const container = document.createElement('div');
+    container.className = 'interactive-container';
+
+    if (q.interactive.pool && q.interactive.pool.length > 0) {
+      const poolWrap = document.createElement('div');
+      poolWrap.className = 'bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-2';
+      poolWrap.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Lựa chọn khả dụng:</div>`;
+      const tagsContainer = document.createElement('div');
+      tagsContainer.className = 'flex flex-wrap gap-1.5';
+      q.interactive.pool.forEach(item => {
+        const tag = document.createElement('span');
+        tag.className = 'pool-tag';
+        tag.textContent = item;
+        tagsContainer.appendChild(tag);
+      });
+      poolWrap.appendChild(tagsContainer);
+      container.appendChild(poolWrap);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'interactive-card space-y-3';
+
+    const userMap = ansState.interactiveAnswers || {};
+    const isRevealed = ansState.revealed && mode === 'study';
+
+    q.interactive.targets.forEach((target, idx) => {
+      const row = document.createElement('div');
+      row.className = 'interactive-select-row';
+
+      const labelWrap = document.createElement('div');
+      labelWrap.className = 'flex items-center justify-between';
+
+      const label = document.createElement('label');
+      label.className = 'text-xs font-semibold text-slate-700 dark:text-slate-300';
+      label.textContent = `${idx + 1}. ${target.label}:`;
+      labelWrap.appendChild(label);
+
+      const selectedVal = userMap[target.id] || '';
+      if (isRevealed) {
+        const isMatch = selectedVal === target.answer;
+        const badge = document.createElement('div');
+        if (isMatch) {
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">check</span><span>Chính xác</span>`;
+        } else {
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">close</span><span>Đáp án: ${target.answer}</span>`;
+        }
+        labelWrap.appendChild(badge);
+      }
+      row.appendChild(labelWrap);
+
+      const select = document.createElement('select');
+      select.className = 'interactive-select';
+      if (isRevealed) {
+        if (selectedVal === target.answer) select.classList.add('select-correct');
+        else select.classList.add('select-wrong');
+      }
+
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '';
+      defaultOpt.disabled = true;
+      defaultOpt.selected = !selectedVal;
+      defaultOpt.textContent = '-- Chọn công cụ / hành động --';
+      select.appendChild(defaultOpt);
+
+      q.interactive.pool.forEach(optText => {
+        const opt = document.createElement('option');
+        opt.value = optText;
+        opt.textContent = optText;
+        if (selectedVal === optText) opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      select.addEventListener('change', (e) => {
+        handleMatchingSelect(q, target.id, e.target.value);
+      });
+
+      row.appendChild(select);
+      card.appendChild(row);
+    });
+
+    container.appendChild(card);
+
+    const hasAny = Object.keys(userMap).length > 0;
+    if (mode === 'study' && hasAny && !ansState.revealed) {
+      const confirmWrap = document.createElement('div');
+      confirmWrap.className = 'pt-2 flex justify-end';
+      const btnConfirm = document.createElement('button');
+      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
+      confirmWrap.appendChild(btnConfirm);
+      container.appendChild(confirmWrap);
+    }
+
+    elOptionsContainer.appendChild(container);
+  }
+
+  function handleYesNoSelect(q, stmtId, val) {
+    const current = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+    const newAnswers = { ...(current.interactiveAnswers || {}), [stmtId]: val };
+
+    if (mode === 'exam') {
+      userAnswers[q.id] = {
+        selectedKeys: [],
+        interactiveAnswers: newAnswers,
+        isCorrect: null,
+        revealed: false
+      };
+      saveState();
+      updateStats();
+      renderOptions(q);
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+      return;
+    }
+
+    userAnswers[q.id] = {
+      selectedKeys: [],
+      interactiveAnswers: newAnswers,
+      isCorrect: null,
+      revealed: false
+    };
+    saveState();
+    updateStats();
+    renderOptions(q);
+  }
+
+  function handleDropdownSelect(q, blankId, val) {
+    const current = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+    const newAnswers = { ...(current.interactiveAnswers || {}), [blankId]: val };
+
+    if (mode === 'exam') {
+      userAnswers[q.id] = {
+        selectedKeys: [],
+        interactiveAnswers: newAnswers,
+        isCorrect: null,
+        revealed: false
+      };
+      saveState();
+      updateStats();
+      renderOptions(q);
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+      return;
+    }
+
+    userAnswers[q.id] = {
+      selectedKeys: [],
+      interactiveAnswers: newAnswers,
+      isCorrect: null,
+      revealed: false
+    };
+    saveState();
+    updateStats();
+    renderOptions(q);
+  }
+
+  function handleMatchingSelect(q, targetId, val) {
+    const current = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+    const newAnswers = { ...(current.interactiveAnswers || {}), [targetId]: val };
+
+    if (mode === 'exam') {
+      userAnswers[q.id] = {
+        selectedKeys: [],
+        interactiveAnswers: newAnswers,
+        isCorrect: null,
+        revealed: false
+      };
+      saveState();
+      updateStats();
+      renderOptions(q);
+      renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+      return;
+    }
+
+    userAnswers[q.id] = {
+      selectedKeys: [],
+      interactiveAnswers: newAnswers,
+      isCorrect: null,
+      revealed: false
+    };
+    saveState();
+    updateStats();
+    renderOptions(q);
+  }
+
+  function submitInteractiveQuestion(q) {
+    const current = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+    const ansMap = current.interactiveAnswers || {};
+    let isAllCorrect = true;
+
+    if (q.interactive.type === 'yes_no') {
+      q.interactive.statements.forEach(st => {
+        if (ansMap[st.id] !== st.answer) isAllCorrect = false;
+      });
+    } else if (q.interactive.type === 'dropdown') {
+      q.interactive.blanks.forEach(b => {
+        if (ansMap[b.id] !== b.answer) isAllCorrect = false;
+      });
+    } else if (q.interactive.type === 'matching') {
+      q.interactive.targets.forEach(t => {
+        if (ansMap[t.id] !== t.answer) isAllCorrect = false;
+      });
+    }
+
+    userAnswers[q.id] = {
+      ...current,
+      isCorrect: isAllCorrect,
+      revealed: true
+    };
+
+    saveState();
+    updateStats();
+    renderCurrentQuestion();
+    renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
   function handleOptionClick(q, key) {
@@ -591,7 +1022,7 @@
 
     questions.forEach(q => {
       const a = userAnswers[q.id];
-      if (a && a.selectedKeys && a.selectedKeys.length > 0) {
+      if (isQuestionPartiallyAnswered(q, a)) {
         answered++;
         if (a.isCorrect === true) correct++;
         if (a.isCorrect === false) wrong++;
@@ -649,9 +1080,18 @@
       if (bookmarks.has(q.id)) item.classList.add('bookmarked');
 
       const ans = userAnswers[q.id];
-      if (ans && ans.selectedKeys && ans.selectedKeys.length > 0) {
-        if (ans.isCorrect === true) item.classList.add('correct');
-        else if (ans.isCorrect === false) item.classList.add('wrong');
+      if (isQuestionPartiallyAnswered(q, ans)) {
+        if (mode === 'study') {
+          if (ans.isCorrect === true) item.classList.add('correct');
+          else if (ans.isCorrect === false) item.classList.add('wrong');
+          else item.classList.add('answered');
+        } else {
+          item.classList.add('answered');
+          if (ans.revealed) {
+            if (ans.isCorrect === true) item.classList.add('correct');
+            else if (ans.isCorrect === false) item.classList.add('wrong');
+          }
+        }
       }
 
       item.addEventListener('click', () => {
@@ -726,11 +1166,30 @@
 
     questions.forEach(q => {
       const ans = userAnswers[q.id];
-      if (!ans || !ans.selectedKeys || ans.selectedKeys.length === 0) {
+      if (!isQuestionPartiallyAnswered(q, ans)) {
         skipped++;
       } else {
-        if (q.options && q.options.length > 0) {
-          const selected = [...ans.selectedKeys].sort().join(',');
+        if (q.interactive) {
+          const ansMap = ans.interactiveAnswers || {};
+          let isAllCorrect = true;
+          if (q.interactive.type === 'yes_no') {
+            q.interactive.statements.forEach(st => {
+              if (ansMap[st.id] !== st.answer) isAllCorrect = false;
+            });
+          } else if (q.interactive.type === 'dropdown') {
+            q.interactive.blanks.forEach(b => {
+              if (ansMap[b.id] !== b.answer) isAllCorrect = false;
+            });
+          } else if (q.interactive.type === 'matching') {
+            q.interactive.targets.forEach(t => {
+              if (ansMap[t.id] !== t.answer) isAllCorrect = false;
+            });
+          }
+          ans.isCorrect = isAllCorrect;
+          if (isAllCorrect) correct++;
+          else wrong++;
+        } else if (q.options && q.options.length > 0) {
+          const selected = [...(ans.selectedKeys || [])].sort().join(',');
           const correctAns = [...q.answer_keys].sort().join(',');
           if (selected === correctAns) {
             ans.isCorrect = true;
@@ -858,10 +1317,11 @@
     elBtnToggleExplanation.addEventListener('click', () => {
       const q = questions[currentIndex];
       if (!q) return;
-      const ans = userAnswers[q.id] || { selectedKeys: [], isCorrect: null, revealed: false };
+      const ans = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
       ans.revealed = !ans.revealed;
       userAnswers[q.id] = ans;
       saveState();
+      renderOptions(q);
       renderExplanation(q);
     });
 
