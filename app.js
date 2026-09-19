@@ -185,7 +185,15 @@
       toast_unbookmarked: "Bookmark removed",
       toast_exam_submitted: "Exam submitted! Score: {score}%",
       interactive_guide_title: "Interactive Question / Diagram / Code",
-      interactive_guide_desc: "Study the diagram or code above, then click the lightbulb icon below to see the answer and analysis."
+      interactive_guide_desc: "Study the diagram or code above, then click the lightbulb icon below to see the answer and analysis.",
+      interactive_dropdown_header: "Select the appropriate value for each item:",
+      interactive_statements_header: "Statements",
+      interactive_yes_no_header: "Yes / No",
+      interactive_matching_pool: "Available options:",
+      interactive_dropdown_placeholder: "-- Select an option --",
+      interactive_matching_placeholder: "-- Select action / tool --",
+      interactive_check_btn: "Check Answer",
+      answer_prefix: "Answer:"
     },
     vi: {
       mode_study: "Ôn tập",
@@ -256,7 +264,15 @@
       toast_unbookmarked: "Đã bỏ lưu câu hỏi",
       toast_exam_submitted: "Đã nộp bài! Điểm số: {score}%",
       interactive_guide_title: "Dạng câu hỏi tương tác / Sơ đồ / Mã nguồn",
-      interactive_guide_desc: "Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm icon bóng đèn bên dưới để xem đáp án và phân tích chi tiết."
+      interactive_guide_desc: "Hãy đọc sơ đồ hoặc đoạn mã ở trên, sau đó bấm icon bóng đèn bên dưới để xem đáp án và phân tích chi tiết.",
+      interactive_dropdown_header: "Chọn giá trị phù hợp cho từng mục:",
+      interactive_statements_header: "Nhận định (Statements)",
+      interactive_yes_no_header: "Đúng / Sai",
+      interactive_matching_pool: "Lựa chọn khả dụng:",
+      interactive_dropdown_placeholder: "-- Chọn đáp án phù hợp --",
+      interactive_matching_placeholder: "-- Chọn công cụ / hành động --",
+      interactive_check_btn: "Kiểm tra kết quả",
+      answer_prefix: "Đáp án:"
     }
   };
 
@@ -778,14 +794,14 @@
 
     // 2. Question Prompt
     const prompt = document.createElement('div');
-    prompt.className = 'text-[14.5px] sm:text-[15.5px] font-medium leading-[1.65] text-slate-800 dark:text-slate-100 whitespace-pre-line tracking-[-0.01em]';
+    prompt.className = 'text-[13.5px] sm:text-[14px] font-medium leading-[1.58] text-slate-800 dark:text-slate-100 whitespace-pre-line tracking-[-0.01em]';
     prompt.textContent = q.question;
     card.appendChild(prompt);
 
     // 3. Question Images (Zero CLS aspect ratio + lazy loading)
     if (q.images && q.images.length > 0) {
       const imgsWrap = document.createElement('div');
-      imgsWrap.className = 'flex flex-col gap-3 my-3';
+      imgsWrap.className = 'flex flex-col gap-2.5 my-2.5';
       q.images.forEach(imgObj => {
         const wrap = document.createElement('div');
         wrap.className = 'q-img-wrap';
@@ -817,7 +833,7 @@
     // 4. Options Container
     const optsContainer = document.createElement('div');
     optsContainer.id = `all-q-opts-${q.id}`;
-    optsContainer.className = 'space-y-2.5 my-3';
+    optsContainer.className = 'space-y-2 my-2.5';
     renderOptions(q, optsContainer);
     card.appendChild(optsContainer);
 
@@ -904,7 +920,7 @@
     container.appendChild(header);
 
     const answerP = document.createElement('div');
-    answerP.className = 'text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-400';
+    answerP.className = 'text-xs sm:text-[13px] font-semibold text-emerald-700 dark:text-emerald-400';
     if (q.answer && q.answer.includes(' | ')) {
       answerP.innerHTML = `<span class="font-bold">${t('correct_answer_label')}</span><ul class="mt-1 list-disc list-inside space-y-0.5 text-xs text-emerald-800 dark:text-emerald-300 font-medium">` +
         q.answer.split(' | ').map(part => `<li>${escapeHtml(part)}</li>`).join('') +
@@ -915,7 +931,7 @@
     container.appendChild(answerP);
 
     const bodyP = document.createElement('div');
-    bodyP.className = 'text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans';
+    bodyP.className = 'text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-[1.65] whitespace-pre-line font-sans';
     bodyP.textContent = q.explanation;
     container.appendChild(bodyP);
 
@@ -1200,15 +1216,15 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between pb-1 text-xs text-slate-500 dark:text-slate-400 font-medium';
+    header.className = 'flex items-center justify-between pb-0.5 text-xs text-slate-500 dark:text-slate-400 font-medium';
     header.innerHTML = `
-      <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-orange-500">checklist</span><span>Nhận định (Statements)</span></span>
-      <span>Đúng / Sai</span>
+      <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-orange-500">checklist</span><span>${t('interactive_statements_header')}</span></span>
+      <span>${t('interactive_yes_no_header')}</span>
     `;
     container.appendChild(header);
 
     const card = document.createElement('div');
-    card.className = 'interactive-card p-0 overflow-hidden';
+    card.className = 'interactive-card yes-no-card';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1271,10 +1287,10 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-2 flex justify-end';
+      confirmWrap.className = 'pt-1 flex justify-end';
       const btnConfirm = document.createElement('button');
       btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
-      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('check_selection')}</span>`;
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
 
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
@@ -1289,12 +1305,12 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium pb-1 flex items-center space-x-1.5';
-    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-orange-500">tune</span><span>Chọn giá trị phù hợp cho từng mục:</span>`;
+    header.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center space-x-1.5 pb-0.5';
+    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-orange-500">tune</span><span>${t('interactive_dropdown_header')}</span>`;
     container.appendChild(header);
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-3';
+    card.className = 'interactive-card space-y-2';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1304,10 +1320,10 @@
       row.className = 'interactive-select-row';
 
       const labelWrap = document.createElement('div');
-      labelWrap.className = 'flex items-center justify-between';
+      labelWrap.className = 'flex flex-wrap items-center justify-between gap-1.5';
       
       const label = document.createElement('label');
-      label.className = 'text-xs font-semibold text-slate-700 dark:text-slate-300';
+      label.className = 'text-xs sm:text-[13px] font-semibold text-slate-700 dark:text-slate-200';
       label.textContent = `${idx + 1}. ${blank.label}:`;
       labelWrap.appendChild(label);
 
@@ -1316,11 +1332,11 @@
         const isMatch = selectedVal === blank.answer;
         const badge = document.createElement('div');
         if (isMatch) {
-          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1';
-          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">check</span><span>Chính xác</span>`;
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span>`;
         } else {
-          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1';
-          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">close</span><span>Đáp án: ${blank.answer}</span>`;
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">close</span><span>${t('answer_prefix')} ${escapeHtml(blank.answer)}</span>`;
         }
         labelWrap.appendChild(badge);
       }
@@ -1337,7 +1353,7 @@
       defaultOpt.value = '';
       defaultOpt.disabled = true;
       defaultOpt.selected = !selectedVal;
-      defaultOpt.textContent = '-- Chọn đáp án phù hợp --';
+      defaultOpt.textContent = t('interactive_dropdown_placeholder');
       select.appendChild(defaultOpt);
 
       blank.options.forEach(optText => {
@@ -1361,10 +1377,10 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-2 flex justify-end';
+      confirmWrap.className = 'pt-1 flex justify-end';
       const btnConfirm = document.createElement('button');
       btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
-      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
       container.appendChild(confirmWrap);
@@ -1379,8 +1395,8 @@
 
     if (q.interactive.pool && q.interactive.pool.length > 0) {
       const poolWrap = document.createElement('div');
-      poolWrap.className = 'bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-2';
-      poolWrap.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Lựa chọn khả dụng:</div>`;
+      poolWrap.className = 'bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] space-y-1.5';
+      poolWrap.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">${t('interactive_matching_pool')}</div>`;
       const tagsContainer = document.createElement('div');
       tagsContainer.className = 'flex flex-wrap gap-1.5';
       q.interactive.pool.forEach(item => {
@@ -1394,7 +1410,7 @@
     }
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-3';
+    card.className = 'interactive-card space-y-2';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1404,10 +1420,10 @@
       row.className = 'interactive-select-row';
 
       const labelWrap = document.createElement('div');
-      labelWrap.className = 'flex items-center justify-between';
+      labelWrap.className = 'flex flex-wrap items-center justify-between gap-1.5';
 
       const label = document.createElement('label');
-      label.className = 'text-xs font-semibold text-slate-700 dark:text-slate-300';
+      label.className = 'text-xs sm:text-[13px] font-semibold text-slate-700 dark:text-slate-200';
       label.textContent = `${idx + 1}. ${target.label}:`;
       labelWrap.appendChild(label);
 
@@ -1416,11 +1432,11 @@
         const isMatch = selectedVal === target.answer;
         const badge = document.createElement('div');
         if (isMatch) {
-          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1';
-          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">check</span><span>Chính xác</span>`;
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span>`;
         } else {
-          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1';
-          badge.innerHTML = `<span class="material-symbols-outlined text-[14px]">close</span><span>Đáp án: ${target.answer}</span>`;
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 inline-flex items-center space-x-1';
+          badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">close</span><span>${t('answer_prefix')} ${escapeHtml(target.answer)}</span>`;
         }
         labelWrap.appendChild(badge);
       }
@@ -1437,7 +1453,7 @@
       defaultOpt.value = '';
       defaultOpt.disabled = true;
       defaultOpt.selected = !selectedVal;
-      defaultOpt.textContent = '-- Chọn công cụ / hành động --';
+      defaultOpt.textContent = t('interactive_matching_placeholder');
       select.appendChild(defaultOpt);
 
       q.interactive.pool.forEach(optText => {
@@ -1461,10 +1477,10 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-2 flex justify-end';
+      confirmWrap.className = 'pt-1 flex justify-end';
       const btnConfirm = document.createElement('button');
       btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
-      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>Kiểm tra kết quả</span>`;
+      btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
       container.appendChild(confirmWrap);
@@ -1658,6 +1674,19 @@
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
   }
 
+  function scrollExplanationIntoView() {
+    if (!elExplanationBox || elExplanationBox.style.display === 'none') return;
+    setTimeout(() => {
+      const rect = elExplanationBox.getBoundingClientRect();
+      const dockHeight = 90; // floating nav capsule height + bottom padding offset
+      const visibleBottom = window.innerHeight - dockHeight;
+      if (rect.bottom > visibleBottom) {
+        const scrollNeeded = rect.bottom - visibleBottom + 24;
+        window.scrollBy({ top: scrollNeeded, behavior: 'smooth' });
+      }
+    }, 120);
+  }
+
   function renderExplanation(q) {
     const ansState = userAnswers[q.id];
     const isRevealed = ansState && ansState.revealed;
@@ -1665,7 +1694,7 @@
     if (isRevealed && mode === 'study') {
       elExplanationBox.style.display = 'block';
       if (q.answer && q.answer.includes(' | ')) {
-        elExplCorrectAnswer.innerHTML = '<span class="font-bold">Đáp án chính xác:</span><ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-emerald-800 dark:text-emerald-300 font-medium leading-relaxed">' +
+        elExplCorrectAnswer.innerHTML = `<span class="font-bold">${t('correct_answer_label')}</span><ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-emerald-800 dark:text-emerald-300 font-medium leading-relaxed">` +
           q.answer.split(' | ').map(part => `<li>${escapeHtml(part)}</li>`).join('') +
           '</ul>';
       } else {
@@ -1714,6 +1743,7 @@
           elExplImages.style.display = 'none';
         }
       }
+      scrollExplanationIntoView();
     } else {
       elExplanationBox.style.display = 'none';
     }

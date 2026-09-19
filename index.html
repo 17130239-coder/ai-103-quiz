@@ -121,12 +121,12 @@
   </header>
 
   <!-- MAIN CANVAS (Centered, Distraction-Free & Ergonomic) -->
-  <main class="flex-1 max-w-3xl w-full mx-auto px-3.5 sm:px-6 pt-4 sm:pt-6 pb-28">
+  <main class="flex-1 max-w-3xl w-full mx-auto px-3.5 sm:px-6 pt-3.5 sm:pt-5 pb-36 sm:pb-44">
     
     <!-- VIEW 1: QUIZ & PRACTICE (Study & Exam) -->
     <div id="viewQuiz" class="space-y-0 transition-opacity duration-200">
       <!-- Meta Info Bar -->
-      <div class="flex items-center justify-between pb-3 border-b border-black/[0.06] dark:border-white/[0.08] mb-4">
+      <div class="flex items-center justify-between pb-2.5 border-b border-black/[0.06] dark:border-white/[0.08] mb-3.5">
         <div class="flex items-center space-x-1.5 sm:space-x-2">
           <span id="qNumber" class="text-[11px] sm:text-xs font-mono font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 sm:px-2.5 py-0.5 rounded-full border border-orange-500/20">
             Câu 1 / 175
@@ -144,48 +144,48 @@
       </div>
 
       <!-- Question Prompt (Compact, Balanced Typography) -->
-      <article class="mb-5">
-        <h1 id="questionText" class="text-[14.5px] sm:text-[15.5px] font-medium leading-[1.62] sm:leading-[1.7] text-slate-800 dark:text-slate-100 tracking-[-0.01em] whitespace-pre-line">
+      <article class="mb-4">
+        <h1 id="questionText" class="text-[13.5px] sm:text-[14px] font-medium leading-[1.58] text-slate-800 dark:text-slate-100 tracking-[-0.01em] whitespace-pre-line">
           Đang tải nội dung câu hỏi...
         </h1>
       </article>
 
       <!-- Attached Diagrams / Code Screenshots (Zero-CLS container) -->
-      <div id="questionImages" class="flex flex-col gap-3 mb-5" style="display: none;">
+      <div id="questionImages" class="flex flex-col gap-2.5 mb-4" style="display: none;">
         <!-- Dynamic images injected -->
       </div>
 
       <!-- Options Container -->
-      <div id="optionsContainer" class="space-y-2.5 sm:space-y-3 mb-6">
+      <div id="optionsContainer" class="space-y-2 sm:space-y-2.5 mb-5">
         <!-- Options injected dynamically -->
       </div>
 
       <!-- Exam Submit Button (Visible only in Exam mode) -->
-      <div id="examSubmitContainer" class="flex justify-end mb-6" style="display: none;">
+      <div id="examSubmitContainer" class="flex justify-end mb-5" style="display: none;">
         <button id="btnExamSubmit" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-medium text-xs shadow-xs transition-all active:scale-95">
           Nộp bài thi & Chấm điểm
         </button>
       </div>
 
       <!-- Deep Dive / Explanation Card (Minimalist Linear disclosure) -->
-      <section id="explanationBox" class="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 sm:p-5 space-y-3 transition-all" style="display: none;">
-        <div class="flex items-center justify-between pb-2.5 border-b border-emerald-500/20">
+      <section id="explanationBox" class="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-3.5 sm:p-4.5 space-y-2.5 transition-all" style="display: none;">
+        <div class="flex items-center justify-between pb-2 border-b border-emerald-500/20">
           <div class="flex items-center space-x-2">
             <span class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
               <span class="material-symbols-outlined text-[14px]">check</span>
             </span>
-            <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-sm text-emerald-700 dark:text-emerald-400">
+            <span id="explCorrectAnswer" class="font-semibold text-xs sm:text-[13px] text-emerald-700 dark:text-emerald-400">
               Đáp án chính xác
             </span>
           </div>
           <span class="text-[10px] sm:text-[11px] font-mono text-slate-400">Microsoft Learn</span>
         </div>
 
-        <div id="explBody" class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-[1.7] whitespace-pre-line font-sans">
+        <div id="explBody" class="text-xs sm:text-[13px] text-slate-700 dark:text-slate-300 leading-[1.65] whitespace-pre-line font-sans">
         </div>
 
         <!-- Container for official answer images from the exam -->
-        <div id="explImages" class="pt-2 flex flex-col gap-3" style="display: none;">
+        <div id="explImages" class="pt-1.5 flex flex-col gap-2.5" style="display: none;">
         </div>
       </section>
     </div>
