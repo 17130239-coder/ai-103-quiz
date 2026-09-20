@@ -201,8 +201,16 @@
       fast_learn_shortcut: "Fast Learn [F]",
       reveal_all_answers: "Show All Answers",
       hide_all_answers: "Hide All Answers",
-      toast_fast_learn_on: "⚡ Fast Learn ON: Showing all answers and explanations",
-      toast_fast_learn_off: "⚡ Fast Learn OFF: Normal practice mode"
+      toast_fast_learn_on: "⚡ Fast Learn ON: Showing all answers",
+      toast_fast_learn_off: "⚡ Fast Learn OFF: Normal practice mode",
+      hide_explanation: "Hide Explanation",
+      show_explanation: "Show Explanation",
+      hide_explanation_shortcut: "Hide Explanation [E]",
+      show_explanation_shortcut: "Show Explanation [E]",
+      hide_explanations_all: "Hide Explanations",
+      show_explanations_all: "Show Explanations",
+      toast_explanation_hidden: "Explanations hidden for rapid study",
+      toast_explanation_shown: "Explanations visible"
     },
     vi: {
       mode_study: "Ôn tập",
@@ -288,8 +296,16 @@
       fast_learn_shortcut: "Học nhanh [F]",
       reveal_all_answers: "Hiện tất cả đáp án",
       hide_all_answers: "Ẩn tất cả đáp án",
-      toast_fast_learn_on: "⚡ Chế độ Học nhanh BẬT: Đang hiện toàn bộ đáp án & giải thích",
-      toast_fast_learn_off: "⚡ Chế độ Học nhanh TẮT: Trở về chế độ luyện tập"
+      toast_fast_learn_on: "⚡ Chế độ Học nhanh BẬT: Đang hiện toàn bộ đáp án",
+      toast_fast_learn_off: "⚡ Chế độ Học nhanh TẮT: Trở về chế độ luyện tập",
+      hide_explanation: "Ẩn giải thích",
+      show_explanation: "Hiện giải thích",
+      hide_explanation_shortcut: "Ẩn giải thích [E]",
+      show_explanation_shortcut: "Hiện giải thích [E]",
+      hide_explanations_all: "Ẩn giải thích",
+      show_explanations_all: "Hiện giải thích",
+      toast_explanation_hidden: "Đã ẩn giải thích để học nhanh",
+      toast_explanation_shown: "Đã hiện giải thích"
     }
   };
 
@@ -375,14 +391,19 @@
   const elBtnLangToggle = document.getElementById('btnLangToggle');
   const elLangText = document.getElementById('langText');
 
-  // Fast Learn Elements
+  // Fast Learn Elements (Header only - no duplication)
   const elBtnFastLearnToggle = document.getElementById('btnFastLearnToggle');
   const elFastLearnText = document.getElementById('fastLearnText');
   const elFastLearnIcon = document.getElementById('fastLearnIcon');
-  const elBtnFastLearnSingle = document.getElementById('btnFastLearnSingle');
-  const elFastLearnSingleText = document.getElementById('fastLearnSingleText');
-  const elBtnAllQRevealAll = document.getElementById('btnAllQRevealAll');
-  const elAllQRevealAllText = document.getElementById('allQRevealAllText');
+
+  // Explanation Option Elements
+  let isHideExplanation = localStorage.getItem('ai103_hide_explanation') === 'true';
+  const elBtnToggleExplMeta = document.getElementById('btnToggleExplMeta');
+  const elExplMetaIcon = document.getElementById('explMetaIcon');
+  const elExplMetaText = document.getElementById('explMetaText');
+  const elBtnAllQToggleExpl = document.getElementById('btnAllQToggleExpl');
+  const elAllQToggleExplIcon = document.getElementById('allQToggleExplIcon');
+  const elAllQToggleExplText = document.getElementById('allQToggleExplText');
 
   function updateFastLearnUI() {
     // Header button
@@ -399,30 +420,118 @@
         elBtnFastLearnToggle.title = t('fast_learn_shortcut');
       }
     }
+  }
+
+  function updateExplanationUI() {
+    const q = questions[currentIndex];
+    const ansState = q ? userAnswers[q.id] : null;
+    const isRevealed = q && ((ansState && ansState.revealed) || isFastLearn);
+
+    let isCurrentlyShown = false;
+    if (mode === 'study' && isRevealed) {
+      if (isHideExplanation) {
+        isCurrentlyShown = ansState && ansState.peekExplanation === true;
+      } else {
+        isCurrentlyShown = !(ansState && ansState.peekExplanation === false);
+      }
+    }
 
     // Meta bar button (Single view)
-    if (elBtnFastLearnSingle) {
-      if (isFastLearn) {
-        elBtnFastLearnSingle.classList.add('text-amber-500', 'font-semibold');
-        elBtnFastLearnSingle.classList.remove('text-slate-500', 'dark:text-slate-400');
-        if (elFastLearnSingleText) elFastLearnSingleText.textContent = t('fast_learn_on');
+    if (elBtnToggleExplMeta) {
+      if (isHideExplanation) {
+        if (elExplMetaIcon) elExplMetaIcon.textContent = isCurrentlyShown ? 'visibility' : 'visibility_off';
+        if (elExplMetaText) elExplMetaText.textContent = isCurrentlyShown ? t('hide_explanation_shortcut') : t('show_explanation_shortcut');
+        elBtnToggleExplMeta.classList.add('text-amber-500', 'dark:text-amber-400');
+        elBtnToggleExplMeta.classList.remove('text-slate-500', 'dark:text-slate-400');
+        elBtnToggleExplMeta.title = isCurrentlyShown ? t('hide_explanation') : t('show_explanation');
       } else {
-        elBtnFastLearnSingle.classList.remove('text-amber-500', 'font-semibold');
-        elBtnFastLearnSingle.classList.add('text-slate-500', 'dark:text-slate-400');
-        if (elFastLearnSingleText) elFastLearnSingleText.textContent = t('fast_learn_shortcut');
+        if (elExplMetaIcon) elExplMetaIcon.textContent = isCurrentlyShown ? 'visibility_off' : 'visibility';
+        if (elExplMetaText) elExplMetaText.textContent = isCurrentlyShown ? t('hide_explanation_shortcut') : t('show_explanation_shortcut');
+        elBtnToggleExplMeta.classList.remove('text-amber-500', 'dark:text-amber-400');
+        elBtnToggleExplMeta.classList.add('text-slate-500', 'dark:text-slate-400');
+        elBtnToggleExplMeta.title = isCurrentlyShown ? t('hide_explanation') : t('show_explanation');
       }
     }
 
-    // All Questions toolbar button
-    if (elBtnAllQRevealAll) {
-      if (isFastLearn) {
-        elBtnAllQRevealAll.classList.add('btn-fast-learn-active');
-        if (elAllQRevealAllText) elAllQRevealAllText.textContent = t('hide_all_answers');
+    // Floating nav capsule button (btnToggleExplanation)
+    if (elBtnToggleExplanation) {
+      const icon = elBtnToggleExplanation.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.textContent = isCurrentlyShown ? 'lightbulb' : 'lightbulb_outline';
+      }
+      if (isCurrentlyShown) {
+        elBtnToggleExplanation.classList.add('text-amber-500', 'dark:text-amber-400');
       } else {
-        elBtnAllQRevealAll.classList.remove('btn-fast-learn-active');
-        if (elAllQRevealAllText) elAllQRevealAllText.textContent = t('reveal_all_answers');
+        elBtnToggleExplanation.classList.remove('text-amber-500', 'dark:text-amber-400');
+      }
+      elBtnToggleExplanation.title = isCurrentlyShown ? `${t('hide_answer')} [Space]` : `${t('show_answer')} [Space]`;
+    }
+
+    // All Questions toolbar button (btnAllQToggleExpl)
+    if (elBtnAllQToggleExpl) {
+      if (elAllQToggleExplIcon) {
+        elAllQToggleExplIcon.textContent = isHideExplanation ? 'visibility_off' : 'visibility';
+      }
+      if (elAllQToggleExplText) {
+        elAllQToggleExplText.textContent = isHideExplanation ? t('show_explanations_all') : t('hide_explanations_all');
+      }
+      if (isHideExplanation) {
+        elBtnAllQToggleExpl.classList.add('text-amber-600', 'dark:text-amber-400', 'border-amber-500/30', 'bg-amber-500/10');
+      } else {
+        elBtnAllQToggleExpl.classList.remove('text-amber-600', 'dark:text-amber-400', 'border-amber-500/30', 'bg-amber-500/10');
       }
     }
+  }
+
+  function toggleHideExplanationOption(explicitVal = null) {
+    if (explicitVal !== null) {
+      isHideExplanation = !!explicitVal;
+    } else {
+      isHideExplanation = !isHideExplanation;
+    }
+
+    localStorage.setItem('ai103_hide_explanation', isHideExplanation ? 'true' : 'false');
+
+    const q = questions[currentIndex];
+    if (q && userAnswers[q.id]) {
+      delete userAnswers[q.id].peekExplanation;
+    }
+
+    if (currentLayout === 'all') {
+      renderAllQuestionsView();
+    } else {
+      if (q) renderExplanation(q);
+    }
+    updateExplanationUI();
+
+    showToast(
+      isHideExplanation ? t('toast_explanation_hidden') : t('toast_explanation_shown'),
+      isHideExplanation ? 'visibility_off' : 'visibility'
+    );
+  }
+
+  function toggleCurrentQuestionExplanation() {
+    const q = questions[currentIndex];
+    if (!q || mode !== 'study') return;
+    const ans = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
+
+    const isRevealed = ans.revealed || isFastLearn;
+    if (!isRevealed) {
+      ans.revealed = true;
+      userAnswers[q.id] = ans;
+    } else {
+      if (isHideExplanation) {
+        ans.peekExplanation = ans.peekExplanation !== true;
+      } else {
+        ans.peekExplanation = ans.peekExplanation === false ? true : false;
+      }
+      userAnswers[q.id] = ans;
+    }
+
+    saveState();
+    renderOptions(q);
+    renderExplanation(q);
+    updateExplanationUI();
   }
 
   function toggleFastLearn(explicitVal = null) {
@@ -957,24 +1066,34 @@
       const explToggleBtn = document.createElement('button');
       explToggleBtn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-xs font-semibold transition-all active:scale-95';
       const isRev = (ansState && ansState.revealed) || isFastLearn;
+      let shouldShowExpl = false;
+      if (isRev) {
+        if (isHideExplanation) {
+          shouldShowExpl = ansState && ansState.peekExplanation === true;
+        } else {
+          shouldShowExpl = !(ansState && ansState.peekExplanation === false);
+        }
+      }
       explToggleBtn.innerHTML = `
         <span class="material-symbols-outlined text-[15px]">lightbulb</span>
-        <span>${isRev ? t('hide_answer') : t('show_answer')}</span>
+        <span>${shouldShowExpl ? t('hide_answer') : t('show_answer')}</span>
       `;
 
       const explBox = document.createElement('div');
       explBox.id = `all-q-expl-box-${q.id}`;
       explBox.className = 'mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 sm:p-5 space-y-3.5 transition-all';
-      explBox.style.display = isRev ? 'block' : 'none';
+      explBox.style.display = shouldShowExpl ? 'block' : 'none';
       renderCardExplanationContent(q, explBox);
 
       explToggleBtn.addEventListener('click', () => {
-        const curRev = (ansState && ansState.revealed) || isFastLearn;
-        ansState.revealed = !curRev;
+        const isShownNow = explBox.style.display !== 'none';
+        const nextShow = !isShownNow;
+        ansState.peekExplanation = nextShow;
+        if (nextShow) ansState.revealed = true;
         userAnswers[q.id] = ansState;
         saveState();
-        explBox.style.display = ansState.revealed ? 'block' : 'none';
-        explToggleBtn.querySelector('span:last-child').textContent = ansState.revealed ? t('hide_answer') : t('show_answer');
+        explBox.style.display = nextShow ? 'block' : 'none';
+        explToggleBtn.querySelector('span:last-child').textContent = nextShow ? t('hide_answer') : t('show_answer');
         renderOptions(q, optsContainer);
       });
 
@@ -1820,7 +1939,16 @@
     const ansState = userAnswers[q.id];
     const isRevealed = (ansState && ansState.revealed) || isFastLearn;
 
+    let shouldShow = false;
     if (isRevealed && mode === 'study') {
+      if (isHideExplanation) {
+        shouldShow = ansState && ansState.peekExplanation === true;
+      } else {
+        shouldShow = !(ansState && ansState.peekExplanation === false);
+      }
+    }
+
+    if (shouldShow) {
       elExplanationBox.style.display = 'block';
       if (q.answer && q.answer.includes(' | ')) {
         elExplCorrectAnswer.innerHTML = `<span class="font-bold">${t('correct_answer_label')}</span><ul class="mt-1.5 list-disc list-inside space-y-1 text-xs text-emerald-800 dark:text-emerald-300 font-medium leading-relaxed">` +
@@ -1875,6 +2003,7 @@
     } else {
       elExplanationBox.style.display = 'none';
     }
+    updateExplanationUI();
   }
 
   function updateActionButtons(q) {
@@ -2102,8 +2231,8 @@
         timer.style.setProperty('display', 'none', 'important');
       }
       if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = '';
-      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = '';
-      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = '';
+      if (elBtnToggleExplMeta) elBtnToggleExplMeta.style.display = '';
+      if (elBtnAllQToggleExpl) elBtnAllQToggleExpl.style.display = '';
       stopExamTimer();
     } else if (mode === 'exam') {
       if (btnExam) {
@@ -2116,15 +2245,16 @@
         timer.style.removeProperty('display');
       }
       if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = 'none';
-      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = 'none';
-      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = 'none';
+      if (elBtnToggleExplMeta) elBtnToggleExplMeta.style.display = 'none';
+      if (elBtnAllQToggleExpl) elBtnAllQToggleExpl.style.display = 'none';
       startExamTimer();
     } else {
       if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = 'none';
-      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = 'none';
-      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = 'none';
+      if (elBtnToggleExplMeta) elBtnToggleExplMeta.style.display = 'none';
+      if (elBtnAllQToggleExpl) elBtnAllQToggleExpl.style.display = 'none';
     }
     renderCurrentQuestion();
+    updateExplanationUI();
   }
 
   // Global exposure for inline HTML onclick and external triggers
@@ -2512,15 +2642,17 @@
       elBtnLangToggle.addEventListener('click', toggleLanguage);
     }
 
-    // Fast Learn Toggle Listeners
+    // Fast Learn Toggle Listener (Header only - no duplication)
     if (elBtnFastLearnToggle) {
       elBtnFastLearnToggle.addEventListener('click', () => toggleFastLearn());
     }
-    if (elBtnFastLearnSingle) {
-      elBtnFastLearnSingle.addEventListener('click', () => toggleFastLearn());
+
+    // Explanation Option Toggle Listeners
+    if (elBtnToggleExplMeta) {
+      elBtnToggleExplMeta.addEventListener('click', () => toggleHideExplanationOption());
     }
-    if (elBtnAllQRevealAll) {
-      elBtnAllQRevealAll.addEventListener('click', () => toggleFastLearn());
+    if (elBtnAllQToggleExpl) {
+      elBtnAllQToggleExpl.addEventListener('click', () => toggleHideExplanationOption());
     }
 
     // All Questions Filter Pills
@@ -2665,19 +2797,9 @@
       renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     });
 
-    // Toggle Explanation
+    // Toggle Explanation (Current question)
     elBtnToggleExplanation.addEventListener('click', () => {
-      const q = questions[currentIndex];
-      if (!q) return;
-      const ans = userAnswers[q.id] || { selectedKeys: [], interactiveAnswers: {}, isCorrect: null, revealed: false };
-      ans.revealed = !ans.revealed;
-      userAnswers[q.id] = ans;
-      saveState();
-      renderOptions(q);
-      renderExplanation(q);
-      if (ans.revealed && !isFastLearn) {
-        scrollExplanationIntoView();
-      }
+      toggleCurrentQuestionExplanation();
     });
 
     // Navigation buttons
@@ -2710,7 +2832,14 @@
         goToPrev();
       } else if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
-        if (mode === 'study') elBtnToggleExplanation.click();
+        if (mode === 'study') toggleCurrentQuestionExplanation();
+      } else if (e.key === 'e' || e.key === 'E') {
+        const q = questions[currentIndex];
+        const hasOptionE = q && q.options && q.options.some(o => o.key === 'E');
+        if (!hasOptionE && mode === 'study') {
+          e.preventDefault();
+          toggleHideExplanationOption();
+        }
       } else if (e.key === 'b' || e.key === 'B') {
         e.preventDefault();
         elBtnBookmark.click();
