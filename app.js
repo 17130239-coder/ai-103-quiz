@@ -23,6 +23,7 @@
   let currentLanguage = localStorage.getItem('ai103_language') || 'en'; // Default: 'en'
   let currentLayout = localStorage.getItem('ai103_layout') || 'single'; // 'single' | 'all'
   let allQFilter = 'all'; // 'all' | 'unanswered' | 'wrong' | 'correct' | 'bookmarked'
+  let isFastLearn = localStorage.getItem('ai103_fast_learn') === 'true'; // Fast Learn Mode
   
   let examTimerId = null;
   let examSeconds = 0;
@@ -193,7 +194,15 @@
       interactive_dropdown_placeholder: "-- Select an option --",
       interactive_matching_placeholder: "-- Select action / tool --",
       interactive_check_btn: "Check Answer",
-      answer_prefix: "Answer:"
+      answer_prefix: "Answer:",
+      fast_learn: "Fast Learn",
+      fast_learn_on: "Fast Learn: ON",
+      fast_learn_off: "Fast Learn",
+      fast_learn_shortcut: "Fast Learn [F]",
+      reveal_all_answers: "Show All Answers",
+      hide_all_answers: "Hide All Answers",
+      toast_fast_learn_on: "⚡ Fast Learn ON: Showing all answers and explanations",
+      toast_fast_learn_off: "⚡ Fast Learn OFF: Normal practice mode"
     },
     vi: {
       mode_study: "Ôn tập",
@@ -272,7 +281,15 @@
       interactive_dropdown_placeholder: "-- Chọn đáp án phù hợp --",
       interactive_matching_placeholder: "-- Chọn công cụ / hành động --",
       interactive_check_btn: "Kiểm tra kết quả",
-      answer_prefix: "Đáp án:"
+      answer_prefix: "Đáp án:",
+      fast_learn: "Học nhanh",
+      fast_learn_on: "Học nhanh: BẬT",
+      fast_learn_off: "Học nhanh",
+      fast_learn_shortcut: "Học nhanh [F]",
+      reveal_all_answers: "Hiện tất cả đáp án",
+      hide_all_answers: "Ẩn tất cả đáp án",
+      toast_fast_learn_on: "⚡ Chế độ Học nhanh BẬT: Đang hiện toàn bộ đáp án & giải thích",
+      toast_fast_learn_off: "⚡ Chế độ Học nhanh TẮT: Trở về chế độ luyện tập"
     }
   };
 
@@ -303,6 +320,7 @@
     if (elBtnLangToggle) elBtnLangToggle.title = t('lang_toggle_title');
     if (elLayoutText) elLayoutText.textContent = currentLayout === 'all' ? t('layout_all') : t('layout_single');
     if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${questions.length} ${currentLanguage === 'en' ? 'questions' : 'câu'}`;
+    updateFastLearnUI();
 
     updateStats();
     if (currentLayout === 'single') {
@@ -356,6 +374,83 @@
   const elLayoutText = document.getElementById('layoutText');
   const elBtnLangToggle = document.getElementById('btnLangToggle');
   const elLangText = document.getElementById('langText');
+
+  // Fast Learn Elements
+  const elBtnFastLearnToggle = document.getElementById('btnFastLearnToggle');
+  const elFastLearnText = document.getElementById('fastLearnText');
+  const elFastLearnIcon = document.getElementById('fastLearnIcon');
+  const elBtnFastLearnSingle = document.getElementById('btnFastLearnSingle');
+  const elFastLearnSingleText = document.getElementById('fastLearnSingleText');
+  const elBtnAllQRevealAll = document.getElementById('btnAllQRevealAll');
+  const elAllQRevealAllText = document.getElementById('allQRevealAllText');
+
+  function updateFastLearnUI() {
+    // Header button
+    if (elBtnFastLearnToggle) {
+      if (isFastLearn) {
+        elBtnFastLearnToggle.classList.add('btn-fast-learn-active');
+        if (elFastLearnIcon) elFastLearnIcon.classList.add('fast-learn-pulse');
+        if (elFastLearnText) elFastLearnText.textContent = t('fast_learn_on');
+        elBtnFastLearnToggle.title = t('toast_fast_learn_on');
+      } else {
+        elBtnFastLearnToggle.classList.remove('btn-fast-learn-active');
+        if (elFastLearnIcon) elFastLearnIcon.classList.remove('fast-learn-pulse');
+        if (elFastLearnText) elFastLearnText.textContent = t('fast_learn_off');
+        elBtnFastLearnToggle.title = t('fast_learn_shortcut');
+      }
+    }
+
+    // Meta bar button (Single view)
+    if (elBtnFastLearnSingle) {
+      if (isFastLearn) {
+        elBtnFastLearnSingle.classList.add('text-amber-500', 'font-semibold');
+        elBtnFastLearnSingle.classList.remove('text-slate-500', 'dark:text-slate-400');
+        if (elFastLearnSingleText) elFastLearnSingleText.textContent = t('fast_learn_on');
+      } else {
+        elBtnFastLearnSingle.classList.remove('text-amber-500', 'font-semibold');
+        elBtnFastLearnSingle.classList.add('text-slate-500', 'dark:text-slate-400');
+        if (elFastLearnSingleText) elFastLearnSingleText.textContent = t('fast_learn_shortcut');
+      }
+    }
+
+    // All Questions toolbar button
+    if (elBtnAllQRevealAll) {
+      if (isFastLearn) {
+        elBtnAllQRevealAll.classList.add('btn-fast-learn-active');
+        if (elAllQRevealAllText) elAllQRevealAllText.textContent = t('hide_all_answers');
+      } else {
+        elBtnAllQRevealAll.classList.remove('btn-fast-learn-active');
+        if (elAllQRevealAllText) elAllQRevealAllText.textContent = t('reveal_all_answers');
+      }
+    }
+  }
+
+  function toggleFastLearn(explicitVal = null) {
+    if (mode === 'exam') {
+      showToast(currentLanguage === 'en' ? 'Fast Learn is for Study mode' : 'Chế độ Học nhanh dành cho Ôn tập', 'info');
+      return;
+    }
+
+    if (explicitVal !== null) {
+      isFastLearn = !!explicitVal;
+    } else {
+      isFastLearn = !isFastLearn;
+    }
+
+    localStorage.setItem('ai103_fast_learn', isFastLearn ? 'true' : 'false');
+    updateFastLearnUI();
+
+    if (currentLayout === 'all') {
+      renderAllQuestionsView();
+    } else {
+      renderCurrentQuestion();
+    }
+
+    showToast(
+      isFastLearn ? t('toast_fast_learn_on') : t('toast_fast_learn_off'),
+      'bolt'
+    );
+  }
 
   // Continuous Vertical Scroll (All Questions) Elements
   const elViewAllQuestions = document.getElementById('viewAllQuestions');
@@ -845,7 +940,7 @@
     if (mode === 'study') {
       const explToggleBtn = document.createElement('button');
       explToggleBtn.className = 'flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/15 text-orange-600 dark:text-orange-400 border border-orange-500/20 text-xs font-semibold transition-all active:scale-95';
-      const isRev = ansState && ansState.revealed;
+      const isRev = (ansState && ansState.revealed) || isFastLearn;
       explToggleBtn.innerHTML = `
         <span class="material-symbols-outlined text-[15px]">lightbulb</span>
         <span>${isRev ? t('hide_answer') : t('show_answer')}</span>
@@ -858,7 +953,7 @@
       renderCardExplanationContent(q, explBox);
 
       explToggleBtn.addEventListener('click', () => {
-        const curRev = ansState.revealed;
+        const curRev = (ansState && ansState.revealed) || isFastLearn;
         ansState.revealed = !curRev;
         userAnswers[q.id] = ansState;
         saveState();
@@ -1147,14 +1242,19 @@
         // Status badges for Study mode
         let statusBadgeHtml = '';
 
-        if (mode === 'study' && ansState.selectedKeys && ansState.selectedKeys.length > 0) {
-          const isKeyCorrect = q.answer_keys.includes(opt.key);
-          if (isKeyCorrect) {
-            item.classList.add('correct');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span></span>`;
-          } else if (isSelected && !isKeyCorrect) {
-            item.classList.add('wrong');
-            statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>${t('badge_wrong')}</span></span>`;
+        if (mode === 'study') {
+          const isRevealed = (ansState.revealed || isFastLearn);
+          const hasSelected = ansState.selectedKeys && ansState.selectedKeys.length > 0;
+          const isKeyCorrect = q.answer_keys && q.answer_keys.includes(opt.key);
+
+          if (isRevealed || hasSelected) {
+            if (isKeyCorrect) {
+              item.classList.add('correct');
+              statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span></span>`;
+            } else if (isSelected && !isKeyCorrect) {
+              item.classList.add('wrong');
+              statusBadgeHtml = `<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-rose-500/15 text-rose-600 dark:text-rose-400 inline-flex items-center space-x-1"><span class="material-symbols-outlined text-[13px]">close</span><span>${t('badge_wrong')}</span></span>`;
+            }
           }
         }
 
@@ -1227,7 +1327,7 @@
     card.className = 'interactive-card yes-no-card';
 
     const userMap = ansState.interactiveAnswers || {};
-    const isRevealed = ansState.revealed && mode === 'study';
+    const isRevealed = (ansState.revealed || isFastLearn) && mode === 'study';
 
     q.interactive.statements.forEach((stmt, idx) => {
       const row = document.createElement('div');
@@ -1240,7 +1340,7 @@
       const pillsDiv = document.createElement('div');
       pillsDiv.className = 'yes-no-pills';
 
-      const selectedVal = userMap[stmt.id];
+      const selectedVal = userMap[stmt.id] || (isFastLearn ? stmt.answer : '');
 
       const btnYes = document.createElement('button');
       btnYes.className = 'yes-no-btn';
@@ -1313,7 +1413,7 @@
     card.className = 'interactive-card';
 
     const userMap = ansState.interactiveAnswers || {};
-    const isRevealed = ansState.revealed && mode === 'study';
+    const isRevealed = (ansState.revealed || isFastLearn) && mode === 'study';
 
     q.interactive.blanks.forEach((blank, idx) => {
       const row = document.createElement('div');
@@ -1327,7 +1427,7 @@
       label.textContent = `${idx + 1}. ${blank.label}:`;
       labelWrap.appendChild(label);
 
-      const selectedVal = userMap[blank.id] || '';
+      const selectedVal = userMap[blank.id] || (isFastLearn ? blank.answer : '');
       if (isRevealed) {
         const isMatch = selectedVal === blank.answer;
         const badge = document.createElement('div');
@@ -1413,7 +1513,7 @@
     card.className = 'interactive-card';
 
     const userMap = ansState.interactiveAnswers || {};
-    const isRevealed = ansState.revealed && mode === 'study';
+    const isRevealed = (ansState.revealed || isFastLearn) && mode === 'study';
 
     q.interactive.targets.forEach((target, idx) => {
       const row = document.createElement('div');
@@ -1427,7 +1527,7 @@
       label.textContent = `${idx + 1}. ${target.label}:`;
       labelWrap.appendChild(label);
 
-      const selectedVal = userMap[target.id] || '';
+      const selectedVal = userMap[target.id] || (isFastLearn ? target.answer : '');
       if (isRevealed) {
         const isMatch = selectedVal === target.answer;
         const badge = document.createElement('div');
@@ -1689,7 +1789,7 @@
 
   function renderExplanation(q) {
     const ansState = userAnswers[q.id];
-    const isRevealed = ansState && ansState.revealed;
+    const isRevealed = (ansState && ansState.revealed) || isFastLearn;
 
     if (isRevealed && mode === 'study') {
       elExplanationBox.style.display = 'block';
@@ -1973,6 +2073,9 @@
         timer.classList.remove('flex');
         timer.style.setProperty('display', 'none', 'important');
       }
+      if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = '';
+      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = '';
+      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = '';
       stopExamTimer();
     } else if (mode === 'exam') {
       if (btnExam) {
@@ -1984,7 +2087,14 @@
         timer.classList.add('flex');
         timer.style.removeProperty('display');
       }
+      if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = 'none';
+      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = 'none';
+      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = 'none';
       startExamTimer();
+    } else {
+      if (elBtnFastLearnToggle) elBtnFastLearnToggle.style.display = 'none';
+      if (elBtnFastLearnSingle) elBtnFastLearnSingle.style.display = 'none';
+      if (elBtnAllQRevealAll) elBtnAllQRevealAll.style.display = 'none';
     }
     renderCurrentQuestion();
   }
@@ -2374,6 +2484,17 @@
       elBtnLangToggle.addEventListener('click', toggleLanguage);
     }
 
+    // Fast Learn Toggle Listeners
+    if (elBtnFastLearnToggle) {
+      elBtnFastLearnToggle.addEventListener('click', () => toggleFastLearn());
+    }
+    if (elBtnFastLearnSingle) {
+      elBtnFastLearnSingle.addEventListener('click', () => toggleFastLearn());
+    }
+    if (elBtnAllQRevealAll) {
+      elBtnAllQRevealAll.addEventListener('click', () => toggleFastLearn());
+    }
+
     // All Questions Filter Pills
     if (elAllQFilterPills) {
       elAllQFilterPills.forEach(pill => {
@@ -2559,9 +2680,12 @@
       } else if (e.key === ' ' || e.code === 'Space') {
         e.preventDefault();
         if (mode === 'study') elBtnToggleExplanation.click();
-      } else if (e.key === 'b' || e.key === 'B' || e.key === 'f' || e.key === 'F') {
+      } else if (e.key === 'b' || e.key === 'B') {
         e.preventDefault();
         elBtnBookmark.click();
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFastLearn();
       } else if (e.key === 'g' || e.key === 'G') {
         e.preventDefault();
         if (elQuestionDrawer.classList.contains('translate-y-full') || elQuestionDrawer.classList.contains('sm:translate-x-full')) {

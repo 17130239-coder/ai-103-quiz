@@ -982,3 +982,25 @@ input[type="number"] {
 #allQJumpInput {
   min-width: 3.5rem;
 }
+
+/* Fast Learn Mode (Rapid Learning) */
+.btn-fast-learn-active {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #f59e0b !important;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+html.dark .btn-fast-learn-active {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  border-color: rgba(245, 158, 11, 0.5) !important;
+  color: #fbbf24 !important;
+}
+
+.fast-learn-pulse {
+  animation: fastLearnPulse 1.8s ease-in-out infinite;
+}
+@keyframes fastLearnPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
+}
