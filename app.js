@@ -1216,7 +1216,7 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between pb-2 text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-medium mb-2.5';
+    header.className = 'interactive-header flex items-center justify-between';
     header.innerHTML = `
       <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-orange-500">checklist</span><span>${t('interactive_statements_header')}</span></span>
       <span>${t('interactive_yes_no_header')}</span>
@@ -1305,12 +1305,12 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-medium flex items-center space-x-2 mb-3.5';
-    header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-orange-500">tune</span><span>${t('interactive_dropdown_header')}</span>`;
+    header.className = 'interactive-header';
+    header.innerHTML = `<span class="material-symbols-outlined text-[16px] text-orange-500">tune</span><span>${t('interactive_dropdown_header')}</span>`;
     container.appendChild(header);
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-4';
+    card.className = 'interactive-card';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1320,7 +1320,7 @@
       row.className = 'interactive-select-row';
 
       const labelWrap = document.createElement('div');
-      labelWrap.className = 'flex flex-wrap items-center justify-between gap-1.5';
+      labelWrap.className = 'flex flex-wrap items-center justify-between gap-2 pb-0.5';
       
       const label = document.createElement('label');
       label.className = 'text-xs sm:text-[13px] font-semibold text-slate-700 dark:text-slate-200';
@@ -1395,7 +1395,7 @@
 
     if (q.interactive.pool && q.interactive.pool.length > 0) {
       const poolWrap = document.createElement('div');
-      poolWrap.className = 'bg-black/[0.02] dark:bg-white/[0.03] p-3.5 sm:p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.08] space-y-2 mb-4';
+      poolWrap.className = 'bg-black/[0.02] dark:bg-white/[0.03] p-3.5 sm:p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.08] space-y-2 mb-5';
       poolWrap.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">${t('interactive_matching_pool')}</div>`;
       const tagsContainer = document.createElement('div');
       tagsContainer.className = 'flex flex-wrap gap-2';
@@ -1410,7 +1410,7 @@
     }
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-4';
+    card.className = 'interactive-card';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';

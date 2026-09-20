@@ -257,12 +257,22 @@ html.dark .interactive-guide {
 }
 
 /* Images & Diagrams with Zero Layout Shift */
+#questionImages {
+  margin-top: 0.5rem !important;
+  margin-bottom: 2rem !important;
+}
+@media (max-width: 640px) {
+  #questionImages {
+    margin-bottom: 1.75rem !important;
+  }
+}
+
 .q-img-wrap {
   position: relative;
   background-color: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
+  border-radius: 0.875rem;
+  padding: 0.625rem;
   text-align: center;
   cursor: zoom-in;
   transition: border-color 0.15s ease;
@@ -290,9 +300,28 @@ html.dark .q-img-frame {
   background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* Smooth Explanation Box Reveal */
+/* Options Container Vertical Rhythm */
+#optionsContainer {
+  margin-top: 0.5rem !important;
+  margin-bottom: 2.25rem !important;
+}
+@media (max-width: 640px) {
+  #optionsContainer {
+    margin-bottom: 2rem !important;
+  }
+}
+
+/* Smooth Explanation Box Reveal & Vertical Spacing */
 #explanationBox {
+  margin-top: 2.25rem !important;
+  margin-bottom: 2.5rem !important;
   animation: explanationSlide 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (max-width: 640px) {
+  #explanationBox {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
 }
 @keyframes explanationSlide {
   from {
@@ -592,12 +621,27 @@ html.dark .btn-outline {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.interactive-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #64748b;
+  margin-bottom: 1.25rem !important;
+}
+html.dark .interactive-header {
+  color: #94a3b8;
 }
 
 .interactive-card {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem !important;
   width: 100%;
 }
 .interactive-card.yes-no-card {
@@ -718,8 +762,8 @@ html.dark .yes-no-btn.revealed-key {
 .interactive-select-row {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  padding: 1rem 1.125rem;
+  gap: 0.75rem;
+  padding: 1.125rem 1.25rem;
   border-radius: 0.875rem;
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -734,7 +778,7 @@ html.dark .interactive-select-row {
 
 .interactive-select {
   width: 100%;
-  padding: 0.625rem 2.2rem 0.625rem 0.875rem;
+  padding: 0.6875rem 2.4rem 0.6875rem 1rem;
   font-size: 0.8125rem;
   font-family: inherit;
   font-weight: 500;
