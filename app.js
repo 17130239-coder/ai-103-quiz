@@ -833,14 +833,14 @@
     // 4. Options Container
     const optsContainer = document.createElement('div');
     optsContainer.id = `all-q-opts-${q.id}`;
-    optsContainer.className = 'space-y-2 my-2.5';
+    optsContainer.className = 'space-y-3.5 my-3.5';
     renderOptions(q, optsContainer);
     card.appendChild(optsContainer);
 
     // 5. Card Footer: Explanation & Action in Study mode
     const explSection = document.createElement('div');
     explSection.id = `all-q-expl-wrap-${q.id}`;
-    explSection.className = 'pt-2 border-t border-black/[0.04] dark:border-white/[0.06] space-y-3';
+    explSection.className = 'pt-3.5 border-t border-black/[0.06] dark:border-white/[0.08] space-y-3.5 mt-3.5';
 
     if (mode === 'study') {
       const explToggleBtn = document.createElement('button');
@@ -853,7 +853,7 @@
 
       const explBox = document.createElement('div');
       explBox.id = `all-q-expl-box-${q.id}`;
-      explBox.className = 'rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 space-y-3 transition-all';
+      explBox.className = 'mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/[0.05] dark:bg-emerald-500/[0.08] p-4 sm:p-5 space-y-3.5 transition-all';
       explBox.style.display = isRev ? 'block' : 'none';
       renderCardExplanationContent(q, explBox);
 
@@ -1216,7 +1216,7 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'flex items-center justify-between pb-0.5 text-xs text-slate-500 dark:text-slate-400 font-medium';
+    header.className = 'flex items-center justify-between pb-2 text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-medium mb-2.5';
     header.innerHTML = `
       <span class="flex items-center space-x-1.5"><span class="material-symbols-outlined text-[15px] text-orange-500">checklist</span><span>${t('interactive_statements_header')}</span></span>
       <span>${t('interactive_yes_no_header')}</span>
@@ -1287,9 +1287,9 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-1 flex justify-end';
+      confirmWrap.className = 'pt-3.5 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
 
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
@@ -1305,12 +1305,12 @@
     container.className = 'interactive-container';
 
     const header = document.createElement('div');
-    header.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center space-x-1.5 pb-0.5';
+    header.className = 'text-xs sm:text-[13px] text-slate-500 dark:text-slate-400 font-medium flex items-center space-x-2 mb-3.5';
     header.innerHTML = `<span class="material-symbols-outlined text-[15px] text-orange-500">tune</span><span>${t('interactive_dropdown_header')}</span>`;
     container.appendChild(header);
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-2';
+    card.className = 'interactive-card space-y-4';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1332,10 +1332,10 @@
         const isMatch = selectedVal === blank.answer;
         const badge = document.createElement('div');
         if (isMatch) {
-          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center space-x-1';
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20 inline-flex items-center space-x-1';
           badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span>`;
         } else {
-          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 inline-flex items-center space-x-1';
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-md border border-rose-500/20 inline-flex items-center space-x-1';
           badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">close</span><span>${t('answer_prefix')} ${escapeHtml(blank.answer)}</span>`;
         }
         labelWrap.appendChild(badge);
@@ -1377,9 +1377,9 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-1 flex justify-end';
+      confirmWrap.className = 'pt-3.5 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
@@ -1395,10 +1395,10 @@
 
     if (q.interactive.pool && q.interactive.pool.length > 0) {
       const poolWrap = document.createElement('div');
-      poolWrap.className = 'bg-black/[0.02] dark:bg-white/[0.03] p-3 rounded-xl border border-black/[0.06] dark:border-white/[0.08] space-y-1.5';
+      poolWrap.className = 'bg-black/[0.02] dark:bg-white/[0.03] p-3.5 sm:p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.08] space-y-2 mb-4';
       poolWrap.innerHTML = `<div class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">${t('interactive_matching_pool')}</div>`;
       const tagsContainer = document.createElement('div');
-      tagsContainer.className = 'flex flex-wrap gap-1.5';
+      tagsContainer.className = 'flex flex-wrap gap-2';
       q.interactive.pool.forEach(item => {
         const tag = document.createElement('span');
         tag.className = 'pool-tag';
@@ -1410,7 +1410,7 @@
     }
 
     const card = document.createElement('div');
-    card.className = 'interactive-card space-y-2';
+    card.className = 'interactive-card space-y-4';
 
     const userMap = ansState.interactiveAnswers || {};
     const isRevealed = ansState.revealed && mode === 'study';
@@ -1432,10 +1432,10 @@
         const isMatch = selectedVal === target.answer;
         const badge = document.createElement('div');
         if (isMatch) {
-          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center space-x-1';
+          badge.className = 'text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-md border border-emerald-500/20 inline-flex items-center space-x-1';
           badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">check</span><span>${t('badge_correct')}</span>`;
         } else {
-          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20 inline-flex items-center space-x-1';
+          badge.className = 'text-[11px] font-semibold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-md border border-rose-500/20 inline-flex items-center space-x-1';
           badge.innerHTML = `<span class="material-symbols-outlined text-[13px]">close</span><span>${t('answer_prefix')} ${escapeHtml(target.answer)}</span>`;
         }
         labelWrap.appendChild(badge);
@@ -1477,9 +1477,9 @@
     const hasAny = Object.keys(userMap).length > 0;
     if (mode === 'study' && hasAny && !ansState.revealed) {
       const confirmWrap = document.createElement('div');
-      confirmWrap.className = 'pt-1 flex justify-end';
+      confirmWrap.className = 'pt-3.5 flex justify-end';
       const btnConfirm = document.createElement('button');
-      btnConfirm.className = 'w-full sm:w-auto px-4 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
+      btnConfirm.className = 'w-full sm:w-auto px-5 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 flex items-center justify-center space-x-1.5';
       btnConfirm.innerHTML = `<span class="material-symbols-outlined text-[16px]">check_circle</span><span>${t('interactive_check_btn')}</span>`;
       btnConfirm.addEventListener('click', () => submitInteractiveQuestion(q));
       confirmWrap.appendChild(btnConfirm);
