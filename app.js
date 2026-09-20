@@ -440,10 +440,18 @@
     localStorage.setItem('ai103_fast_learn', isFastLearn ? 'true' : 'false');
     updateFastLearnUI();
 
+    cancelScrollExplanation();
+
     if (currentLayout === 'all') {
       renderAllQuestionsView();
+      if (isFastLearn) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     } else {
       renderCurrentQuestion();
+      if (isFastLearn) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
 
     showToast(
@@ -668,13 +676,21 @@
     currentIndex = newIndex;
     saveState();
     
-    // Crucial: Instant scroll to top to prevent jitter / scroll desync
+    // Cancel any pending explanation auto-scroll
+    cancelScrollExplanation();
+
+    // Crucial: Instant scroll to top to prevent jitter and view question from top
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     renderCurrentQuestion();
     updateNavButtons();
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
     preloadAdjacentImages();
+
+    // Secondary frame guarantee to stay at top after DOM paint
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    });
   }
 
   function goToNext() {
@@ -1705,6 +1721,7 @@
     updateStats();
     refreshQuestionUI(q);
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    if (!isFastLearn && currentLayout === 'single') scrollExplanationIntoView();
   }
 
   function handleOptionClick(q, key) {
@@ -1733,6 +1750,7 @@
         updateStats();
         refreshQuestionUI(q);
         renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+        if (!isFastLearn && currentLayout === 'single') scrollExplanationIntoView();
       }
     } else {
       // Exam mode
@@ -1772,11 +1790,22 @@
     updateStats();
     refreshQuestionUI(q);
     renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    if (!isFastLearn && currentLayout === 'single') scrollExplanationIntoView();
+  }
+
+  let scrollExplanationTimer = null;
+  function cancelScrollExplanation() {
+    if (scrollExplanationTimer) {
+      clearTimeout(scrollExplanationTimer);
+      scrollExplanationTimer = null;
+    }
   }
 
   function scrollExplanationIntoView() {
+    cancelScrollExplanation();
+    if (isFastLearn || currentLayout !== 'single' || mode !== 'study') return;
     if (!elExplanationBox || elExplanationBox.style.display === 'none') return;
-    setTimeout(() => {
+    scrollExplanationTimer = setTimeout(() => {
       const rect = elExplanationBox.getBoundingClientRect();
       const dockHeight = 90; // floating nav capsule height + bottom padding offset
       const visibleBottom = window.innerHeight - dockHeight;
@@ -1843,7 +1872,6 @@
           elExplImages.style.display = 'none';
         }
       }
-      scrollExplanationIntoView();
     } else {
       elExplanationBox.style.display = 'none';
     }
@@ -2647,6 +2675,9 @@
       saveState();
       renderOptions(q);
       renderExplanation(q);
+      if (ans.revealed && !isFastLearn) {
+        scrollExplanationIntoView();
+      }
     });
 
     // Navigation buttons
