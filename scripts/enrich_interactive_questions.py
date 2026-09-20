@@ -138,8 +138,8 @@ HOT_AREA_DATA = {
         {"id": "b2", "label": "Pull request policy", "answer": "Require the evaluation workflow to succeed before merging", "options": ["Require the evaluation workflow to succeed before merging", "Allow merge if evaluation completes with warnings", "Trigger deployment on pull request creation", "Ignore evaluation results for main branch"]}
     ],
     23: [
-        {"id": "b1", "label": "Metrics to enable", "answer": "Model Availability Rate and Provisioned Utilization", "options": ["Model Availability Rate and Provisioned Utilization", "Token Count and Error Rate", "Latency and Storage Bandwidth", "Request Count only"]},
-        {"id": "b2", "label": "Diagnostic log to collect", "answer": "RequestResponse", "options": ["RequestResponse", "AuditLogs", "MetricsOnly", "SecurityEvents"]}
+        {"id": "b1", "label": "Metrics to enable", "answer": "Model Availability Rate and Provisioned Utilization", "options": ["Model Availability Rate and Provisioned Utilization", "Only Tokens Cache Match Rate", "Only Total Requests filtered to status code 200", "Time To Response and Total Tokens"]},
+        {"id": "b2", "label": "Diagnostic log to collect", "answer": "RequestResponse", "options": ["AllMetrics", "audit", "RequestResponse", "trace"]}
     ],
     29: [
         {"id": "b1", "label": "To retain user preferences across conversations", "answer": "Agent memory that uses persistent storage", "options": ["Agent memory that uses persistent storage", "Prompt caching", "In-memory session state", "Client-side browser cookies"]},

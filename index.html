@@ -51,7 +51,7 @@
       }
     };
   </script>
-  <link rel="stylesheet" href="style.css?v=20260920_6" />
+  <link rel="stylesheet" href="style.css?v=20260920_7" />
 </head>
 <body class="bg-[#fcfaf8] dark:bg-[#0c0f17] text-[#0f172a] dark:text-[#e2e8f0] font-sans antialiased min-h-screen flex flex-col selection:bg-orange-500/20 selection:text-orange-400 transition-colors duration-200 pb-28">
 
@@ -89,7 +89,7 @@
         <!-- Fast Learn Toggle (Header) -->
         <button id="btnFastLearnToggle" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95 transition-all" title="Toggle Fast Learn: Show all answers directly to learn fast [F]">
           <span id="fastLearnIcon" class="material-symbols-outlined text-[15px] text-amber-500">bolt</span>
-          <span id="fastLearnText" class="font-mono text-[11px] hidden lg:inline" data-i18n="fast_learn">Fast Learn</span>
+          <span id="fastLearnText" class="font-mono text-[11px] hidden md:inline" data-i18n="fast_learn">Fast Learn</span>
         </button>
 
         <!-- Layout Toggle (Single / All Questions) -->
@@ -107,7 +107,7 @@
         <!-- Matrix Drawer Button -->
         <button id="toggleDrawerBtn" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95" title="Question Matrix">
           <span class="material-symbols-outlined text-[15px] text-orange-500">grid_view</span>
-          <span id="drawerTriggerCount" class="font-mono text-[11px] hidden sm:inline">175</span>
+          <span id="drawerTriggerCount" class="font-mono text-[11px] hidden md:inline">175</span>
         </button>
 
         <!-- Theme Toggle -->
@@ -130,26 +130,25 @@
     
     <!-- VIEW 1: QUIZ & PRACTICE (Study & Exam) -->
     <div id="viewQuiz" class="transition-opacity duration-200">
-      <!-- Meta Info Bar -->
-      <div class="flex items-center justify-between pb-2.5 border-b border-black/[0.06] dark:border-white/[0.08] mb-3.5">
-        <div class="flex items-center space-x-1.5 sm:space-x-2">
-          <span id="qNumber" class="text-[11px] sm:text-xs font-mono font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2 sm:px-2.5 py-0.5 rounded-full border border-orange-500/20">
+      <!-- Meta Info Bar (Responsive, Anti-wrap, Polished) -->
+      <div class="flex flex-wrap items-center justify-between gap-y-2 gap-x-3 pb-2.5 border-b border-black/[0.06] dark:border-white/[0.08] mb-3.5">
+        <div class="flex items-center flex-wrap gap-1.5 sm:gap-2">
+          <span id="qNumber" class="text-[11px] sm:text-xs font-mono font-semibold text-orange-600 dark:text-orange-400 bg-orange-500/10 px-2.5 py-0.5 rounded-full border border-orange-500/20 whitespace-nowrap shrink-0">
             Câu 1 / 175
           </span>
-          <span id="qTypeBadge" class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2 sm:px-2.5 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06]">
+          <span id="qTypeBadge" class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 bg-black/[0.03] dark:bg-white/[0.06] px-2.5 py-0.5 rounded-full font-medium border border-black/[0.04] dark:border-white/[0.06] whitespace-nowrap shrink-0">
             Trắc nghiệm đơn
           </span>
         </div>
 
         <!-- Meta Actions (Explanation Option + Bookmark) -->
-        <div class="flex items-center space-x-2 sm:space-x-2.5">
-          <button id="btnToggleExplMeta" class="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 hover:text-orange-500 transition-colors font-medium active:scale-95" title="Toggle explanation visibility [E]">
-            <span id="explMetaIcon" class="material-symbols-outlined text-[16px]">visibility</span>
+        <div class="flex items-center flex-wrap gap-1.5 sm:gap-2 shrink-0">
+          <button id="btnToggleExplMeta" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-xs font-medium text-slate-600 dark:text-slate-300 transition-all active:scale-95 whitespace-nowrap shrink-0" title="Toggle explanation visibility [E]">
+            <span id="explMetaIcon" class="material-symbols-outlined text-[15px] leading-none text-slate-400 dark:text-slate-500">visibility</span>
             <span id="explMetaText" data-i18n="hide_explanation_shortcut">Hide Explanation [E]</span>
           </button>
-          <span class="text-slate-300 dark:text-slate-700 text-xs select-none">•</span>
-          <button id="btnBookmark" class="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-500 transition-colors font-medium active:scale-95">
-            <span class="material-symbols-outlined text-[17px]">bookmark_border</span>
+          <button id="btnBookmark" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border border-black/[0.06] dark:border-white/[0.08] bg-black/[0.02] dark:bg-white/[0.04] hover:bg-black/[0.05] dark:hover:bg-white/[0.08] text-xs font-medium text-slate-600 dark:text-slate-300 transition-all active:scale-95 whitespace-nowrap shrink-0" title="Bookmark Question [B]">
+            <span class="material-symbols-outlined text-[15px] leading-none text-slate-400 dark:text-slate-500">bookmark_border</span>
             <span id="bookmarkText">Lưu [B]</span>
           </button>
         </div>
@@ -526,8 +525,8 @@
   </div>
 
   <!-- Data & Scripts -->
-  <script src="data/questions-data.js?v=20260920_6"></script>
-  <script src="data/tips-data.js?v=20260920_6"></script>
-  <script src="app.js?v=20260920_6"></script>
+  <script src="data/questions-data.js?v=20260920_7"></script>
+  <script src="data/tips-data.js?v=20260920_7"></script>
+  <script src="app.js?v=20260920_7"></script>
 </body>
 </html>

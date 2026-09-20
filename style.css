@@ -393,10 +393,39 @@ html.dark .grid-item.current {
 
 /* Bookmark Action Active State */
 #btnBookmark.bookmarked {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
   color: #f59e0b !important;
 }
 #btnBookmark.bookmarked .material-symbols-outlined {
   font-variation-settings: 'FILL' 1;
+  color: #f59e0b !important;
+}
+html.dark #btnBookmark.bookmarked {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+}
+html.dark #btnBookmark.bookmarked .material-symbols-outlined {
+  color: #fbbf24 !important;
+}
+
+/* Explanation Meta Action Active State */
+#btnToggleExplMeta.meta-expl-hidden {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+  color: #d97706 !important;
+}
+#btnToggleExplMeta.meta-expl-hidden .material-symbols-outlined {
+  color: #d97706 !important;
+}
+html.dark #btnToggleExplMeta.meta-expl-hidden {
+  background-color: rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+  color: #fbbf24 !important;
+}
+html.dark #btnToggleExplMeta.meta-expl-hidden .material-symbols-outlined {
+  color: #fbbf24 !important;
 }
 
 /* Lightbox Modal */

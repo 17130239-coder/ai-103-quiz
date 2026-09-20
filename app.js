@@ -441,14 +441,12 @@
       if (isHideExplanation) {
         if (elExplMetaIcon) elExplMetaIcon.textContent = isCurrentlyShown ? 'visibility' : 'visibility_off';
         if (elExplMetaText) elExplMetaText.textContent = isCurrentlyShown ? t('hide_explanation_shortcut') : t('show_explanation_shortcut');
-        elBtnToggleExplMeta.classList.add('text-amber-500', 'dark:text-amber-400');
-        elBtnToggleExplMeta.classList.remove('text-slate-500', 'dark:text-slate-400');
+        elBtnToggleExplMeta.classList.add('meta-expl-hidden');
         elBtnToggleExplMeta.title = isCurrentlyShown ? t('hide_explanation') : t('show_explanation');
       } else {
         if (elExplMetaIcon) elExplMetaIcon.textContent = isCurrentlyShown ? 'visibility_off' : 'visibility';
         if (elExplMetaText) elExplMetaText.textContent = isCurrentlyShown ? t('hide_explanation_shortcut') : t('show_explanation_shortcut');
-        elBtnToggleExplMeta.classList.remove('text-amber-500', 'dark:text-amber-400');
-        elBtnToggleExplMeta.classList.add('text-slate-500', 'dark:text-slate-400');
+        elBtnToggleExplMeta.classList.remove('meta-expl-hidden');
         elBtnToggleExplMeta.title = isCurrentlyShown ? t('hide_explanation') : t('show_explanation');
       }
     }

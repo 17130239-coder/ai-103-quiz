@@ -953,9 +953,9 @@
             "answer": "Model Availability Rate and Provisioned Utilization",
             "options": [
               "Model Availability Rate and Provisioned Utilization",
-              "Token Count and Error Rate",
-              "Latency and Storage Bandwidth",
-              "Request Count only"
+              "Only Tokens Cache Match Rate",
+              "Only Total Requests filtered to status code 200",
+              "Time To Response and Total Tokens"
             ]
           },
           {
@@ -963,10 +963,10 @@
             "label": "Diagnostic log to collect",
             "answer": "RequestResponse",
             "options": [
+              "AllMetrics",
+              "audit",
               "RequestResponse",
-              "AuditLogs",
-              "MetricsOnly",
-              "SecurityEvents"
+              "trace"
             ]
           }
         ]
