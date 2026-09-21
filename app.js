@@ -9,11 +9,23 @@
   // --- App State ---
   const STORAGE_KEY = 'ai103_quiz_state_v6';
   
-  let questions = [];
+  let rawQuestions = []; // Original untouched list of 175 questions
+  let questions = []; // Active ordered questions list
   let currentIndex = 0;
   let mode = 'study'; // 'study' | 'exam'
   let currentFilter = 'all'; // 'all' | 'unanswered' | 'wrong' | 'correct' | 'bookmarked'
   let filteredIndices = [];
+
+  // Question Order & Type Filter State
+  let questionOrder = localStorage.getItem('ai103_question_order') || 'default'; // 'default' | 'reverse' | 'random'
+  let typeFilter = localStorage.getItem('ai103_type_filter') || 'all'; // 'all' | 'multiple_choice_single' | 'matching_hot_area' | 'drag_drop' | 'multiple_choice_multi' | 'yes_no'
+  let randomQuestionIds = [];
+  try {
+    const storedIds = localStorage.getItem('ai103_shuffled_ids');
+    if (storedIds) randomQuestionIds = JSON.parse(storedIds);
+  } catch (e) {
+    randomQuestionIds = [];
+  }
   
   let userAnswers = {}; // { [qId]: { selectedKeys: [], isCorrect: boolean, revealed: boolean } }
   let bookmarks = new Set();
@@ -210,7 +222,31 @@
       hide_explanations_all: "Hide Explanations",
       show_explanations_all: "Show Explanations",
       toast_explanation_hidden: "Explanations hidden for rapid study",
-      toast_explanation_shown: "Explanations visible"
+      toast_explanation_shown: "Explanations visible",
+      setting_title: "Quiz Settings & Filters",
+      order_title: "Question Order",
+      order_default: "Default Order (1 → {total})",
+      order_default_short: "Default",
+      order_reverse: "Reverse Order ({total} → 1)",
+      order_reverse_short: "Reverse",
+      order_random: "Random / Shuffled",
+      order_random_short: "Random",
+      order_reshuffle: "Reshuffle",
+      order_label: "Order:",
+      type_filter_title: "Question Type",
+      type_all: "All Types",
+      study_options_title: "Study Options",
+      fast_learn_desc: "Show answers directly for rapid study",
+      hide_explanation_desc: "Think first, click [E] to reveal when needed",
+      btn_reset_defaults: "Reset to Default",
+      btn_done: "Done",
+      toast_order_default: "Order set to Default (1 → {total})",
+      toast_order_reverse: "Order set to Reverse ({total} → 1)",
+      toast_order_random: "Order set to Random (Shuffled)",
+      toast_order_reshuffled: "Questions reshuffled 🎲",
+      toast_type_all: "Showing all question types ({total})",
+      toast_type_filter: "Filtered: {type} ({count} questions)",
+      toast_settings_reset: "Settings reset to default"
     },
     vi: {
       mode_study: "Ôn tập",
@@ -305,7 +341,31 @@
       hide_explanations_all: "Ẩn giải thích",
       show_explanations_all: "Hiện giải thích",
       toast_explanation_hidden: "Đã ẩn giải thích để học nhanh",
-      toast_explanation_shown: "Đã hiện giải thích"
+      toast_explanation_shown: "Đã hiện giải thích",
+      setting_title: "Cài đặt & Bộ lọc câu hỏi",
+      order_title: "Thứ tự câu hỏi",
+      order_default: "Thứ tự mặc định (1 → {total})",
+      order_default_short: "Mặc định",
+      order_reverse: "Đảo ngược thứ tự ({total} → 1)",
+      order_reverse_short: "Đảo ngược",
+      order_random: "Ngẫu nhiên (Xáo trộn)",
+      order_random_short: "Ngẫu nhiên",
+      order_reshuffle: "Xáo trộn lại",
+      order_label: "Thứ tự:",
+      type_filter_title: "Loại câu hỏi",
+      type_all: "Tất cả loại",
+      study_options_title: "Tùy chọn học tập",
+      fast_learn_desc: "Hiển thị đáp án ngay để ôn luyện siêu tốc",
+      hide_explanation_desc: "Tự tư duy trước, bấm [E] để xem khi cần",
+      btn_reset_defaults: "Khôi phục mặc định",
+      btn_done: "Xong",
+      toast_order_default: "Đã chuyển sang thứ tự Mặc định (1 → {total})",
+      toast_order_reverse: "Đã chuyển sang thứ tự Đảo ngược ({total} → 1)",
+      toast_order_random: "Đã chuyển sang thứ tự Ngẫu nhiên",
+      toast_order_reshuffled: "Đã xáo trộn lại thứ tự câu hỏi 🎲",
+      toast_type_all: "Hiển thị tất cả dạng câu hỏi ({total})",
+      toast_type_filter: "Đã lọc: {type} ({count} câu)",
+      toast_settings_reset: "Đã khôi phục cài đặt về mặc định"
     }
   };
 
@@ -337,6 +397,7 @@
     if (elLayoutText) elLayoutText.textContent = currentLayout === 'all' ? t('layout_all') : t('layout_single');
     if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${questions.length} ${currentLanguage === 'en' ? 'questions' : 'câu'}`;
     updateFastLearnUI();
+    updateOrderAndFilterUI();
 
     updateStats();
     if (currentLayout === 'single') {
@@ -420,6 +481,9 @@
         elBtnFastLearnToggle.title = t('fast_learn_shortcut');
       }
     }
+    if (elSettingsToggleFastLearn) {
+      elSettingsToggleFastLearn.checked = isFastLearn;
+    }
   }
 
   function updateExplanationUI() {
@@ -478,6 +542,10 @@
       } else {
         elBtnAllQToggleExpl.classList.remove('text-amber-600', 'dark:text-amber-400', 'border-amber-500/30', 'bg-amber-500/10');
       }
+    }
+
+    if (elSettingsToggleHideExpl) {
+      elSettingsToggleHideExpl.checked = isHideExplanation;
     }
   }
 
@@ -639,6 +707,33 @@
   const elBtnReviewWrong = document.getElementById('btnReviewWrong');
   const elBtnRestartExam = document.getElementById('btnRestartExam');
 
+  // Settings & Filter Modal Elements
+  const elBtnSettingsToggle = document.getElementById('btnSettingsToggle');
+  const elSettingsOrderBadge = document.getElementById('settingsOrderBadge');
+  const elSettingsActiveDot = document.getElementById('settingsActiveDot');
+  const elSettingsModal = document.getElementById('settingsModal');
+  const elBtnCloseSettings = document.getElementById('btnCloseSettings');
+  const elBtnApplySettings = document.getElementById('btnApplySettings');
+  const elBtnResetSettings = document.getElementById('btnResetSettings');
+  const elBtnSettingsReshuffle = document.getElementById('btnSettingsReshuffle');
+  const elSettingsTypeCountBadge = document.getElementById('settingsTypeCountBadge');
+  const elSettingOrderCards = document.querySelectorAll('.setting-order-card');
+  const elSettingTypeChips = document.querySelectorAll('.setting-type-chip');
+  const elSettingsToggleFastLearn = document.getElementById('settingsToggleFastLearn');
+  const elSettingsToggleHideExpl = document.getElementById('settingsToggleHideExpl');
+
+  // View 2 Quick Triggers
+  const elBtnAllQTypeFilter = document.getElementById('btnAllQTypeFilter');
+  const elAllQTypeFilterLabel = document.getElementById('allQTypeFilterLabel');
+  const elBtnAllQOrderToggle = document.getElementById('btnAllQOrderToggle');
+  const elAllQOrderIcon = document.getElementById('allQOrderIcon');
+  const elAllQOrderLabel = document.getElementById('allQOrderLabel');
+
+  // Drawer Type Filter & Order Elements
+  const elDrawerOrderBtns = document.querySelectorAll('.drawer-order-btn');
+  const elBtnDrawerReshuffle = document.getElementById('btnDrawerReshuffle');
+  const elDrawerTypeFilterPills = document.querySelectorAll('.drawer-type-pill');
+
   // --- Initializer ---
   async function initApp() {
     setupEventListeners();
@@ -648,13 +743,13 @@
 
     const inlineData = window.QUIZ_DATA || window.__QUESTIONS_DATA__;
     if (inlineData && inlineData.questions) {
-      questions = inlineData.questions;
+      rawQuestions = inlineData.questions;
       onDataReady();
     } else {
       try {
         const res = await fetch('data/ai-103-questions.json');
         const data = await res.json();
-        questions = data.questions;
+        rawQuestions = data.questions;
         onDataReady();
       } catch (err) {
         console.error('Failed to load questions:', err);
@@ -664,7 +759,9 @@
   }
 
   function onDataReady() {
+    applyQuestionOrder();
     updateFilteredIndices();
+    updateOrderAndFilterUI();
     updateStats();
     applyLanguage(currentLanguage);
     if (currentLayout === 'all') {
@@ -677,6 +774,8 @@
   }
 
   // --- Persistence ---
+  let savedQuestionId = null;
+
   function loadSavedState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('ai103_quiz_state_v5') || localStorage.getItem('ai103_quiz_state_v4');
@@ -684,6 +783,7 @@
         const parsed = JSON.parse(raw);
         if (parsed.userAnswers) userAnswers = parsed.userAnswers;
         if (parsed.bookmarks) bookmarks = new Set(parsed.bookmarks);
+        if (typeof parsed.currentQuestionId === 'number') savedQuestionId = parsed.currentQuestionId;
         if (typeof parsed.currentIndex === 'number') currentIndex = parsed.currentIndex;
       }
     } catch (e) {
@@ -693,9 +793,11 @@
 
   function saveState() {
     try {
+      const q = questions[currentIndex];
       const payload = {
         userAnswers,
         bookmarks: Array.from(bookmarks),
+        currentQuestionId: q ? q.id : null,
         currentIndex
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -728,6 +830,205 @@
     localStorage.setItem('ai103_quiz_dark', isDarkMode);
   }
 
+  // ==========================================================================
+  // Question Order & Type Filter Engine
+  // ==========================================================================
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function applyQuestionOrder() {
+    if (!rawQuestions || rawQuestions.length === 0) return;
+    const currentQ = questions[currentIndex];
+    const currentQId = currentQ ? currentQ.id : (savedQuestionId || null);
+
+    if (questionOrder === 'reverse') {
+      questions = [...rawQuestions].reverse();
+    } else if (questionOrder === 'random') {
+      const rawIds = rawQuestions.map(q => q.id);
+      const isValid = Array.isArray(randomQuestionIds) && 
+                      randomQuestionIds.length === rawIds.length && 
+                      rawIds.every(id => randomQuestionIds.includes(id));
+      if (!isValid) {
+        randomQuestionIds = shuffleArray(rawIds);
+        localStorage.setItem('ai103_shuffled_ids', JSON.stringify(randomQuestionIds));
+      }
+      const qMap = new Map(rawQuestions.map(q => [q.id, q]));
+      questions = randomQuestionIds.map(id => qMap.get(id)).filter(Boolean);
+    } else {
+      questionOrder = 'default';
+      questions = [...rawQuestions];
+    }
+
+    // Keep current question active if possible
+    if (currentQId) {
+      const foundIdx = questions.findIndex(q => q.id === currentQId);
+      if (foundIdx !== -1) {
+        currentIndex = foundIdx;
+      } else {
+        currentIndex = 0;
+      }
+    } else {
+      currentIndex = 0;
+    }
+  }
+
+  function setQuestionOrder(newOrder, reshuffle = false, notify = true) {
+    questionOrder = newOrder;
+    localStorage.setItem('ai103_question_order', questionOrder);
+
+    if (questionOrder === 'random' && (reshuffle || !randomQuestionIds.length)) {
+      randomQuestionIds = shuffleArray(rawQuestions.map(q => q.id));
+      localStorage.setItem('ai103_shuffled_ids', JSON.stringify(randomQuestionIds));
+    }
+
+    applyQuestionOrder();
+    updateFilteredIndices();
+    updateOrderAndFilterUI();
+    updateStats();
+    renderCurrentQuestion();
+    updateNavButtons();
+    renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    if (currentLayout === 'all') {
+      renderAllQuestionsView();
+    }
+
+    if (notify) {
+      if (questionOrder === 'default') showToast(t('toast_order_default', { total: rawQuestions.length }), 'format_list_numbered');
+      else if (questionOrder === 'reverse') showToast(t('toast_order_reverse', { total: rawQuestions.length }), 'swap_vert');
+      else if (questionOrder === 'random') showToast(t('toast_order_random'), 'shuffle');
+    }
+  }
+
+  function reshuffleQuestions(notify = true) {
+    if (!rawQuestions || rawQuestions.length === 0) return;
+    randomQuestionIds = shuffleArray(rawQuestions.map(q => q.id));
+    localStorage.setItem('ai103_shuffled_ids', JSON.stringify(randomQuestionIds));
+    setQuestionOrder('random', false, false);
+    if (notify) {
+      showToast(t('toast_order_reshuffled'), 'casino');
+    }
+  }
+
+  function setTypeFilter(newType, notify = true) {
+    typeFilter = newType;
+    localStorage.setItem('ai103_type_filter', typeFilter);
+
+    updateFilteredIndices();
+    updateOrderAndFilterUI();
+    updateStats();
+    renderCurrentQuestion();
+    updateNavButtons();
+    renderGridItems(elGridSearchInput ? elGridSearchInput.value : '');
+    if (currentLayout === 'all') {
+      renderAllQuestionsView();
+    }
+
+    if (notify) {
+      if (typeFilter === 'all') {
+        showToast(t('toast_type_all', { total: rawQuestions.length }), 'category');
+      } else {
+        const typeName = t('type_' + typeFilter) || typeFilter;
+        const count = rawQuestions.filter(q => q.type === typeFilter).length;
+        showToast(t('toast_type_filter', { type: typeName, count }), 'filter_alt');
+      }
+    }
+  }
+
+  function updateOrderAndFilterUI() {
+    // 1. Header Badges
+    if (elSettingsOrderBadge) {
+      if (questionOrder === 'default') elSettingsOrderBadge.textContent = '1→175';
+      else if (questionOrder === 'reverse') elSettingsOrderBadge.textContent = '175→1';
+      else if (questionOrder === 'random') elSettingsOrderBadge.textContent = '🔀 Rand';
+    }
+    if (elSettingsActiveDot) {
+      elSettingsActiveDot.classList.toggle('hidden', questionOrder === 'default' && typeFilter === 'all');
+    }
+
+    // 2. Settings Modal Active States
+    elSettingOrderCards.forEach(card => {
+      const isActive = card.dataset.order === questionOrder;
+      card.classList.toggle('active', isActive);
+      const icon = card.querySelector('.material-symbols-outlined');
+      if (icon) {
+        if (isActive) icon.classList.add('text-orange-500');
+        else icon.classList.remove('text-orange-500');
+      }
+    });
+
+    elSettingTypeChips.forEach(chip => {
+      const isActive = chip.dataset.type === typeFilter;
+      chip.classList.toggle('active', isActive);
+    });
+
+    if (elBtnSettingsReshuffle) {
+      elBtnSettingsReshuffle.classList.toggle('hidden', questionOrder !== 'random');
+    }
+
+    if (elSettingsTypeCountBadge) {
+      const matchCount = typeFilter === 'all' 
+        ? rawQuestions.length 
+        : rawQuestions.filter(q => q.type === typeFilter).length;
+      elSettingsTypeCountBadge.textContent = `${matchCount} ${currentLanguage === 'en' ? 'questions' : 'câu'}`;
+    }
+
+    if (elSettingsToggleFastLearn) elSettingsToggleFastLearn.checked = isFastLearn;
+    if (elSettingsToggleHideExpl) elSettingsToggleHideExpl.checked = isHideExplanation;
+
+    // 3. Drawer Active States
+    elDrawerOrderBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.order === questionOrder);
+    });
+    if (elBtnDrawerReshuffle) {
+      elBtnDrawerReshuffle.classList.toggle('hidden', questionOrder !== 'random');
+    }
+    elDrawerTypeFilterPills.forEach(pill => {
+      pill.classList.toggle('active', pill.dataset.type === typeFilter);
+    });
+
+    // 4. View 2 Sticky Bar Triggers
+    if (elAllQOrderIcon) {
+      if (questionOrder === 'default') elAllQOrderIcon.textContent = 'format_list_numbered';
+      else if (questionOrder === 'reverse') elAllQOrderIcon.textContent = 'swap_vert';
+      else if (questionOrder === 'random') elAllQOrderIcon.textContent = 'shuffle';
+    }
+    if (elAllQOrderLabel) {
+      if (questionOrder === 'default') elAllQOrderLabel.textContent = '1→175';
+      else if (questionOrder === 'reverse') elAllQOrderLabel.textContent = '175→1';
+      else if (questionOrder === 'random') elAllQOrderLabel.textContent = '🔀 Rand';
+    }
+    if (elAllQTypeFilterLabel) {
+      elAllQTypeFilterLabel.textContent = typeFilter === 'all' 
+        ? t('type_all') 
+        : (t('type_' + typeFilter) || typeFilter);
+    }
+  }
+
+  function openSettingsModal() {
+    if (!elSettingsModal) return;
+    updateOrderAndFilterUI();
+    elSettingsModal.style.display = 'flex';
+  }
+
+  function closeSettingsModal() {
+    if (!elSettingsModal) return;
+    elSettingsModal.style.display = 'none';
+  }
+
+  function toggleSettingsModal() {
+    if (elSettingsModal && elSettingsModal.style.display === 'flex') {
+      closeSettingsModal();
+    } else {
+      openSettingsModal();
+    }
+  }
+
   // --- Answering State Helpers ---
   function isQuestionPartiallyAnswered(q, ans) {
     if (!ans) return false;
@@ -754,6 +1055,12 @@
   function updateFilteredIndices() {
     const indices = [];
     questions.forEach((q, idx) => {
+      // 1. Question Type Filter
+      if (typeFilter !== 'all' && q.type !== typeFilter) {
+        return;
+      }
+
+      // 2. Status Filter
       const ans = userAnswers[q.id];
       const isBookmarked = bookmarks.has(q.id);
 
@@ -772,6 +1079,8 @@
 
     filteredIndices = indices;
     if (filteredIndices.length === 0) {
+      const anyTypeIndex = questions.findIndex(q => typeFilter === 'all' || q.type === typeFilter);
+      currentIndex = anyTypeIndex !== -1 ? anyTypeIndex : 0;
       filteredIndices = [currentIndex];
     } else if (!filteredIndices.includes(currentIndex)) {
       currentIndex = filteredIndices[0];
@@ -881,8 +1190,12 @@
   // Continuous Vertical Scroll (All Questions) Implementation
   // ==========================================================================
   function updateAllQFilterCounts() {
+    const activeQuestions = typeFilter === 'all' 
+      ? questions 
+      : questions.filter(q => q.type === typeFilter);
+
     let unans = 0, wrong = 0, correct = 0, bkmk = 0;
-    questions.forEach(q => {
+    activeQuestions.forEach(q => {
       const ans = userAnswers[q.id];
       if (bookmarks.has(q.id)) bkmk++;
       if (!isQuestionPartiallyAnswered(q, ans)) {
@@ -894,15 +1207,15 @@
       }
     });
 
-    if (elAllQFilterCountAll) elAllQFilterCountAll.textContent = `(${questions.length})`;
+    if (elAllQFilterCountAll) elAllQFilterCountAll.textContent = `(${activeQuestions.length})`;
     if (elAllQFilterCountUnanswered) elAllQFilterCountUnanswered.textContent = `(${unans})`;
     if (elAllQFilterCountWrong) elAllQFilterCountWrong.textContent = `(${wrong})`;
     if (elAllQFilterCountCorrect) elAllQFilterCountCorrect.textContent = `(${correct})`;
     if (elAllQFilterCountBookmarked) elAllQFilterCountBookmarked.textContent = `(${bkmk})`;
 
-    const answeredCount = questions.length - unans;
+    const answeredCount = activeQuestions.length - unans;
     if (elAllQCounterText) {
-      elAllQCounterText.textContent = t('done_count', { n: answeredCount, total: questions.length });
+      elAllQCounterText.textContent = t('done_count', { n: answeredCount, total: activeQuestions.length });
     }
   }
 
@@ -913,6 +1226,7 @@
     updateAllQFilterCounts();
 
     const filtered = questions.filter(q => {
+      if (typeFilter !== 'all' && q.type !== typeFilter) return false;
       const ansState = userAnswers[q.id];
       if (allQFilter === 'all') return true;
       if (allQFilter === 'bookmarked') return bookmarks.has(q.id);
@@ -1240,13 +1554,22 @@
 
     // 1. Meta Badges
     const filterPos = filteredIndices.indexOf(currentIndex);
+    let orderSymbol = '';
+    if (questionOrder === 'random') orderSymbol = ' 🔀';
+    else if (questionOrder === 'reverse') orderSymbol = ' 🔻';
+
     const posText = filterPos !== -1 
-      ? t('q_pos_filtered', { id: q.id, pos: filterPos + 1, total: filteredIndices.length })
-      : t('q_pos', { pos: q.id, total: questions.length });
+      ? t('q_pos_filtered', { id: q.id, pos: filterPos + 1, total: filteredIndices.length }) + orderSymbol
+      : t('q_pos', { pos: q.id, total: questions.length }) + orderSymbol;
     elQNumber.textContent = posText;
-    elNavStatus.textContent = `${currentIndex + 1} / ${questions.length}`;
+    elNavStatus.textContent = `${filterPos !== -1 ? filterPos + 1 : currentIndex + 1} / ${filteredIndices.length || questions.length}`;
 
     elQTypeBadge.textContent = t('type_' + q.type) || t('type_multiple_choice_single');
+    if (typeFilter !== 'all') {
+      elQTypeBadge.classList.add('bg-orange-500/10', 'text-orange-600', 'dark:text-orange-400', 'border-orange-500/20');
+    } else {
+      elQTypeBadge.classList.remove('bg-orange-500/10', 'text-orange-600', 'dark:text-orange-400', 'border-orange-500/20');
+    }
 
     // Bookmark state
     const icon = elBtnBookmark.querySelector('.material-symbols-outlined');
@@ -2016,17 +2339,28 @@
 
   function updateNavButtons() {
     const filterPos = filteredIndices.indexOf(currentIndex);
-    elBtnPrev.disabled = filterPos <= 0 && currentIndex <= 0;
-    elBtnNext.disabled = filterPos === filteredIndices.length - 1 && currentIndex === questions.length - 1;
+    if (filterPos !== -1) {
+      elBtnPrev.disabled = filterPos <= 0;
+      elBtnNext.disabled = filterPos >= filteredIndices.length - 1;
+    } else {
+      elBtnPrev.disabled = currentIndex <= 0;
+      elBtnNext.disabled = currentIndex >= questions.length - 1;
+    }
   }
 
   // --- Stats and Progress ---
   function updateStats() {
+    const activeQuestions = typeFilter === 'all' 
+      ? questions 
+      : questions.filter(q => q.type === typeFilter);
+
     let answered = 0;
     let correct = 0;
     let wrong = 0;
+    let bookmarkedCount = 0;
 
-    questions.forEach(q => {
+    activeQuestions.forEach(q => {
+      if (bookmarks.has(q.id)) bookmarkedCount++;
       const a = userAnswers[q.id];
       if (isQuestionPartiallyAnswered(q, a)) {
         answered++;
@@ -2035,19 +2369,22 @@
       }
     });
 
-    const unanswered = questions.length - answered;
-    const bookmarkedCount = bookmarks.size;
+    const unanswered = activeQuestions.length - answered;
 
-    if (elCountAll) elCountAll.textContent = questions.length;
+    if (elCountAll) elCountAll.textContent = activeQuestions.length;
     if (elCountUnanswered) elCountUnanswered.textContent = unanswered;
     if (elCountWrong) elCountWrong.textContent = wrong;
     if (elCountCorrect) elCountCorrect.textContent = correct;
     if (elCountBookmarked) elCountBookmarked.textContent = bookmarkedCount;
 
-    const percent = Math.round((answered / (questions.length || 1)) * 100);
+    const percent = Math.round((answered / (activeQuestions.length || 1)) * 100);
     elProgressBarFill.style.width = `${percent}%`;
-    if (elProgressLabel) elProgressLabel.textContent = `${answered} / ${questions.length} câu (${percent}%)`;
-    if (elDrawerTriggerCount) elDrawerTriggerCount.textContent = `${answered}/${questions.length}`;
+    if (elProgressLabel) {
+      elProgressLabel.textContent = `${answered} / ${activeQuestions.length} câu (${percent}%)`;
+    }
+    if (elDrawerTriggerCount) {
+      elDrawerTriggerCount.textContent = `${answered}/${activeQuestions.length}`;
+    }
   }
 
   // --- Drawer (Bottom sheet on Mobile, Slide-over on Desktop) ---
@@ -2070,6 +2407,8 @@
     const kw = keyword.toLowerCase().trim();
 
     questions.forEach((q, idx) => {
+      if (typeFilter !== 'all' && q.type !== typeFilter) return;
+
       if (kw) {
         const textMatch = q.question.toLowerCase().includes(kw) || 
                           q.explanation.toLowerCase().includes(kw) ||
@@ -2715,6 +3054,95 @@
       applyTheme(!isDarkMode);
     });
 
+    // Settings Modal & Triggers
+    if (elBtnSettingsToggle) {
+      elBtnSettingsToggle.addEventListener('click', toggleSettingsModal);
+    }
+    if (elBtnCloseSettings) {
+      elBtnCloseSettings.addEventListener('click', closeSettingsModal);
+    }
+    if (elBtnApplySettings) {
+      elBtnApplySettings.addEventListener('click', closeSettingsModal);
+    }
+    if (elSettingsModal) {
+      elSettingsModal.addEventListener('click', (e) => {
+        if (e.target === elSettingsModal) closeSettingsModal();
+      });
+    }
+    if (elBtnResetSettings) {
+      elBtnResetSettings.addEventListener('click', () => {
+        setQuestionOrder('default', false, false);
+        setTypeFilter('all', false);
+        showToast(t('toast_settings_reset'), 'restart_alt');
+      });
+    }
+    if (elBtnSettingsReshuffle) {
+      elBtnSettingsReshuffle.addEventListener('click', () => reshuffleQuestions(true));
+    }
+    if (elSettingOrderCards) {
+      elSettingOrderCards.forEach(card => {
+        card.addEventListener('click', () => {
+          const order = card.getAttribute('data-order');
+          if (order) setQuestionOrder(order, false, true);
+        });
+      });
+    }
+    if (elSettingTypeChips) {
+      elSettingTypeChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          const type = chip.getAttribute('data-type');
+          if (type) setTypeFilter(type, true);
+        });
+      });
+    }
+    if (elSettingsToggleFastLearn) {
+      elSettingsToggleFastLearn.addEventListener('change', () => {
+        toggleFastLearn();
+      });
+    }
+    if (elSettingsToggleHideExpl) {
+      elSettingsToggleHideExpl.addEventListener('change', () => {
+        toggleHideExplanationOption();
+      });
+    }
+
+    // View 2 Quick Triggers
+    if (elBtnAllQTypeFilter) {
+      elBtnAllQTypeFilter.addEventListener('click', openSettingsModal);
+    }
+    if (elBtnAllQOrderToggle) {
+      elBtnAllQOrderToggle.addEventListener('click', () => {
+        const orderCycle = {
+          'default': 'reverse',
+          'reverse': 'random',
+          'random': 'default'
+        };
+        const nextOrder = orderCycle[questionOrder] || 'default';
+        setQuestionOrder(nextOrder, false, true);
+      });
+    }
+
+    // Drawer Order & Type Filter Listeners
+    if (elDrawerOrderBtns) {
+      elDrawerOrderBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const order = btn.getAttribute('data-order');
+          if (order) setQuestionOrder(order, false, true);
+        });
+      });
+    }
+    if (elBtnDrawerReshuffle) {
+      elBtnDrawerReshuffle.addEventListener('click', () => reshuffleQuestions(true));
+    }
+    if (elDrawerTypeFilterPills) {
+      elDrawerTypeFilterPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          const type = pill.getAttribute('data-type');
+          if (type) setTypeFilter(type, true);
+        });
+      });
+    }
+
     // Drawer Toggle
     elToggleDrawerBtn.addEventListener('click', openDrawer);
     if (elBtnNavMatrix) elBtnNavMatrix.addEventListener('click', openDrawer);
@@ -2807,12 +3235,16 @@
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT') {
-        if (e.key === 'Escape') closeDrawer();
+        if (e.key === 'Escape') {
+          closeDrawer();
+          closeSettingsModal();
+        }
         return;
       }
 
       if (e.key === 'Escape') {
         closeDrawer();
+        closeSettingsModal();
         closeLightbox();
         elExamResultModal.style.display = 'none';
         return;
@@ -2844,6 +3276,9 @@
       } else if (e.key === 'f' || e.key === 'F') {
         e.preventDefault();
         toggleFastLearn();
+      } else if (e.key === 's' || e.key === 'S') {
+        e.preventDefault();
+        toggleSettingsModal();
       } else if (e.key === 'g' || e.key === 'G') {
         e.preventDefault();
         if (elQuestionDrawer.classList.contains('translate-y-full') || elQuestionDrawer.classList.contains('sm:translate-x-full')) {

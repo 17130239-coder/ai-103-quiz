@@ -104,6 +104,13 @@
           <span id="langText">EN</span>
         </button>
 
+        <!-- Settings Toggle (Order & Type Filter) -->
+        <button id="btnSettingsToggle" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95 transition-all relative" title="Settings & Filters [S]">
+          <span class="material-symbols-outlined text-[15px] text-orange-500">tune</span>
+          <span id="settingsOrderBadge" class="font-mono text-[11px] hidden md:inline">1→175</span>
+          <span id="settingsActiveDot" class="hidden absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-orange-500 ring-2 ring-white dark:ring-[#0c0f17]"></span>
+        </button>
+
         <!-- Matrix Drawer Button -->
         <button id="toggleDrawerBtn" class="flex items-center space-x-1 px-2 sm:px-2.5 py-1 rounded-lg bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-xs font-medium active:scale-95" title="Question Matrix">
           <span class="material-symbols-outlined text-[15px] text-orange-500">grid_view</span>
@@ -233,6 +240,18 @@
               <span data-i18n="filter_bookmarked">Bookmarked</span> <span id="allQFilterCountBookmarked" class="text-amber-400 font-mono text-[10px]">(0)</span>
             </button>
           </div>
+
+          <div class="h-4 w-px bg-black/[0.08] dark:bg-white/[0.1] mx-0.5 shrink-0"></div>
+
+          <!-- Quick Type Filter & Order Triggers in View 2 -->
+          <button id="btnAllQTypeFilter" class="flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-slate-700 dark:text-slate-200 transition-all shrink-0" title="Filter by Question Type">
+            <span class="material-symbols-outlined text-[14px] text-orange-500">category</span>
+            <span id="allQTypeFilterLabel" data-i18n="type_all">All Types</span>
+          </button>
+          <button id="btnAllQOrderToggle" class="flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-black/[0.03] dark:bg-white/[0.06] hover:bg-black/[0.06] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.08] text-slate-700 dark:text-slate-200 transition-all shrink-0" title="Change Question Order">
+            <span id="allQOrderIcon" class="material-symbols-outlined text-[14px] text-orange-500">format_list_numbered</span>
+            <span id="allQOrderLabel" class="font-mono text-[11px]">1→175</span>
+          </button>
         </div>
 
         <!-- Jump to Question & Progress count -->
@@ -452,6 +471,42 @@
           <span class="flex items-center space-x-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span><span>Sai</span></span>
         </div>
       </div>
+
+      <!-- Type Filter Pills & Order Selector in Drawer -->
+      <div class="space-y-1.5 pt-2 border-t border-black/[0.05] dark:border-white/[0.06]">
+        <div class="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+          <span class="flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
+            <span class="material-symbols-outlined text-[14px] text-orange-500">category</span>
+            <span data-i18n="type_filter_title">Loại câu hỏi</span>
+          </span>
+          <div class="flex items-center gap-1">
+            <button id="btnDrawerOrderDefault" class="drawer-order-btn active px-1.5 py-0.5 rounded text-[10px] font-mono transition-all" data-order="default" title="Thứ tự mặc định (1 → 175)">1→N</button>
+            <button id="btnDrawerOrderReverse" class="drawer-order-btn px-1.5 py-0.5 rounded text-[10px] font-mono transition-all" data-order="reverse" title="Đảo ngược (175 → 1)">N→1</button>
+            <button id="btnDrawerOrderRandom" class="drawer-order-btn px-1.5 py-0.5 rounded text-[10px] font-mono transition-all" data-order="random" title="Ngẫu nhiên (Xáo trộn)">🔀</button>
+            <button id="btnDrawerReshuffle" class="hidden px-1 py-0.5 rounded text-[10px] font-mono text-orange-500 hover:bg-orange-500/10 transition-all" title="Xáo trộn lại">🎲</button>
+          </div>
+        </div>
+        <div id="drawerTypeFilterPills" class="flex items-center space-x-1 overflow-x-auto no-scrollbar pb-0.5">
+          <button class="drawer-type-pill active px-2 py-0.5 rounded-md text-[10.5px] font-medium transition-all shrink-0" data-type="all">
+            <span data-i18n="type_all">Tất cả</span> <span class="opacity-70 font-mono text-[9.5px]">(175)</span>
+          </button>
+          <button class="drawer-type-pill px-2 py-0.5 rounded-md text-[10.5px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-type="multiple_choice_single">
+            <span data-i18n="type_multiple_choice_single">Trắc nghiệm</span> <span class="opacity-70 font-mono text-[9.5px]">(110)</span>
+          </button>
+          <button class="drawer-type-pill px-2 py-0.5 rounded-md text-[10.5px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-type="matching_hot_area">
+            <span data-i18n="type_matching_hot_area">Hot Area</span> <span class="opacity-70 font-mono text-[9.5px]">(41)</span>
+          </button>
+          <button class="drawer-type-pill px-2 py-0.5 rounded-md text-[10.5px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-type="drag_drop">
+            <span data-i18n="type_drag_drop">Kéo thả</span> <span class="opacity-70 font-mono text-[9.5px]">(9)</span>
+          </button>
+          <button class="drawer-type-pill px-2 py-0.5 rounded-md text-[10.5px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-type="multiple_choice_multi">
+            <span data-i18n="type_multiple_choice_multi">Nhiều đáp án</span> <span class="opacity-70 font-mono text-[9.5px]">(8)</span>
+          </button>
+          <button class="drawer-type-pill px-2 py-0.5 rounded-md text-[10.5px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all shrink-0" data-type="yes_no">
+            <span data-i18n="type_yes_no">Đúng/Sai</span> <span class="opacity-70 font-mono text-[9.5px]">(7)</span>
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Matrix Grid Tiles -->
@@ -467,6 +522,174 @@
     </div>
 
   </aside>
+
+  <!-- SETTINGS & FILTERS MODAL -->
+  <div id="settingsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card max-w-md w-full">
+      <div class="modal-header">
+        <div class="flex items-center space-x-2">
+          <span class="w-7 h-7 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">tune</span>
+          </span>
+          <h2 data-i18n="setting_title">Cài đặt & Bộ lọc câu hỏi</h2>
+        </div>
+        <button id="btnCloseSettings" class="close-btn" title="Đóng [ESC]">&times;</button>
+      </div>
+
+      <div class="p-4 sm:p-5 space-y-5 overflow-y-auto max-h-[75vh]">
+        
+        <!-- SECTION 1: QUESTION ORDER -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-orange-500">sort</span>
+              <span data-i18n="order_title">Thứ tự câu hỏi</span>
+            </label>
+            <button id="btnSettingsReshuffle" class="hidden text-xs font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1 active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-[14px]">casino</span>
+              <span data-i18n="order_reshuffle">Xáo trộn lại</span>
+            </button>
+          </div>
+
+          <!-- Segmented Order Choices -->
+          <div class="grid grid-cols-3 gap-2">
+            <!-- Default -->
+            <button class="setting-order-card active flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer" data-order="default">
+              <span class="material-symbols-outlined text-[20px] mb-1 text-orange-500">format_list_numbered</span>
+              <span class="text-xs font-semibold text-slate-800 dark:text-slate-100" data-i18n="order_default_short">Mặc định</span>
+              <span class="text-[10px] font-mono text-slate-400 mt-0.5">1 → 175</span>
+            </button>
+
+            <!-- Reverse -->
+            <button class="setting-order-card flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer" data-order="reverse">
+              <span class="material-symbols-outlined text-[20px] mb-1 text-slate-400">swap_vert</span>
+              <span class="text-xs font-semibold text-slate-700 dark:text-slate-200" data-i18n="order_reverse_short">Đảo ngược</span>
+              <span class="text-[10px] font-mono text-slate-400 mt-0.5">175 → 1</span>
+            </button>
+
+            <!-- Random -->
+            <button class="setting-order-card flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all cursor-pointer" data-order="random">
+              <span class="material-symbols-outlined text-[20px] mb-1 text-slate-400">shuffle</span>
+              <span class="text-xs font-semibold text-slate-700 dark:text-slate-200" data-i18n="order_random_short">Ngẫu nhiên</span>
+              <span class="text-[10px] font-mono text-slate-400 mt-0.5">Xáo trộn 🎲</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 2: FILTER BY QUESTION TYPE -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px] text-orange-500">category</span>
+              <span data-i18n="type_filter_title">Lọc theo loại câu hỏi</span>
+            </label>
+            <span id="settingsTypeCountBadge" class="text-[11px] font-mono text-slate-400">175 câu</span>
+          </div>
+
+          <!-- Type Selection Chips -->
+          <div class="grid grid-cols-2 gap-2">
+            <!-- All -->
+            <button class="setting-type-chip active flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="all">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_all">Tất cả loại</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">175</span>
+            </button>
+
+            <!-- Single Choice -->
+            <button class="setting-type-chip flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="multiple_choice_single">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_multiple_choice_single">Trắc nghiệm đơn</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">110</span>
+            </button>
+
+            <!-- Hot Area / Dropdown -->
+            <button class="setting-type-chip flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="matching_hot_area">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_matching_hot_area">Hot Area / Lựa chọn</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">41</span>
+            </button>
+
+            <!-- Drag & Drop -->
+            <button class="setting-type-chip flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="drag_drop">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_drag_drop">Kéo thả / Ghép cặp</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">9</span>
+            </button>
+
+            <!-- Multiple Choice Multi -->
+            <button class="setting-type-chip flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="multiple_choice_multi">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_multiple_choice_multi">Chọn nhiều đáp án</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">8</span>
+            </button>
+
+            <!-- Yes / No -->
+            <button class="setting-type-chip flex items-center justify-between p-2.5 rounded-xl border transition-all text-left" data-type="yes_no">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                <span class="text-xs font-medium" data-i18n="type_yes_no">Nhận định Đúng / Sai</span>
+              </div>
+              <span class="text-[11px] font-mono text-slate-400">7</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SECTION 3: STUDY HELPERS TOGGLES -->
+        <div class="space-y-2 pt-2 border-t border-black/[0.05] dark:border-white/[0.06]">
+          <label class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px] text-orange-500">lightbulb</span>
+            <span data-i18n="study_options_title">Tùy chọn học tập</span>
+          </label>
+
+          <div class="space-y-2">
+            <!-- Fast Learn Toggle Row -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.05] dark:border-white/[0.06]">
+              <div class="space-y-0.5">
+                <div class="text-xs font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[15px] text-amber-500">bolt</span>
+                  <span data-i18n="fast_learn">Chế độ Học nhanh (Fast Learn)</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-tight" data-i18n="fast_learn_desc">Hiển thị đáp án ngay để ôn luyện siêu tốc</p>
+              </div>
+              <input id="settingsToggleFastLearn" type="checkbox" class="w-4 h-4 text-orange-500 accent-orange-500 rounded cursor-pointer" />
+            </div>
+
+            <!-- Hide Explanation Toggle Row -->
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.05] dark:border-white/[0.06]">
+              <div class="space-y-0.5">
+                <div class="text-xs font-medium text-slate-800 dark:text-slate-200 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-[15px] text-slate-400">visibility_off</span>
+                  <span data-i18n="hide_explanation">Ẩn lời giải chi tiết</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-tight" data-i18n="hide_explanation_desc">Tự tư duy trước, bấm [E] hoặc biểu tượng khi cần xem</p>
+              </div>
+              <input id="settingsToggleHideExpl" type="checkbox" class="w-4 h-4 text-orange-500 accent-orange-500 rounded cursor-pointer" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer justify-between">
+        <button id="btnResetSettings" class="text-xs text-slate-500 dark:text-slate-400 hover:text-rose-500 font-medium transition-colors" data-i18n="btn_reset_defaults">
+          Khôi phục mặc định
+        </button>
+        <button id="btnApplySettings" class="btn-primary text-xs font-semibold px-4 py-2 rounded-xl" data-i18n="btn_done">
+          Xong
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- LIGHTBOX MODAL FOR IMAGES -->
   <div id="lightboxModal" class="lightbox-overlay" style="display: none;">

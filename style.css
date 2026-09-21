@@ -1033,3 +1033,106 @@ html.dark .btn-fast-learn-active {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.1); }
 }
+
+/* ==========================================================================
+   Question Settings & Type Filter Controls
+   ========================================================================== */
+.setting-order-card {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+html.dark .setting-order-card {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.setting-order-card:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+  background-color: rgba(249, 115, 22, 0.04);
+}
+html.dark .setting-order-card:hover {
+  border-color: rgba(249, 115, 22, 0.5);
+  background-color: rgba(249, 115, 22, 0.08);
+}
+.setting-order-card.active {
+  border-color: #f97316 !important;
+  background-color: rgba(249, 115, 22, 0.08) !important;
+  box-shadow: 0 0 0 1px #f97316;
+}
+html.dark .setting-order-card.active {
+  border-color: #f97316 !important;
+  background-color: rgba(249, 115, 22, 0.15) !important;
+  box-shadow: 0 0 0 1px #f97316;
+}
+.setting-order-card.active span.material-symbols-outlined {
+  color: #f97316 !important;
+}
+
+.setting-type-chip {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+html.dark .setting-type-chip {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.setting-type-chip:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+}
+html.dark .setting-type-chip:hover {
+  border-color: rgba(249, 115, 22, 0.5);
+}
+.setting-type-chip.active {
+  border-color: #f97316 !important;
+  background-color: rgba(249, 115, 22, 0.08) !important;
+  font-weight: 600;
+  box-shadow: 0 0 0 1px #f97316;
+}
+html.dark .setting-type-chip.active {
+  border-color: #f97316 !important;
+  background-color: rgba(249, 115, 22, 0.15) !important;
+  box-shadow: 0 0 0 1px #f97316;
+}
+
+/* Drawer Order Buttons */
+.drawer-order-btn {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #64748b;
+  cursor: pointer;
+  user-select: none;
+}
+html.dark .drawer-order-btn {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+}
+.drawer-order-btn:hover {
+  color: #0f172a;
+}
+html.dark .drawer-order-btn:hover {
+  color: #ffffff;
+}
+.drawer-order-btn.active {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+html.dark .drawer-order-btn.active {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
+/* Drawer Type Pills */
+.drawer-type-pill {
+  cursor: pointer;
+  user-select: none;
+}
+.drawer-type-pill.active {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+html.dark .drawer-type-pill.active {
+  background-color: #f97316 !important;
+  color: #ffffff !important;
+}
+
